@@ -1,9 +1,9 @@
 import {RestClient} from "@/api/RestClient";
-import type {Broker} from "@/broker/domain/Broker";
+import type {Broker, BrokerData} from "@/broker/domain/Broker";
 
 export class BrokerClient extends RestClient {
 
-    public getAll(): Promise<Broker[]> {
+    public getAll(): Promise<BrokerData[]> {
         return this.get("/brokers/");
     }
 

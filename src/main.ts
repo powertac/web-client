@@ -4,7 +4,12 @@ import Application from './application/views/Application.vue'
 import router from './router'
 import './styles/index.scss'
 
-const app = createApp(Application)
-app.use(createPinia())
-app.use(router)
-app.mount('#app')
+const pinia = createPinia();
+
+// FIXME : initialize authorization before creating the application
+// TODO : investigate loading the state(s) from local storage for performance -> how to invalidate caches, though
+
+createApp(Application)
+    .use(pinia)
+    .use(router)
+    .mount("#app");

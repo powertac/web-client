@@ -1,8 +1,18 @@
 import type {Game} from "@/game/domain/Game";
+import {useGameStore} from "@/game/domain/GameStore";
 
 export abstract class GameGroup {
 
-    abstract get games(): Game[];
+    abstract get gameIds(): string[];
+
+    get games(): Game[] {
+        const gameStore = useGameStore();
+        return this.gameIds.map((id) => gameStore.findById(id));
+    }
+
+    get size(): number {
+        return this.gameIds.length;
+    }
 
     get completedGames(): Game[] {
         return this.games.slice().filter((g) => g.status === 'completed');

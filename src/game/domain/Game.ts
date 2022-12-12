@@ -1,25 +1,38 @@
 import type {GameConfig, GameConfigData} from "@/game/domain/GameConfig";
 import type {GameRun, GameRunData} from "@/game/domain/GameRun";
+import type {Moment} from "moment";
 import type {Baseline} from "@/baseline/domain/Baseline";
 import type {Treatment} from "@/treatment/domain/Treatment";
-import {buildGameConfig} from "@/game/domain/GameConfig";
-import {buildGameRun} from "@/game/domain/GameRun";
 import {useBaselineStore} from "@/baseline/domain/BaselineStore";
 import {useTreatmentStore} from "@/treatment/domain/TreatmentStore";
 import {useGameStore} from "@/game/domain/GameStore";
-import moment from "moment";
 
 export class Game {
 
     constructor(public readonly id: string,
                 public readonly name: string,
                 public readonly config: GameConfig,
-                public readonly createdAt: moment.Moment,
+                public readonly createdAt: Moment,
                 public readonly cancelled: boolean,
                 public readonly runs: GameRun[],
-                public readonly baseline: Baseline|null,
-                public readonly treatment: Treatment|null,
-                public readonly baseGame: Game|null) {}
+                private readonly baselineId: string|null,
+                private readonly treatmentId: string|null,
+                private readonly baseGameId: string|null) {}
+
+    get baseline(): Baseline|null {
+        // FIXME : check performance impact of loading from store vs. keeping local copy
+        return null !== this.baselineId ? useBaselineStore().findById(this.baselineId) : null;
+    }
+
+    get treatment(): Treatment|null {
+        // FIXME : check performance impact of loading from store vs. keeping local copy
+        return null !== this.treatmentId ? useTreatmentStore().findById(this.treatmentId) : null;
+    }
+
+    get baseGame(): Game|null {
+        // FIXME : check performance impact of loading from store vs. keeping local copy
+        return null !== this.baseGameId ? useGameStore().findById(this.baseGameId) : null;
+    }
 
     get status(): string {
         if (this.cancelled) {
@@ -84,28 +97,11 @@ export class Game {
 export interface GameData {
     id: string;
     name: string;
-    config: GameConfigData; // FIXME : model is also changed in backend: this can be replaced by an ID as well
+    config: GameConfigData;
     createdAt: number;
     cancelled: boolean;
     runs: GameRunData[];
     baselineId: string|null;
     treatmentId: string|null;
     baseGameId: string|null;
-}
-
-const baselineStore = useBaselineStore();
-const treatmentStore = useTreatmentStore();
-const gameStore = useGameStore();
-
-export function buildGame(data: GameData): Game {
-    return new Game(
-        data.id,
-        data.name,
-        buildGameConfig(data.config),
-        moment(data.createdAt),
-        data.cancelled,
-        data.runs.map(data => buildGameRun(data)),
-        data.baselineId !== null ? baselineStore.findById(data.baselineId) : null,
-        data.treatmentId !== null ? treatmentStore.findById(data.treatmentId) : null,
-        data.baseGameId !== null ? gameStore.findById(data.baseGameId) : null);
 }

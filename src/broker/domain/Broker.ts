@@ -1,7 +1,7 @@
 export class Broker {
 
     constructor(
-        public id: string|null,
+        public id: string,
         public name: string,
         public version: string,
         public imageTag: string,
@@ -10,7 +10,7 @@ export class Broker {
 }
 
 export interface BrokerData {
-    id?: string;
+    id: string;
     name: string;
     version: string;
     imageTag: string;
@@ -19,7 +19,7 @@ export interface BrokerData {
 
 export function buildBroker(data: BrokerData): Broker {
     return new Broker(
-        data.id !== undefined ? data.id : null,
+        data.id,
         data.name,
         data.version,
         data.imageTag,

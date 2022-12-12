@@ -1,5 +1,6 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import DashboardView from '@/application/views/DashboardView.vue'
+import { createRouter, createWebHistory } from "vue-router";
+import DashboardView from "@/application/views/DashboardView.vue";
+import GameConfigEditor from "@/game/components/GameConfigEditor.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -8,6 +9,11 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: DashboardView
+    },
+    {
+      path: '/game-configs/new',
+      name: 'home',
+      component: GameConfigEditor
     },
   ]
 })

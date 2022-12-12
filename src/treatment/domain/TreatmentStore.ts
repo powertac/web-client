@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import {createGetter} from "@/util/StoreUtils";
+import {createFindByIdGetter} from "@/store/StoreUtils";
 import type {Treatment} from "@/treatment/domain/Treatment";
 
 export interface TreatmentStoreState {
@@ -10,6 +10,10 @@ export const useTreatmentStore = defineStore({
     id: "treatments",
     state: () => ({treatments: {}} as TreatmentStoreState),
     getters: {
-        findById: (state: TreatmentStoreState) => createGetter("treatment", state.treatments)
+        findById: (state: TreatmentStoreState) => createFindByIdGetter("treatment", state.treatments)
+    },
+    actions: {
+        async fetchById(id: string): Promise<void> {
+        }
     }
 });

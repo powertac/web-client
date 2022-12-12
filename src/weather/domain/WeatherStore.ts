@@ -1,7 +1,8 @@
-import type {WeatherLocation, WeatherLocationData} from "@/weather/domain/WeatherLocation";
+import type {WeatherLocation} from "@/weather/domain/WeatherLocation";
 import {buildWeatherLocation} from "@/weather/domain/WeatherLocation";
 import {defineStore} from "pinia";
-import {createGetter} from "@/util/StoreUtils";
+import {createFindAllGetter, createFindByIdGetter} from "@/store/StoreUtils";
+import {api} from "@/api/api";
 
 export interface WeatherStoreState {
     locations: {[name: string]: WeatherLocation}
@@ -11,11 +12,14 @@ export const useWeatherStore = defineStore({
     id: "weather",
     state: () => ({locations: {}} as WeatherStoreState),
     getters: {
-        location: (state: WeatherStoreState) => createGetter("location", state.locations)
+        findLocationByName: (state: WeatherStoreState) => createFindByIdGetter("location", state.locations),
+        findAllLocations: (state: WeatherStoreState) => createFindAllGetter(state.locations)
     },
     actions: {
-        addLocation(data: WeatherLocationData): void {
-            this.locations[data.name] = buildWeatherLocation(data);
+        async fetchAllLocations(): Promise<void> {
+            (await api.weather.locations.getAll())
+                .map((data) => buildWeatherLocation(data))
+                .forEach((location) => this.locations[location.name] = location);
         }
     }
 });

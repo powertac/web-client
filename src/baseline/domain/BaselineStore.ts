@@ -1,6 +1,11 @@
 import {defineStore} from "pinia";
-import type {Baseline} from "@/baseline/domain/Baseline";
-import {createGetter} from "@/util/StoreUtils";
+import {Baseline, type BaselineData} from "@/baseline/domain/Baseline";
+import {createFindByIdGetter} from "@/store/StoreUtils";
+import {api} from "@/api/api";
+import {buildGameConfig} from "@/game/domain/GameConfig";
+import moment from "moment";
+import {useGameStore} from "@/game/domain/GameStore";
+import {SyncGroup} from "@/concurrency/SyncGroup";
 
 export interface BaselineStoreState {
     baselines: {[id: string]: Baseline}
@@ -10,6 +15,25 @@ export const useBaselineStore = defineStore({
     id: "baselines",
     state: () => ({baselines: {}} as BaselineStoreState),
     getters: {
-        findById: (state: BaselineStoreState) => createGetter("baseline", state.baselines)
+        exists: (state: BaselineStoreState) => (id: string) => state.baselines[id] !== undefined,
+        findById: (state: BaselineStoreState) => createFindByIdGetter("baseline", state.baselines)
+    },
+    actions: {
+        async fetchById(id: string): Promise<void> {
+            if (undefined === this.baselines[id]) {
+                const data = await api.orchestrator.baselines.getById(id);
+                this.baselines[id] = buildBaseline(data);
+                await useGameStore().fetchByIds(data.gameIds);
+            }
+        }
     }
 });
+
+function buildBaseline(data: BaselineData): Baseline {
+    return new Baseline(
+        data.id,
+        data.name,
+        buildGameConfig(data.config),
+        data.gameIds,
+        moment(data.createdAt));
+}
