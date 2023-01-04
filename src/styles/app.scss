@@ -1,0 +1,13 @@
+@layer base {
+  html {
+    @apply text-slate-800;
+    font-size: 12px;
+  }
+  body {
+    @apply h-screen;
+  }
+
+  #app {
+    @apply h-full;
+  }
+}

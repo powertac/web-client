@@ -1,0 +1,13 @@
+.card {
+  @apply rounded-sm px-5 py-3 border border-stone-300 bg-stone-50 cursor-pointer m-[1px];
+  .card-title { @apply font-semibold break-words; }
+  &.selected {
+    @apply border-emerald-400 bg-emerald-50 text-emerald-800 border-2 m-0;
+    .key-value dt { @apply text-emerald-600 }
+  }
+  .key-value {
+    @apply flex justify-between;
+    dt { @apply text-stone-600 }
+    dd {  }
+  }
+}

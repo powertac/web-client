@@ -1,10 +1,10 @@
-import moment, {type Moment} from "moment";
+import {DateTime} from "luxon";
 
 export class GameRun {
 
     constructor(public readonly id: string,
-                public readonly start: Moment,
-                public readonly end: moment.Moment,
+                public readonly start: DateTime,
+                public readonly end: DateTime,
                 public readonly phase: string, // FIXME : make it an enum
                 public readonly failed: boolean) {}
 
@@ -22,8 +22,8 @@ export interface GameRunData {
 export function buildGameRun(data: GameRunData): GameRun {
     return new GameRun(
         data.id,
-        moment(data.start),
-        moment(data.end),
+        DateTime.fromMillis(data.start),
+        DateTime.fromMillis(data.end),
         data.phase,
         data.failed);
 }

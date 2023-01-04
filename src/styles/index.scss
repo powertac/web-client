@@ -1,3 +1,7 @@
 @tailwind base;
-@tailwind components;
 @tailwind utilities;
+
+@import "app";
+@import "form";
+@import "card";
+@import "button";

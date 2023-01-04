@@ -3,9 +3,8 @@ import {Baseline, type BaselineData} from "@/baseline/domain/Baseline";
 import {createFindByIdGetter} from "@/store/StoreUtils";
 import {api} from "@/api/api";
 import {buildGameConfig} from "@/game/domain/GameConfig";
-import moment from "moment";
 import {useGameStore} from "@/game/domain/GameStore";
-import {SyncGroup} from "@/concurrency/SyncGroup";
+import {DateTime} from "luxon";
 
 export interface BaselineStoreState {
     baselines: {[id: string]: Baseline}
@@ -35,5 +34,5 @@ function buildBaseline(data: BaselineData): Baseline {
         data.name,
         buildGameConfig(data.config),
         data.gameIds,
-        moment(data.createdAt));
+        DateTime.fromMillis(data.createdAt));
 }

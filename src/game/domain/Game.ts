@@ -1,18 +1,19 @@
 import type {GameConfig, GameConfigData} from "@/game/domain/GameConfig";
 import type {GameRun, GameRunData} from "@/game/domain/GameRun";
-import type {Moment} from "moment";
 import type {Baseline} from "@/baseline/domain/Baseline";
 import type {Treatment} from "@/treatment/domain/Treatment";
 import {useBaselineStore} from "@/baseline/domain/BaselineStore";
 import {useTreatmentStore} from "@/treatment/domain/TreatmentStore";
 import {useGameStore} from "@/game/domain/GameStore";
+import type {DateTime} from "luxon";
+import {WeatherConfigData} from "@/weather/domain/WeatherConfig";
 
 export class Game {
 
     constructor(public readonly id: string,
                 public readonly name: string,
                 public readonly config: GameConfig,
-                public readonly createdAt: Moment,
+                public readonly createdAt: DateTime,
                 public readonly cancelled: boolean,
                 public readonly runs: GameRun[],
                 private readonly baselineId: string|null,
@@ -72,7 +73,7 @@ export class Game {
         return completedRun !== undefined ? completedRun : null;
     }
 
-    get start(): moment.Moment|null {
+    get start(): DateTime|null {
         if (this.completedRun !== null) {
             return this.completedRun.start;
         } else if (this.activeRun !== null) {
@@ -82,7 +83,7 @@ export class Game {
         }
     }
 
-    get end(): moment.Moment|null {
+    get end(): DateTime|null {
         if (this.completedRun !== null) {
             return this.completedRun.end;
         } else if (this.activeRun !== null) {
@@ -104,4 +105,11 @@ export interface GameData {
     baselineId: string|null;
     treatmentId: string|null;
     baseGameId: string|null;
+}
+
+export interface NewGameData {
+    name: string;
+    brokerIds: string[];
+    parameters: { [key: string]: string };
+    weather: WeatherConfigData;
 }

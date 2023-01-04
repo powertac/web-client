@@ -1,22 +1,20 @@
 <script setup lang="ts">
-import {useBrokerStore} from "@/broker/domain/BrokerStore";
-import {onMounted, ref} from "vue";
-import {SyncGroup} from "@/concurrency/SyncGroup";
-import {useWeatherStore} from "@/weather/domain/WeatherStore";
 import BrokerSelector from "@/broker/components/BrokerSelector.vue";
-
-const brokerStore = useBrokerStore();
-const weatherStore = useWeatherStore();
-const loading = ref(true);
-
-onMounted(() => {
-    const sync = new SyncGroup();
-    sync.add(weatherStore.fetchAllLocations());
-    sync.wait().then(() => loading.value = false);
-});
+import WeatherSelector from "@/weather/components/WeatherSelector.vue";
+import ParameterEditor from "@/simulation/components/ParameterEditor.vue";
 </script>
 
 <template>
-    <h1>Game Config</h1>
-    <BrokerSelector />
+    <div class="form-group">
+        <h2 class="form-group-title">Brokers</h2>
+        <BrokerSelector class="form-group-content" />
+    </div>
+    <div class="form-group">
+        <h2 class="form-group-title">Weather</h2>
+        <WeatherSelector class="form-group-content" />
+    </div>
+    <div class="form-group">
+        <h2 class="form-group-title">Parameters</h2>
+        <ParameterEditor class="form-group-content" />
+    </div>
 </template>

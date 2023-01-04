@@ -1,21 +1,21 @@
-import moment from "moment";
+import {DateTime} from "luxon";
 
 export class WeatherLocation {
 
     constructor(
         public readonly name: string,
-        public readonly minReportTime: moment.Moment,
-        public readonly maxReportTime: moment.Moment,
-        public readonly minForecastTime: moment.Moment,
-        public readonly maxForecastTime: moment.Moment) {
+        public readonly minReportTime: DateTime,
+        public readonly maxReportTime: DateTime,
+        public readonly minForecastTime: DateTime,
+        public readonly maxForecastTime: DateTime) {
     }
 
-    get minTime(): moment.Moment {
-        return this.minReportTime.isAfter(this.minForecastTime) ? this.minReportTime : this.minForecastTime;
+    get minTime(): DateTime {
+        return DateTime.max(this.minReportTime, this.minForecastTime);
     }
 
-    get maxTime(): moment.Moment {
-        return this.maxReportTime.isBefore(this.maxForecastTime) ? this.maxReportTime : this.maxForecastTime;
+    get maxTime(): DateTime {
+        return DateTime.min(this.maxReportTime, this.maxForecastTime);
     }
 
 }
@@ -31,8 +31,8 @@ export interface WeatherLocationData {
 export function buildWeatherLocation(data: WeatherLocationData): WeatherLocation {
     return new WeatherLocation(
         data.name,
-        moment(data.minReportTime),
-        moment(data.maxReportTime),
-        moment(data.minForecastTime),
-        moment(data.maxForecastTime));
+        DateTime.fromISO(data.minReportTime),
+        DateTime.fromISO(data.maxReportTime),
+        DateTime.fromISO(data.minForecastTime),
+        DateTime.fromISO(data.maxForecastTime));
 }

@@ -1,0 +1,53 @@
+.form {
+  @apply mx-auto mb-44 mt-8 max-w-7xl p-5;
+
+  .form-title {
+    @apply  my-10
+            text-4xl text-slate-600;
+  }
+
+  .form-group {
+    @apply  flex border-t border-b-slate-50
+            mt-10 mb-20 pt-8;
+
+    .form-group-title {
+      @apply  w-52 mt-1
+              text-2xl text-slate-600;
+    }
+
+    .form-group-content {
+      @apply w-full;
+
+      label.attached-label + input.default {
+        @apply rounded-l-none;
+      }
+
+      input.default {
+        @apply  px-5 pt-3 pb-2.5
+                border border-stone-300 rounded-sm outline-none
+                text-base text-stone-700;
+
+        &:active, &:focus {
+          @apply border-blue-400 text-stone-900;
+        }
+
+        &[disabled] {
+          @apply bg-slate-50 border-slate-200 cursor-not-allowed;
+        }
+
+        &.valid {
+          @apply border-emerald-400 bg-emerald-50 text-emerald-800;
+        }
+      }
+    }
+  }
+}
+
+.input-group {
+  @apply flex flex-row;
+
+  label.attached-label {
+    @apply flex items-center px-4 text-base text-slate-600;
+    @apply border border-r-0 rounded-sm rounded-r-none bg-slate-50 border-slate-300;
+  }
+}

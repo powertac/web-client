@@ -1,22 +1,21 @@
 import type {User} from "@/user/domain/User";
-import type {Moment} from "moment";
-import moment from "moment";
 import {useUserStore} from "@/user/domain/UserStore";
+import {DateTime} from "luxon";
 
 export class RegistrationToken {
 
     constructor(public readonly id: number,
                 public readonly token: string,
                 public readonly issuedBy: User,
-                public readonly issuedAt: Moment,
+                public readonly issuedAt: DateTime,
                 public readonly claimedBy: User|null,
-                public readonly claimedAt: Moment|null,
-                public readonly expiresAt: Moment) {}
+                public readonly claimedAt: DateTime|null,
+                public readonly expiresAt: DateTime) {}
 
     get status(): string {
         if (this.claimedAt !== null && this.claimedBy !== null) {
             return "CLAIMED";
-        } else if (this.expiresAt.isBefore(moment())) {
+        } else if (DateTime.now() > this.expiresAt) {
             return "EXPIRED";
         } else {
             return "OPEN";
@@ -42,8 +41,8 @@ export function buildRegistrationToken(data: RegistrationTokenData): Registratio
         data.id,
         data.token,
         userStore.findById(data.issuedBy),
-        moment(data.issuedAt),
+        DateTime.fromMillis(data.issuedAt),
         data.claimedBy !== null ? userStore.findById(data.claimedBy) : null,
-        data.claimedAt !== null ? moment(data.claimedAt) : null,
-        moment(data.expiresAt));
+        data.claimedAt !== null ? DateTime.fromMillis(data.claimedAt) : null,
+        DateTime.fromMillis(data.expiresAt));
 }

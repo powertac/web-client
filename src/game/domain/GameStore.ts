@@ -4,10 +4,10 @@ import {createFindByIdGetter} from "@/store/StoreUtils";
 import {buildGameConfig} from "@/game/domain/GameConfig";
 import {buildGameRun} from "@/game/domain/GameRun";
 import {api} from "@/api/api";
-import moment from "moment";
 import {useBaselineStore} from "@/baseline/domain/BaselineStore";
 import {useTreatmentStore} from "@/treatment/domain/TreatmentStore";
 import {SyncGroup} from "@/concurrency/SyncGroup";
+import {DateTime} from "luxon";
 
 interface GameStoreState {
     games: {[id: string]: Game|undefined}
@@ -53,7 +53,7 @@ function buildGame(data: GameData): Game {
         data.id,
         data.name,
         buildGameConfig(data.config),
-        moment(data.createdAt),
+        DateTime.fromMillis(data.createdAt),
         data.cancelled,
         data.runs.map(data => buildGameRun(data)),
         data.baselineId,

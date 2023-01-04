@@ -1,5 +1,5 @@
 import type {GameConfig, GameConfigData} from "@/game/domain/GameConfig";
-import type {Moment} from "moment";
+import type {DateTime} from "luxon";
 import {GameGroup} from "@/game/domain/GameGroup";
 
 export class Baseline extends GameGroup {
@@ -8,7 +8,7 @@ export class Baseline extends GameGroup {
                 public name: string,
                 public config: GameConfig,
                 public gameIds: string[],
-                public createdAt: Moment) {
+                public createdAt: DateTime) {
         super();
     }
 
