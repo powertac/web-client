@@ -1,5 +1,5 @@
 .button {
-  @apply  px-5 pt-2.5 pb-2 text-slate-600 rounded uppercase text-xs
+  @apply  px-5 py-2.5 text-slate-600 rounded uppercase text-xs
           border border-slate-400;
   &:hover {
     @apply bg-blue-50 text-blue-700 border-blue-500;

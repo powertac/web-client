@@ -7,10 +7,18 @@ import {buildWeatherConfig} from "@/weather/domain/WeatherConfig";
 export class GameConfig {
 
     constructor(
-        public readonly brokers: Broker[],
+        public readonly brokersIds: string[],
         public readonly parameters: { [key: string]: string },
         public readonly weather: WeatherConfig,
-        public readonly seed: string|null) { // FIXME : how are seeds represented?
+        public readonly seed: string|null) {} // FIXME : how are seeds represented?
+
+    get brokers(): Broker[] {
+        const brokerStore = useBrokerStore();
+        return this.brokersIds.map((id) => brokerStore.findById(id))
+            .sort((a, b) => {
+                const primary = a.name.localeCompare(b.name);
+                return primary !== 0 ? primary : a.version.localeCompare(b.version)
+            });
     }
 
 }
@@ -22,11 +30,9 @@ export interface GameConfigData {
     seed: string|null;
 }
 
-const brokerStore = useBrokerStore();
-
 export function buildGameConfig(data: GameConfigData) {
     return new GameConfig(
-        data.brokerIds.map((id) => brokerStore.findById(id)),
+        data.brokerIds,
         data.parameters,
         buildWeatherConfig(data.weather),
         data.seed !== undefined ? data.seed : null);

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {useParameterStore} from "@/simulation/domain/ParameterStore";
-import {onMounted, ref, watch} from "vue";
+import {ref, watch} from "vue";
 import Autocomplete from "@/util/components/Autocomplete.vue";
 import ParameterValue from "@/simulation/components/ParameterValue.vue";
 
@@ -10,7 +10,6 @@ const emit = defineEmits<{
 
 const search = ref("");
 const parameterStore = useParameterStore();
-const loading = ref(true);
 const parameters = ref({} as {[key: string]: string});
 
 function add(parameter: string): void {
@@ -23,10 +22,6 @@ function add(parameter: string): void {
 function remove(parameter: string): void {
     delete parameters.value[parameter];
 }
-
-onMounted(() => parameterStore.fetchAllOnce()
-    .then(() => loading.value = false)
-    .catch((error) => console.error(error)));
 
 watch(parameters, () => emit("selected", parameters.value), {deep: true})
 </script>

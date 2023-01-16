@@ -1,5 +1,5 @@
 import CryptoJS from "crypto-js";
-import {config} from "@/application/config";
+import {config} from "@/config";
 
 const storageKeyPrefix: string = 'PWC_';
 const secretKey: string = config.auth.secret;

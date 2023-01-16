@@ -8,7 +8,11 @@ export class GameClient extends RestClient {
     }
 
     public create(newGame: NewGameData): Promise<GameData> {
-        return this.post("/games/", newGame);
+        return this.post("/v2/games/", newGame);
+    }
+
+    public findAll(): Promise<GameData[]> {
+        return this.get("/v2/games/");
     }
 
 }

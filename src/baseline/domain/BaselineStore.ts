@@ -1,7 +1,7 @@
 import {defineStore} from "pinia";
 import {Baseline, type BaselineData} from "@/baseline/domain/Baseline";
 import {createFindByIdGetter} from "@/store/StoreUtils";
-import {api} from "@/api/api";
+import {api} from "@/api";
 import {buildGameConfig} from "@/game/domain/GameConfig";
 import {useGameStore} from "@/game/domain/GameStore";
 import {DateTime} from "luxon";

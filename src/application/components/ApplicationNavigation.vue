@@ -1,8 +1,9 @@
 <template>
-    <div class="relative w-56 h-full">
-        <div class="h-full bg-slate-50 w-56 fixed">
+    <div class="relative w-72 h-full">
+        <div class="h-full bg-slate-100 border-r border-slate-300 w-72 fixed">
             <router-link class="logo" to="/">POWER TAC</router-link>
             <router-link class="nav-item" to="/game/new">New Game</router-link>
+            <router-link class="nav-item" to="/game/table">Game Table</router-link>
         </div>
     </div>
 </template>

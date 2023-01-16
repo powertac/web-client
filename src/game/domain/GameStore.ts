@@ -1,9 +1,9 @@
 import {Game, type GameData} from "@/game/domain/Game";
 import {defineStore} from "pinia";
-import {createFindByIdGetter} from "@/store/StoreUtils";
+import {createFindAllGetter, createFindByIdGetter} from "@/store/StoreUtils";
 import {buildGameConfig} from "@/game/domain/GameConfig";
 import {buildGameRun} from "@/game/domain/GameRun";
-import {api} from "@/api/api";
+import {api} from "@/api";
 import {useBaselineStore} from "@/baseline/domain/BaselineStore";
 import {useTreatmentStore} from "@/treatment/domain/TreatmentStore";
 import {SyncGroup} from "@/concurrency/SyncGroup";
@@ -18,7 +18,8 @@ export const useGameStore = defineStore({
     state: () => ({games: {}} as GameStoreState),
     getters: {
         exists: (state: GameStoreState) => (id: string) => state.games[id] !== undefined,
-        findById: (state: GameStoreState) => createFindByIdGetter("game", state.games)
+        findById: (state: GameStoreState) => createFindByIdGetter("game", state.games),
+        findAll: (state: GameStoreState) => createFindAllGetter(state.games)
     },
     actions: {
         async fetchById(id: string, force?: boolean): Promise<void> {
@@ -43,6 +44,28 @@ export const useGameStore = defineStore({
             for (let i=0; i < ids.length; i++) {
                 sync.add(this.fetchById(ids[i]));
             }
+            return sync.wait();
+        },
+        async fetchAllOnce(): Promise<void> {
+            const data = await api.orchestrator.games.findAll();
+            const baselineIds = new Set<string>();
+            const treatmentIds = new Set<string>();
+            const baseGameIds = new Set<string>();
+            for (const gameData of data) {
+                if (undefined === this.games[gameData.id]) {
+                    this.games[gameData.id] = buildGame(gameData);
+                    if (null !== gameData.baselineId)
+                        baselineIds.add(gameData.baselineId)
+                    if (null !== gameData.treatmentId)
+                        treatmentIds.add(gameData.treatmentId)
+                    if (null !== gameData.baseGameId)
+                        baseGameIds.add(gameData.baseGameId)
+                }
+            }
+            const sync = new SyncGroup();
+            baselineIds.forEach((id) => sync.add(useBaselineStore().fetchById(id)))
+            treatmentIds.forEach((id) => sync.add(useTreatmentStore().fetchById(id)))
+            baseGameIds.forEach((id) => sync.add(this.fetchById(id)))
             return sync.wait();
         }
     }

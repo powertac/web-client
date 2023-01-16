@@ -7,7 +7,7 @@ import {GameValidator} from "@/game/domain/GameValidator";
 import type {NewGameData} from "@/game/domain/Game";
 import {Broker} from "@/broker/domain/Broker";
 import {WeatherConfig} from "@/weather/domain/WeatherConfig";
-import {api} from "@/api/api";
+import {api} from "@/api";
 import router from "@/router";
 
 const name = ref("" as string);

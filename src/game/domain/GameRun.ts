@@ -3,8 +3,8 @@ import {DateTime} from "luxon";
 export class GameRun {
 
     constructor(public readonly id: string,
-                public readonly start: DateTime,
-                public readonly end: DateTime,
+                public readonly start: DateTime|null,
+                public readonly end: DateTime|null,
                 public readonly phase: string, // FIXME : make it an enum
                 public readonly failed: boolean) {}
 
@@ -12,7 +12,6 @@ export class GameRun {
 
 export interface GameRunData {
     id: string;
-    gameId: string;
     start: number;
     end: number;
     phase: string;
@@ -22,8 +21,8 @@ export interface GameRunData {
 export function buildGameRun(data: GameRunData): GameRun {
     return new GameRun(
         data.id,
-        DateTime.fromMillis(data.start),
-        DateTime.fromMillis(data.end),
+        data.start !== null ? DateTime.fromMillis(data.start) : null,
+        data.end !== null ? DateTime.fromMillis(data.end) : null,
         data.phase,
         data.failed);
 }

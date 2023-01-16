@@ -1,7 +1,7 @@
 import {defineStore} from "pinia";
 import type {Broker} from "@/broker/domain/Broker";
 import {createFindAllGetter, createFindByIdGetter} from "@/store/StoreUtils";
-import {api} from "@/api/api";
+import {api} from "@/api";
 import {buildBroker} from "@/broker/domain/Broker";
 
 export interface BrokerStoreState {

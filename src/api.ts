@@ -1,5 +1,5 @@
 import {AuthClient} from "@/security/AuthClient";
-import {config} from "@/application/config";
+import {config} from "@/config";
 import {BrokerClient} from "@/broker/BrokerClient";
 import {GameClient} from "@/game/GameClient";
 import {BaselineClient} from "@/baseline/BaselineClient";

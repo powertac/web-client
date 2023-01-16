@@ -6,7 +6,8 @@ import {useBaselineStore} from "@/baseline/domain/BaselineStore";
 import {useTreatmentStore} from "@/treatment/domain/TreatmentStore";
 import {useGameStore} from "@/game/domain/GameStore";
 import type {DateTime} from "luxon";
-import {WeatherConfigData} from "@/weather/domain/WeatherConfig";
+import type {WeatherConfigData} from "@/weather/domain/WeatherConfig";
+import {GameStatus} from "@/game/domain/GameStatus";
 
 export class Game {
 
@@ -35,17 +36,17 @@ export class Game {
         return null !== this.baseGameId ? useGameStore().findById(this.baseGameId) : null;
     }
 
-    get status(): string {
+    get status(): GameStatus {
         if (this.cancelled) {
-            return 'cancelled';
+            return GameStatus.Cancelled;
         } else if (this.completedRun !== null) {
-            return 'completed';
+            return GameStatus.Completed;
         } else if (this.activeRun !== null) {
-            return 'running';
+            return GameStatus.Running;
         } else if (this.runs.length < 3) {
-            return 'queued';
+            return GameStatus.Queued;
         }
-        return 'failed';
+        return GameStatus.Failed;
     }
 
     get statusIndex(): number {

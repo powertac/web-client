@@ -11,7 +11,6 @@ const emit = defineEmits<{
 }>();
 
 const weatherStore = useWeatherStore();
-const loading = ref(true);
 const locations = computed(() => weatherStore.findAllLocations().slice().sort((a, b) => a.name.localeCompare(b.name)));
 const selectedLocation = ref<WeatherLocation>();
 const selectedDate = ref<string>();
@@ -32,19 +31,11 @@ function emitIfValid(): void {
             DateTime.fromISO(selectedDate.value as string)));
 }
 
-onMounted(() => {
-    weatherStore.fetchAllLocations()
-        .then(() => loading.value = false)
-        .catch((error) => console.error(error));
-});
 watch(weatherConfig, emitIfValid);
 </script>
 
 <template>
-    <div v-if="loading" class="p-6 bg-slate-50 border border-slate-200 rounded text-center font-semibold text-slate-500 animate-pulse">
-        Loading...
-    </div>
-    <div v-else>
+    <div>
         <div class="flex flex-row gap-2">
             <div @click="selectedLocation = location" class="card" :class="{'selected': selectedLocation?.name === location.name}" v-for="location in locations" :key="location.name">
                 <h6 class="card-title">{{capitalize(location.name)}}</h6>
