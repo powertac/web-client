@@ -1,19 +1,16 @@
 .form {
-  @apply mx-auto mb-44 mt-8 max-w-7xl p-5;
+  @apply flex h-full flex-col;
 
-  .form-title {
-    @apply  my-10
-            text-4xl text-slate-600;
-  }
+  .form-header { @apply bg-slate-50 pt-10 pb-7 border-b border-slate-200 }
+  .form-content { @apply grow overflow-y-scroll }
+  .form-footer { @apply bg-slate-50 border-t border-slate-200 }
+  .form-title { @apply text-4xl text-slate-600 }
 
   .form-group {
-    @apply  flex border-t border-b-slate-50
-            mt-10 mb-20 pt-8;
+    @apply border-b border-slate-200 pb-12 mx-auto pt-7  max-w-7xl flex;
 
-    .form-group-title {
-      @apply  w-52 mt-1
-              text-2xl text-slate-600;
-    }
+    &:last-child { @apply border-b-0 }
+    .form-group-title { @apply  w-52 mt-2 text-2xl text-slate-600 }
 
     .form-group-content {
       @apply w-full;
@@ -38,7 +35,7 @@
         }
 
         &.valid {
-          @apply border-emerald-400 bg-emerald-50 text-emerald-800;
+          @apply border-emerald-400 bg-emerald-50 text-emerald-700;
         }
       }
     }

@@ -6,7 +6,7 @@ import {buildGameRun} from "@/game/domain/GameRun";
 import {api} from "@/api";
 import {useBaselineStore} from "@/baseline/domain/BaselineStore";
 import {useTreatmentStore} from "@/treatment/domain/TreatmentStore";
-import {SyncGroup} from "@/concurrency/SyncGroup";
+import {SyncGroup} from "@/util/SyncGroup";
 import {DateTime} from "luxon";
 
 interface GameStoreState {
@@ -72,13 +72,19 @@ export const useGameStore = defineStore({
 });
 
 function buildGame(data: GameData): Game {
+    const runs = data.runs.map(data => buildGameRun(data)).sort((a, b) => {
+        if (a.start === null && b.start === null) return 0;
+        else if (a.start === null) return -1;
+        else if (b.start === null) return 1;
+        else return a.start.toMillis() - b.start.toMillis();
+    });
     return new Game(
         data.id,
         data.name,
         buildGameConfig(data.config),
         DateTime.fromMillis(data.createdAt),
         data.cancelled,
-        data.runs.map(data => buildGameRun(data)),
+        runs,
         data.baselineId,
         data.treatmentId,
         data.baseGameId);

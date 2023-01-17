@@ -61,7 +61,6 @@ export class Dataset<E> {
     public reset(): Dataset<E> {
         this.columns = [];
         this.sorting = {};
-        console.log(this.sorting);
         return this;
     }
 

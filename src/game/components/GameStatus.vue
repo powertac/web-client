@@ -19,5 +19,6 @@ div.game-status {
     &.queued {}
     &.running { @apply bg-indigo-100 text-indigo-800 border-indigo-300 }
     &.completed { @apply bg-emerald-100 text-emerald-800 border-emerald-300 }
+    &.failed { @apply bg-rose-100 text-rose-800 border-rose-300 }
 }
 </style>

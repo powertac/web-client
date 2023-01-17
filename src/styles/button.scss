@@ -1,16 +1,22 @@
 .button {
-  @apply  px-5 py-2.5 text-slate-600 rounded uppercase text-xs
+  @apply  px-5 py-2.5 text-slate-600 rounded uppercase text-xs bg-white
           border border-slate-400;
   &:hover {
     @apply bg-blue-50 text-blue-700 border-blue-500;
   }
 
   &.button-lg {
-    @apply px-6 pt-3 pb-2.5 text-base font-semibold border-2;
+    @apply px-6 pt-3 pb-2.5 text-sm font-semibold;
   }
 
   &[disabled] {
     @apply bg-slate-100 border-slate-200 text-slate-400;
     &:hover {@apply border-slate-200 text-slate-400}
+  }
+
+  &.form-submit {
+    @apply text-red-400 border bg-blue-100 text-blue-700 border-blue-500;
+    &:hover { @apply border-blue-400 text-blue-600 bg-blue-50 }
+    &[disabled] { @apply bg-slate-200 text-slate-500 rounded-sm border border-slate-300 }
   }
 }

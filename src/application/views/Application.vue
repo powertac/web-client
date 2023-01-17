@@ -3,7 +3,7 @@ import {RouterView} from 'vue-router'
 import ApplicationNavigation from "@/application/components/ApplicationNavigation.vue";
 import {api} from "@/api";
 import {computed, ref} from "vue";
-import {SyncGroup} from "@/concurrency/SyncGroup";
+import {SyncGroup} from "@/util/SyncGroup";
 import {useBrokerStore} from "@/broker/domain/BrokerStore";
 import {useWeatherStore} from "@/weather/domain/WeatherStore";
 import ApplicationLoader from "@/application/components/ApplicationLoader.vue";
@@ -33,7 +33,7 @@ const defaultStyle = computed(() => ({ fontSize: size.value + "px" }));
     </Transition>
     <div class="flex flex-auto flex-row h-full z-0" v-if="!loading">
         <ApplicationNavigation/>
-        <div class="flex-grow">
+        <div class="grow">
             <RouterView/>
         </div>
     </div>

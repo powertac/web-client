@@ -38,7 +38,10 @@ onMounted(() => {
         <div class="card" :class="{'selected': selection.includes(broker)}"
              v-for="broker in brokers()" :key="broker.id"
              @click="select(broker)">
-            <h6 class="card-title">{{broker.name}}</h6>
+            <h6 class="card-title">
+                {{broker.name}}
+                <icon icon="check" class="text-xs ml-1.5 mb-0.5" v-if="selection.includes(broker)" />
+            </h6>
             <span class="uppercase text-xs">{{broker.version}}</span>
         </div>
     </div>

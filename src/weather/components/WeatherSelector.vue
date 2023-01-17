@@ -38,12 +38,15 @@ watch(weatherConfig, emitIfValid);
     <div>
         <div class="flex flex-row gap-2">
             <div @click="selectedLocation = location" class="card" :class="{'selected': selectedLocation?.name === location.name}" v-for="location in locations" :key="location.name">
-                <h6 class="card-title">{{capitalize(location.name)}}</h6>
+                <h6 class="card-title">
+                    {{capitalize(location.name)}}
+                    <icon icon="check" class="text-xs ml-1.5 mb-0.5" v-if="selectedLocation?.name === location.name" />
+                </h6>
                 {{location.minTime.toLocaleString()}} - {{location.maxTime.toLocaleString()}}
             </div>
         </div>
         <div>
-            <div class="input-group mt-2 flex">
+            <div class="input-group mt-2 flex w-[32rem]">
                 <label class="attached-label" for="weather-start-date">Start Date</label>
                 <input type="date" id="weather-start-date" class="grow default w-52 text-center"
                        v-model="selectedDate"

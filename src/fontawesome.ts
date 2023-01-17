@@ -6,7 +6,17 @@ import {
     faUser,
     faClock,
     faTimes,
-    faSquareArrowUpRight, faAngleUp, faAngleDown
+    faSquareArrowUpRight,
+    faAngleUp,
+    faAngleDown,
+    faBars,
+    faDiceD6,
+    faSeedling,
+    faCaretRight,
+    faPlus,
+    faChess,
+    faCircle,
+    faCheckCircle
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -18,5 +28,13 @@ library.add(
     faTimes,
     faSquareArrowUpRight,
     faAngleUp,
-    faAngleDown
+    faAngleDown,
+    faBars,
+    faDiceD6,
+    faSeedling,
+    faCaretRight,
+    faPlus,
+    faChess,
+    faCircle,
+    faCheckCircle
 );

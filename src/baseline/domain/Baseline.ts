@@ -1,6 +1,7 @@
 import type {GameConfig, GameConfigData} from "@/game/domain/GameConfig";
 import type {DateTime} from "luxon";
 import {GameGroup} from "@/game/domain/GameGroup";
+import type {NewGameData} from "@/game/domain/Game";
 
 export class Baseline extends GameGroup {
 
@@ -20,4 +21,8 @@ export interface BaselineData {
     config: GameConfigData;
     gameIds: string[];
     createdAt: number;
+}
+
+export interface NewBaselineData extends NewGameData {
+    size: number;
 }

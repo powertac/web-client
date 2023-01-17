@@ -26,7 +26,7 @@ const columns: { [name: string]: (a: Game, b: Game) => number } = {
     "Completed at": (a, b) => {
         if (a.end === null && b.end === null) return 0;
         else if (a.end === null) return -1;
-        else if (b.end === null) return 1;
+        else if (b.end === null) return 0;
         else return a.end.toMillis() - b.end.toMillis()
     }
 };
@@ -82,7 +82,7 @@ onMounted(() => gameStore.fetchAllOnce()
                 <tbody>
                 <tr v-for="game in games.items" :key="game.id" @click="selectedGame = game" class="selectable" :class="{'selected': isSelected(game)}">
                     <td class="uppercase text-xs">
-                        <GameStatusIcon class="mr-2" :status="game.status" />
+                        <GameStatusIcon class="mr-2 text-slate-500" :status="game.status" />
                         {{game.status}}
                     </td>
                     <td class="!text-left font-mono">{{game.id}}</td>

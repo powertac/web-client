@@ -95,6 +95,7 @@ watch(results, () => selectedIndex.value = 0);
 watch(selectedIndex, selectedIndexConstraint);
 watch(selectedIndex, setScrollOffset);
 watch(props, () => search.value = props.value);
+watch(resultsOpen, (open) => open ? resultsElement.value?.scrollIntoView() : null);
 </script>
 
 <template>
