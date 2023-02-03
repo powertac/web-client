@@ -6,7 +6,9 @@ import {v4 as uuid} from "uuid";
 const props = defineProps<{
     value: string,
     items: string[],
-    placeholder?: string
+    placeholder?: string,
+    valid?: boolean,
+    disabled?: boolean
 }>();
 const emit = defineEmits<{
     (e: 'selected', parameter: string): void
@@ -100,15 +102,22 @@ watch(resultsOpen, (open) => open ? resultsElement.value?.scrollIntoView() : nul
 
 <template>
     <div class="autocomplete relative" @focusin="resultsOpen = true" ref="rootElement">
-        <input type="text" :placeholder="props.placeholder" class="autocomplete-search default w-full" v-model="search" :class="{'rounded-b-none': resultsOpen}"
-               ref="inputElement"
-               @keydown="resultsOpen = true"
-               @keydown.up="selectPrevious"
-               @keydown.down="selectNext"
-               @keydown.enter="select(results[selectedIndex])"
-               @keydown.esc="resultsOpen = false"
-               @keydown.tab="resultsOpen = false" />
-        <div class="autocomplete-results border border-t-0 rounded-sm border-stone-300 max-h-60 overflow-scroll absolute top-[100%] w-full bg-white"
+        <div class="relative">
+            <input type="text" :placeholder="props.placeholder" class="autocomplete-search default w-full" v-model="search"
+                   :class="{'rounded-b-none': resultsOpen, 'valid': valid}"
+                   ref="inputElement"
+                   :disabled="disabled"
+                   @keydown="resultsOpen = true"
+                   @keydown.up="selectPrevious"
+                   @keydown.down="selectNext"
+                   @keydown.enter="select(results[selectedIndex])"
+                   @keydown.esc="resultsOpen = false"
+                   @keydown.tab="resultsOpen = false" />
+            <button class="absolute right-0 top-0 h-full px-5" @click="search = ''; inputElement.focus()">
+                <icon icon="times" />
+            </button>
+        </div>
+        <div class="autocomplete-results border border-t-0 rounded-sm border-stone-300 max-h-60 overflow-scroll absolute top-[100%] w-full bg-white z-50"
              :class="{'hidden': !resultsOpen}" ref="resultsElement">
             <div v-for="(item, index) in results"
                  :id="resultId(index)"

@@ -1,24 +1,28 @@
 <script lang="ts" setup>
 import {useGameStore} from "@/game/domain/GameStore";
-import {onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import {Game} from "@/game/domain/Game";
-import GameBar from "@/game/components/GameBar.vue";
+import GameDetails from "@/game/components/GameDetails.vue";
 import {datetime} from "@/util/DateTimeFormat";
 import GameStatusIcon from "@/game/components/GameStatusIcon.vue";
 import {Dataset, SortOrder} from "@/util/Dataset";
-import DatatableHeader from "@/util/components/DatatableHeader.vue";
+import DatatableHeader from "@/datatable/DatatableHeader.vue";
+import {v4} from "uuid";
 
 const gameStore = useGameStore();
 const loading = ref<boolean>(); // TODO : add loading
 const selectedGame = ref<Game>();
 const games = ref(null as Dataset<Game>|null);
+const rows = ref<HTMLElement[]>([]);
+const tableId = v4();
+
 const columns: { [name: string]: (a: Game, b: Game) => number } = {
-    "Status": (a, b) => a.statusIndex - b.statusIndex,
     "ID": (a, b) => a.id.localeCompare(b.id),
+    "Status": (a, b) => a.statusIndex - b.statusIndex,
     "Baseline / Treatment": (a, b) => {
         if (a.baseline === null && b.baseline === null) return 0;
-        else if (a.baseline === null) return -1;
-        else if (b.baseline === null) return 1;
+        else if (a.baseline === null) return 1;
+        else if (b.baseline === null) return -1;
         else return a.baseline.name.localeCompare(b.baseline.name);
     },
     "Name": (a, b) => a.name.localeCompare(b.name),
@@ -59,6 +63,19 @@ function toggleSorting(column: string, event: MouseEvent): void {
     }
 }
 
+function select(game: Game): void {
+    selectedGame.value = game;
+    const id = rowId(game);
+    const row = rows.value.filter(r => r.id === id).shift();
+    if (row !== undefined) {
+        row.scrollIntoView();
+    }
+}
+
+function rowId(game: Game): string {
+    return tableId + ":" + game.id;
+}
+
 onMounted(() => gameStore.fetchAllOnce()
     .then(() => {
         loading.value = false
@@ -80,12 +97,12 @@ onMounted(() => gameStore.fetchAllOnce()
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="game in games.items" :key="game.id" @click="selectedGame = game" class="selectable" :class="{'selected': isSelected(game)}">
+                <tr v-for="game in games.items" ref="rows" :id="rowId(game)" @click="select(game)" class="selectable" :class="{'selected': isSelected(game)}">
+                    <td class="!text-left font-mono w-96">{{game.id}}</td>
                     <td class="uppercase text-xs">
                         <GameStatusIcon class="mr-2 text-slate-500" :status="game.status" />
                         {{game.status}}
                     </td>
-                    <td class="!text-left font-mono">{{game.id}}</td>
                     <td class="!text-left">
                         <router-link :to="'/baselines/' + game.baseline.id" v-if="game.baseline !== null">
                             {{game.baseline.name}}
@@ -140,6 +157,6 @@ onMounted(() => gameStore.fetchAllOnce()
                 </tbody>
             </table>
         </div>
-        <GameBar :game="selectedGame" v-if="selectedGame !== undefined" @close-self="() => selectedGame = undefined" />
+        <GameDetails :game="selectedGame" v-if="selectedGame !== undefined" @close-self="() => selectedGame = undefined" ref="gameDetails" />
     </div>
 </template>

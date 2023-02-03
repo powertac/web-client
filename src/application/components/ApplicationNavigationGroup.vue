@@ -17,7 +17,7 @@ function activeRoute(name: string): boolean {
 </script>
 
 <template>
-    <div class="ml-6 p-5 text-slate-500 hover:text-slate-700">
+    <div class="ml-6 px-5 py-3 text-slate-500 hover:text-slate-700">
         <h2 class="uppercase font-semibold mb-1 flex items-center cursor-pointer" @click="open = !open"
             :class="{'!text-blue-700': activeGroup}">
             <icon :icon="props.icon" class="mr-1.5 w-6 -mt-[1px]" />

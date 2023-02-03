@@ -10,7 +10,7 @@
   }
 
   &[disabled] {
-    @apply bg-slate-100 border-slate-200 text-slate-400;
+    @apply bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed;
     &:hover {@apply border-slate-200 text-slate-400}
   }
 

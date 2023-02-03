@@ -1,5 +1,6 @@
 import type {Game} from "@/game/domain/Game";
 import {useGameStore} from "@/game/domain/GameStore";
+import {GameStatus} from "@/game/domain/GameStatus";
 
 export abstract class GameGroup {
 
@@ -15,11 +16,15 @@ export abstract class GameGroup {
     }
 
     get completedGames(): Game[] {
-        return this.games.slice().filter((g) => g.status === 'completed');
+        return this.games.slice().filter((g) => g.status === GameStatus.Completed);
     }
 
     get failedGames(): Game[] {
-        return this.games.slice().filter((g) => g.status === 'failed');
+        return this.games.slice().filter((g) => g.status === GameStatus.Failed);
+    }
+
+    get runningGames(): Game[] {
+        return this.games.slice().filter((g) => g.status === GameStatus.Running);
     }
 
     get progress(): number {

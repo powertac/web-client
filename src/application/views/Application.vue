@@ -27,23 +27,24 @@ const defaultStyle = computed(() => ({ fontSize: size.value + "px" }));
 
 <template>
     <Transition>
-    <ApplicationLoader class="absolute top-0 left-0 z-50"
-                       @updated="(state) => loading = (state !== LoadingState.Successful)"
-                       v-if="loading" />
-    </Transition>
-    <div class="flex flex-auto flex-row h-full z-0" v-if="!loading">
-        <ApplicationNavigation/>
-        <div class="grow">
-            <RouterView/>
+        <ApplicationLoader class="absolute top-0 left-0 z-50"
+                           @updated="(state) => loading = (state !== LoadingState.Successful)"
+                           v-if="loading" />
+        <div class="flex flex-auto flex-row h-full z-0" v-else-if="!loading">
+            <ApplicationNavigation/>
+            <div class="grow">
+                <RouterView/>
+            </div>
         </div>
-    </div>
+    </Transition>
+
 </template>
 
 <style lang="scss">
 /* we will explain what these classes do next! */
 .v-enter-active,
 .v-leave-active {
-    transition: opacity 0.5s ease-out;
+    transition: opacity 0.66s ease-out;
 }
 
 .v-enter-from,

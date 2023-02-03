@@ -1,18 +1,22 @@
-import type {Game} from "@/game/domain/Game";
-import type {Baseline} from "@/baseline/domain/Baseline";
-import type {Modifier, ModifierData} from "@/treatment/domain/Modifier";
-import {GameGroup} from "@/game/domain/GameGroup";
-import {useBaselineStore} from "@/baseline/domain/BaselineStore";
+import type {Modifier, ModifierData, NewModifierData} from "@/treatment/domain/Modifier";
 import {buildModifier} from "@/treatment/domain/Modifier";
+import {GameGroup} from "@/game/domain/GameGroup";
+import type {Baseline} from "@/baseline/domain/Baseline";
+import {useBaselineStore} from "@/baseline/domain/BaselineStore";
 
 export class Treatment extends GameGroup {
 
     constructor(public readonly id: string,
                 public readonly name: string,
-                public readonly baseline: Baseline,
+                public readonly baselineId: string,
                 public readonly modifier: Modifier,
-                public readonly games: Game[]) {
+                public readonly gameIds: string[]) {
         super();
+    }
+
+    public get baseline(): Baseline {
+        const baselineStore = useBaselineStore();
+        return baselineStore.findById(this.baselineId);
     }
 
 }
@@ -22,16 +26,20 @@ export interface TreatmentData {
     name: string;
     baselineId: string;
     modifier: ModifierData;
-    games: string[];
+    gameIds: string[];
 }
 
-const baselineStore = useBaselineStore();
+export interface NewTreatmentData {
+    name: string;
+    baselineId: string;
+    modifier: NewModifierData;
+}
 
 export function buildTreatment(data: TreatmentData): Treatment {
     return new Treatment(
         data.id,
         data.name,
-        baselineStore.findById(data.baselineId),
+        data.baselineId,
         buildModifier(data.modifier),
-        []); // FIXME : add game resolving
+        data.gameIds);
 }

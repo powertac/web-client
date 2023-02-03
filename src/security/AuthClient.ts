@@ -1,6 +1,6 @@
 import type {AxiosError} from "axios";
 import type {Credentials} from "@/security/domain/Credentials";
-import {RestClient} from '@/api/RestClient';
+import {RestClient} from '@/util/RestClient';
 import {auth} from "@/security/AuthProvider";
 
 export class AuthClient extends RestClient {

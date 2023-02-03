@@ -1,4 +1,4 @@
-import {RestClient} from "@/api/RestClient";
+import {RestClient} from "@/util/RestClient";
 import type {Broker, BrokerData} from "@/broker/domain/Broker";
 
 export class BrokerClient extends RestClient {

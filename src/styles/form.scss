@@ -1,9 +1,13 @@
 .form {
   @apply flex h-full flex-col;
 
-  .form-header { @apply bg-slate-50 pt-10 pb-7 border-b border-slate-200 }
+  .form-header {
+    @apply bg-slate-50 pt-10 pb-7 border-b border-slate-200;
+  }
   .form-content { @apply grow overflow-y-scroll }
-  .form-footer { @apply bg-slate-50 border-t border-slate-200 }
+  .form-footer {
+    @apply bg-slate-50 border-t border-slate-200;
+  }
   .form-title { @apply text-4xl text-slate-600 }
 
   .form-group {

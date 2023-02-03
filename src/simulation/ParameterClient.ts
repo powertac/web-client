@@ -1,4 +1,4 @@
-import {RestClient} from "@/api/RestClient";
+import {RestClient} from "@/util/RestClient";
 
 export class ParameterClient extends RestClient {
 

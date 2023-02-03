@@ -3,15 +3,13 @@ import DashboardView from "@/application/views/DashboardView.vue";
 import NewGameView from "@/game/views/NewGameView.vue";
 import GameTableView from "@/game/views/GameTableView.vue";
 import NewBaselineView from "@/baseline/views/NewBaselineView.vue";
+import BaselineTableView from "@/baseline/views/BaselineTableView.vue";
+import BrokerTableView from "@/broker/views/BrokerTableView.vue";
+import NewTreatmentView from "@/treatment/views/NewTreatmentView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    {
-      path: '/baselines/new',
-      name: 'new-baseline',
-      component: NewBaselineView
-    },
     {
       path: '/',
       name: 'home',
@@ -28,9 +26,24 @@ const router = createRouter({
       component: GameTableView
     },
     {
+      path: '/baselines/new',
+      name: 'new-baseline',
+      component: NewBaselineView
+    },
+    {
+      path: '/baselines/table',
+      name: 'baseline-table',
+      component: BaselineTableView
+    },
+    {
+      path: '/treatments/new',
+      name: 'new-treatment',
+      component: NewTreatmentView
+    },
+    {
       path: '/brokers/table',
       name: 'broker-table',
-      component: GameTableView
+      component: BrokerTableView
     },
   ]
 });

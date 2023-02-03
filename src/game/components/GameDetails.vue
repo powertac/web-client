@@ -14,7 +14,6 @@ const emit = defineEmits<{
 }>();
 const selectedRun = ref<GameRun>();
 const runSelectionOpen = ref(false);
-
 const runSelectionElement = ref<HTMLElement>();
 
 function closeRunSelection(event: MouseEvent): void {
@@ -30,7 +29,7 @@ function handleClickOutsideRunSelection(event: Event): void {
 
 onMounted(() => selectedRun.value = props.game.runs.length > 0 ? props.game.runs[0] : undefined);
 onMounted(() => document.addEventListener('click', handleClickOutsideRunSelection));
-watch(props, (p) => selectedRun.value = p.game.runs.length > 0 ? p.game.runs[0] : undefined);
+watch(props, (p) => selectedRun.value = p.game.runs.length > 0 ? p.game.runs.sort((a, b) => a.start.toMillis() - b.start.toMillis())[0] : undefined);
 watch(selectedRun, () => runSelectionOpen.value = false);
 onDeactivated(() => document.removeEventListener('click', handleClickOutsideRunSelection));
 </script>

@@ -9,7 +9,7 @@ import {Broker} from "@/broker/domain/Broker";
 import {WeatherConfig} from "@/weather/domain/WeatherConfig";
 import {api} from "@/api";
 import router from "@/router";
-import ValidationBadge from "@/form/components/ValidationBadge.vue";
+import ValidationBadge from "@/form/ValidationBadge.vue";
 
 const name = ref("" as string);
 const brokers = ref([] as Broker[]);
@@ -30,7 +30,7 @@ const game = computed((): Partial<NewGameData> => ({
 function createGame(): void {
     if (isValid()) {
         api.orchestrator.games.create(game.value as NewGameData)
-            .then(() => router.push("/"))
+            .then(() => router.push("/")) // TODO : add real route (deactivate to allow HMR)
             .catch((error) => console.error(error));
     } else {
         console.error("game data not valid");

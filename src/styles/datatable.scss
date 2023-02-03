@@ -18,7 +18,7 @@ table.datatable {
   tbody > tr:first-child > td { @apply border-t-0 }
   tbody > tr.selectable > td { @apply cursor-pointer }
   tbody > tr.selected {
-    & > td { @apply bg-slate-50 border-slate-300 text-slate-900 text-black border-t }
+    & > td { @apply bg-slate-50 border-slate-300 text-black border-t }
     &:first-child > td { @apply border-t-0 }
     &:hover td { @apply bg-slate-100 }
   }

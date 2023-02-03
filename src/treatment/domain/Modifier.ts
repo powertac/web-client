@@ -21,11 +21,14 @@ export class Modifier {
 
 }
 
-export interface ModifierData {
-    id: string;
+export interface NewModifierData {
     name: string;
     type: string;
     config: ModifierConfigData;
+}
+
+export interface ModifierData extends NewModifierData {
+    id: string;
 }
 
 export function buildModifier(data: ModifierData): Modifier {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {useBrokerStore} from "@/broker/domain/BrokerStore";
-import {onMounted, ref} from "vue";
+import {ref} from "vue";
 import type {Broker} from "@/broker/domain/Broker";
 import {Selection} from "@/util/Selection";
 
@@ -22,12 +22,6 @@ function select(broker: Broker): void {
     selection.value.toggle(broker);
     emit('selected', selection.value.entities);
 }
-
-onMounted(() => {
-    brokerStore.fetchAll()
-        .then(() => loading.value = false)
-        .catch((error) => console.error(error));
-});
 </script>
 
 <template>

@@ -1,4 +1,4 @@
-import {RestClient} from "@/api/RestClient";
+import {RestClient} from "@/util/RestClient";
 import type {WeatherLocationData} from "@/weather/domain/WeatherLocation";
 
 export class WeatherLocationClient extends RestClient {

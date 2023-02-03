@@ -7,9 +7,8 @@ import {GameValidator} from "@/game/domain/GameValidator";
 import {Broker} from "@/broker/domain/Broker";
 import {WeatherConfig} from "@/weather/domain/WeatherConfig";
 import {api} from "@/api";
-import router from "@/router";
 import type {NewBaselineData} from "@/baseline/domain/Baseline";
-import ValidationBadge from "@/form/components/ValidationBadge.vue";
+import ValidationBadge from "@/form/ValidationBadge.vue";
 
 const name = ref("" as string);
 const size = ref(0);
@@ -33,7 +32,7 @@ const config = computed((): Partial<NewBaselineData> => ({
 function createBaseline(): void {
     if (isValid()) {
         api.orchestrator.baselines.create(config.value as NewBaselineData)
-            .then(() => router.push("/"))
+            .then(() => console.log("")) // TODO : add routing later to allow HMR
             .catch((error) => console.error(error));
     } else {
         console.error("game data not valid");

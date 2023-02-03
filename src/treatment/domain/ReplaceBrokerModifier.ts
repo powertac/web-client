@@ -13,9 +13,8 @@ export interface ReplaceBrokerModifierConfigData {
     replacementBrokerId: string;
 }
 
-const brokerStore = useBrokerStore();
-
 export function buildReplaceBrokerModifierConfig(data: ReplaceBrokerModifierConfigData): ReplaceBrokerModifierConfig {
+    const brokerStore = useBrokerStore();
     return new ReplaceBrokerModifierConfig(
         brokerStore.findById(data.originalBrokerId),
         brokerStore.findById(data.replacementBrokerId));
