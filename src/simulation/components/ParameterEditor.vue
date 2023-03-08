@@ -5,7 +5,7 @@ import Autocomplete from "@/util/components/Autocomplete.vue";
 import ParameterValue from "@/simulation/components/ParameterValue.vue";
 
 const emit = defineEmits<{
-    (e: 'selected', parameter: {[key: string]: string}): void
+    (e: "updated", parameter: {[key: string]: string}): void
 }>();
 
 const search = ref("");
@@ -23,7 +23,7 @@ function remove(parameter: string): void {
     delete parameters.value[parameter];
 }
 
-watch(parameters, () => emit("selected", parameters.value), {deep: true})
+watch(parameters, () => emit("updated", parameters.value), {deep: true})
 </script>
 
 <template>

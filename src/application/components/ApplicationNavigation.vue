@@ -14,6 +14,7 @@ const treatmentsItems: {routeName: string, label: string}[] = [
 ];
 const brokersItems: {routeName: string, label: string}[] = [
     {routeName: "broker-table", label: "Broker Table"},
+    {routeName: "add-broker", label: "Add Broker"},
 ];
 </script>
 

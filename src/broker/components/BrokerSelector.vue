@@ -9,7 +9,7 @@ const emit = defineEmits<{
 }>();
 
 const brokerStore = useBrokerStore();
-const loading = ref(true);
+const loading = ref(false);
 const selection = ref(new Selection<Broker>());
 const brokers = () => brokerStore.findAll()
     .slice()

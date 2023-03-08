@@ -1,8 +1,8 @@
 import type {Modifier, ModifierData, NewModifierData} from "@/treatment/domain/Modifier";
-import {buildModifier} from "@/treatment/domain/Modifier";
 import {GameGroup} from "@/game/domain/GameGroup";
 import type {Baseline} from "@/baseline/domain/Baseline";
 import {useBaselineStore} from "@/baseline/domain/BaselineStore";
+import type {DateTime} from "luxon";
 
 export class Treatment extends GameGroup {
 
@@ -10,7 +10,8 @@ export class Treatment extends GameGroup {
                 public readonly name: string,
                 public readonly baselineId: string,
                 public readonly modifier: Modifier,
-                public readonly gameIds: string[]) {
+                public readonly gameIds: string[],
+                public readonly createdAt: DateTime) {
         super();
     }
 
@@ -27,19 +28,11 @@ export interface TreatmentData {
     baselineId: string;
     modifier: ModifierData;
     gameIds: string[];
+    createdAt: number;
 }
 
-export interface NewTreatmentData {
+export interface NewTreatmentDTO {
     name: string;
     baselineId: string;
     modifier: NewModifierData;
-}
-
-export function buildTreatment(data: TreatmentData): Treatment {
-    return new Treatment(
-        data.id,
-        data.name,
-        data.baselineId,
-        buildModifier(data.modifier),
-        data.gameIds);
 }

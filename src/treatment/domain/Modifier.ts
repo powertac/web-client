@@ -1,20 +1,22 @@
-import type {ReplaceBrokerModifierConfig, ReplaceBrokerModifierConfigData} from "@/treatment/domain/ReplaceBrokerModifier";
-import type {ParameterSetModifierConfig, ParameterSetModifierConfigData} from "@/treatment/domain/ParameterSetModifier";
-import {buildReplaceBrokerModifierConfig} from "@/treatment/domain/ReplaceBrokerModifier";
-import {buildParameterSetModifierConfig} from "@/treatment/domain/ParameterSetModifier";
+export interface ReplaceBrokerModifierConfig {
+    brokerMapping: {[originalId: string]: string} // mapping original broker id to replacement broker id
+}
+
+export interface ParameterSetModifierConfig {
+    parameters: {[originalId: string]: string} // mapping original broker id to replacement broker id
+}
 
 export type ModifierConfig = ReplaceBrokerModifierConfig|ParameterSetModifierConfig;
-export type ModifierConfigData = ReplaceBrokerModifierConfigData|ParameterSetModifierConfigData;
+export type ModifierConfigData = ReplaceBrokerModifierConfig|ParameterSetModifierConfig;
 
 export enum ModifierType {
-    ReplaceBroker = "replace-broker",
-    ParameterSet = "parameter-set"
+    ReplaceBroker = "REPLACE_BROKER",
+    ParameterSet = "PARAMETER_SET"
 }
 
 export class Modifier {
 
     constructor(public readonly id: string,
-                public readonly name: string,
                 public readonly type: ModifierType,
                 public readonly config: ModifierConfig) {
     }
@@ -22,7 +24,6 @@ export class Modifier {
 }
 
 export interface NewModifierData {
-    name: string;
     type: string;
     config: ModifierConfigData;
 }
@@ -37,18 +38,14 @@ export function buildModifier(data: ModifierData): Modifier {
     switch (data.type) {
         case ModifierType.ReplaceBroker:
             type = ModifierType.ReplaceBroker;
-            config = buildReplaceBrokerModifierConfig(data.config as ReplaceBrokerModifierConfigData);
+            config = data.config;
             break;
         case ModifierType.ParameterSet:
             type = ModifierType.ParameterSet;
-            config = buildParameterSetModifierConfig(data.config as ParameterSetModifierConfigData);
+            config = data.config;
             break;
         default:
             throw new Error(data.type + "is not a valid modifier type");
     }
-    return new Modifier(
-        data.id,
-        data.name,
-        type,
-        config);
+    return new Modifier(data.id, type, config);
 }

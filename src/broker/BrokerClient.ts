@@ -1,5 +1,5 @@
 import {RestClient} from "@/util/RestClient";
-import type {Broker, BrokerData} from "@/broker/domain/Broker";
+import type {BrokerData, NewBrokerData} from "@/broker/domain/Broker";
 
 export class BrokerClient extends RestClient {
 
@@ -7,8 +7,8 @@ export class BrokerClient extends RestClient {
         return this.get("/brokers/");
     }
 
-    public create(broker: Broker): Promise<void> {
-        return this.post("/brokers/", broker);
+    public create(newBroker: NewBrokerData): Promise<void> {
+        return this.post("/brokers/", newBroker);
     }
 
 }

@@ -9,12 +9,15 @@ export class Broker {
 
 }
 
-export interface BrokerData {
+export interface BrokerData extends NewBrokerData{
     id: string;
+    enabled: boolean;
+}
+
+export interface NewBrokerData {
     name: string;
     version: string;
     imageTag: string;
-    enabled: boolean;
 }
 
 export function buildBroker(data: BrokerData): Broker {

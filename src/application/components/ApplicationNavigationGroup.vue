@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {computed, ref} from "vue";
-import router from "@/router";
+import {useRouter} from "vue-router";
 
 const props = defineProps<{
     pathPrefix: string,
@@ -8,6 +8,7 @@ const props = defineProps<{
     label: string,
     items: {routeName: string, label: string}[]
 }>();
+const router = useRouter();
 const open = ref(true);
 const activeGroup = computed(() => router.currentRoute.value.fullPath.startsWith(props.pathPrefix));
 

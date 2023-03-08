@@ -75,7 +75,7 @@ onDeactivated(() => document.removeEventListener('click', handleClickOutsideRunS
                     </div>
                     <div>
                         <router-link :to="'/treatments/' + props.game.treatment.id">
-                            {{props.game.baseline.name}}
+                            {{props.game.treatment.name}}
                         </router-link>
                     </div>
                 </div>

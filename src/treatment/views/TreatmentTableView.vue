@@ -1,17 +1,17 @@
 <script lang="ts" setup>
-import {onMounted, ref} from "vue";
-import {datetime} from "@/util/DateTimeFormat";
-import {Dataset, SortOrder} from "@/util/Dataset";
 import DatatableHeader from "@/datatable/DatatableHeader.vue";
-import {Baseline} from "@/baseline/domain/Baseline";
-import {useBaselineStore} from "@/baseline/domain/BaselineStore";
-import BaselineBar from "@/baseline/components/BaselineDetails.vue";
 import GameGroupProgressBar from "@/game/components/GameGroupProgressBar.vue";
+import {onMounted, ref} from "vue";
+import {Baseline} from "@/baseline/domain/Baseline";
+import {Dataset, SortOrder} from "@/util/Dataset";
+import {useTreatmentStore} from "@/treatment/domain/TreatmentStore";
+import {Treatment} from "@/treatment/domain/Treatment";
+import {datetime} from "@/util/DateTimeFormat";
 
-const baselineStore = useBaselineStore();
-const selectedBaseline = ref<Baseline>();
-const baselines = ref(null as Dataset<Baseline>|null);
-const columns: { [name: string]: (a: Baseline, b: Baseline) => number } = {
+const treatmentStore = useTreatmentStore();
+const selectedTreatment = ref<Treatment>();
+const treatments = ref(null as Dataset<Treatment>|null);
+const columns: { [name: string]: (a: Treatment, b: Treatment) => number } = {
     "ID": (a, b) => a.id.localeCompare(b.id),
     "Name": (a, b) => a.name.localeCompare(b.name),
     "Progress": (a, b) => a.progress - b.progress,
@@ -19,56 +19,56 @@ const columns: { [name: string]: (a: Baseline, b: Baseline) => number } = {
 };
 
 function isSelected(game: Baseline): boolean {
-    return selectedBaseline.value !== undefined
-        && selectedBaseline.value.id === game.id;
+    return selectedTreatment.value !== undefined
+        && selectedTreatment.value.id === game.id;
 }
 
-function createDataset(): Dataset<Baseline> {
-    return Dataset.create(columns, baselineStore.findAll())
+function createDataset(): Dataset<Treatment> {
+    return Dataset.create(columns, treatmentStore.findAll())
         .orderBy("Created at", SortOrder.DESC);
 }
 
 function toggleSorting(column: string, event: MouseEvent): void {
-    if (baselines.value !== null) {
+    if (treatments.value !== null) {
         if (event.ctrlKey) {
-            baselines.value.toggle(column)
+            treatments.value.toggle(column)
         } else {
-            const currentIndex = baselines.value.index(column);
-            const currentOrder = baselines.value.order(column);
-            baselines.value.reset();
+            const currentIndex = treatments.value.index(column);
+            const currentOrder = treatments.value.order(column);
+            treatments.value.reset();
             if (currentIndex !== null && currentOrder !== null) {
-                baselines.value.orderBy(column, currentOrder);
+                treatments.value.orderBy(column, currentOrder);
             }
-            baselines.value.toggle(column);
+            treatments.value.toggle(column);
         }
     }
 }
 
-onMounted(() => baselineStore.fetchAllOnce()
-    .then(() => baselines.value = createDataset())
+onMounted(() => treatmentStore.fetchAllOnce()
+    .then(() => treatments.value = createDataset())
     .catch((error) => console.error(error)));
 </script>
 
 <template>
     <div class="flex flex-col h-full bg-slate-50" ref="root">
         <div class="grow overflow-scroll">
-            <table class="datatable bg-white" v-if="baselines">
+            <table class="datatable bg-white" v-if="treatments">
                 <thead>
                 <tr>
                     <DatatableHeader v-for="column in Object.keys(columns)"
                                      :class="{'left-aligned': (column === 'Name' || column === 'Progress' || column === 'ID')}"
-                                     :name="column" :index="baselines.index(column)" :order="baselines.order(column)"
+                                     :name="column" :index="treatments.index(column)" :order="treatments.order(column)"
                                      @click="(event) => toggleSorting(column, event)" />
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="baseline in baselines.items" :key="baseline.id" @click="selectedBaseline = baseline" class="selectable" :class="{'selected': isSelected(baseline)}">
-                    <td class="!text-left font-mono w-96">{{baseline.id}}</td>
-                    <td class="!text-left">{{baseline.name}}</td>
+                <tr v-for="treatment in treatments.items" :key="treatment.id" @click="selectedTreatment = treatment" class="selectable" :class="{'selected': isSelected(treatment)}">
+                    <td class="!text-left font-mono w-96">{{treatment.id}}</td>
+                    <td class="!text-left">{{treatment.name}}</td>
                     <td class="font-mono">
-                        <GameGroupProgressBar :group="baseline" />
+                        <GameGroupProgressBar :group="treatment" />
                     </td>
-                    <td class="font-mono">{{datetime(baseline.createdAt)}}</td>
+                    <td class="font-mono">{{datetime(treatment.createdAt)}}</td>
                 </tr>
                 </tbody>
             </table>
@@ -111,6 +111,5 @@ onMounted(() => baselineStore.fetchAllOnce()
                 </tbody>
             </table>
         </div>
-        <BaselineBar :baseline="selectedBaseline" v-if="selectedBaseline !== undefined" @close-self="() => selectedBaseline = undefined" />
     </div>
 </template>

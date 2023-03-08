@@ -108,7 +108,7 @@ onMounted(() => gameStore.fetchAllOnce()
                             {{game.baseline.name}}
                         </router-link>
                         <router-link :to="'/treatments/' + game.treatment.id" v-else-if="game.treatment !== null">
-                            {{game.baseline.name}}
+                            {{game.treatment.name}}
                         </router-link>
                         <span v-else>&mdash;</span>
                     </td>

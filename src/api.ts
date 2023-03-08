@@ -6,12 +6,14 @@ import {BaselineClient} from "@/baseline/BaselineClient";
 import {WeatherLocationClient} from "@/weather/WeatherLocationClient";
 import {ParameterClient} from "@/simulation/ParameterClient";
 import {TreatmentClient} from "@/treatment/TreatmentClient";
+import {DockerClient} from "@/util/DockerClient";
 
 export const api = {
     orchestrator: {
         auth: new AuthClient(config.orchestrator.url),
         baselines: new BaselineClient(config.orchestrator.url),
         brokers: new BrokerClient(config.orchestrator.url),
+        docker: new DockerClient(config.orchestrator.url),
         games: new GameClient(config.orchestrator.url),
         parameters: new ParameterClient(config.orchestrator.url),
         treatments: new TreatmentClient(config.orchestrator.url),

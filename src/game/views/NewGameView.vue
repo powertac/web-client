@@ -74,7 +74,7 @@ function isValid(): boolean {
             <div class="form-group" ref="parametersElement">
                 <h2 class="form-group-title">Parameters</h2>
                 <div class="form-group-content">
-                    <ParameterEditor @selected="(newParameters) => parameters = newParameters" class="max-w-7xl" />
+                    <ParameterEditor @updated="(newParameters) => parameters = newParameters" class="max-w-7xl" />
                     <p class="mt-5 text-slate-500"></p>
                 </div>
             </div>
