@@ -10,6 +10,7 @@ const baselinesItems: {routeName: string, label: string}[] = [
     {routeName: "baseline-table", label: "Baseline Table"},
 ];
 const treatmentsItems: {routeName: string, label: string}[] = [
+    {routeName: "treatment-table", label: "Treatment Table"},
     {routeName: "new-treatment", label: "New Treatment"},
 ];
 const brokersItems: {routeName: string, label: string}[] = [

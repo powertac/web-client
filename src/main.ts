@@ -8,7 +8,12 @@ import "./fontawesome";
 const app = createApp(Application);
 const pinia = createPinia();
 import router from "./router";
-app.use(pinia)
-    .use(router)
-    .component('icon', FontAwesomeIcon)
-    .mount("#app");
+import config from "@/config";
+
+config.load().then(() =>
+    app.use(pinia)
+        .use(router)
+        .component('icon', FontAwesomeIcon)
+        .mount("#app"))
+    .then((error) => console.error(error));
+

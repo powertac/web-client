@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import {createFindByIdGetter} from "@/store/StoreUtils";
+import {createFindAllGetter, createFindByIdGetter} from "@/store/StoreUtils";
 import {Treatment, type TreatmentData} from "@/treatment/domain/Treatment";
 import {buildModifier} from "@/treatment/domain/Modifier";
 import {DateTime} from "luxon";
@@ -7,6 +7,7 @@ import {api} from "@/api";
 import {SyncGroup} from "@/util/SyncGroup";
 import {useGameStore} from "@/game/domain/GameStore";
 import {useBaselineStore} from "@/baseline/domain/BaselineStore";
+import {buildGameConfig} from "@/game/domain/GameConfig";
 
 export interface TreatmentStoreState {
     treatments: {[id: string]: Treatment}
@@ -16,13 +17,13 @@ export const useTreatmentStore = defineStore({
     id: "treatments",
     state: () => ({treatments: {}} as TreatmentStoreState),
     getters: {
-        findById: (state: TreatmentStoreState) => createFindByIdGetter("treatment", state.treatments)
+        findById: (state: TreatmentStoreState) => createFindByIdGetter("treatment", state.treatments),
+        findAll: (state: TreatmentStoreState) => createFindAllGetter(state.treatments)
     },
     actions: {
         async fetchOnceById(id: string): Promise<void> {
             if (undefined === this.treatments[id]) {
                 const data = await api.orchestrator.treatments.getById(id);
-                console.log(data);
                 this.treatments[id] = buildTreatment(data);
                 const sync = new SyncGroup();
                 const gameStore = useGameStore();
@@ -53,12 +54,12 @@ export const useTreatmentStore = defineStore({
 });
 
 export function buildTreatment(data: TreatmentData): Treatment {
-    console.log(Object.keys(data));
     return new Treatment(
         data.id,
         data.name,
         data.baselineId,
         buildModifier(data.modifier),
         data.gameIds,
+        buildGameConfig(data.config),
         DateTime.fromMillis(data.createdAt));
 }

@@ -6,7 +6,6 @@
  * PARAMETERS' CORRECTNESS REGARDING INTERNAL SIMULATION LOGIC IS NOT YET CONSIDERED !
  */
 export function parametersValid(parameters: {[key: string]: string}): boolean {
-    console.log(parameters);
     const keys = Object.keys(parameters).filter(key => key !== undefined);
     const values = keys.map((key) => parameters[key])
         .filter((value) => value !== undefined)

@@ -7,6 +7,7 @@ import {Dataset, SortOrder} from "@/util/Dataset";
 import {useTreatmentStore} from "@/treatment/domain/TreatmentStore";
 import {Treatment} from "@/treatment/domain/Treatment";
 import {datetime} from "@/util/DateTimeFormat";
+import TreatmentDetails from "@/treatment/components/TreatmentDetails.vue";
 
 const treatmentStore = useTreatmentStore();
 const selectedTreatment = ref<Treatment>();
@@ -14,6 +15,7 @@ const treatments = ref(null as Dataset<Treatment>|null);
 const columns: { [name: string]: (a: Treatment, b: Treatment) => number } = {
     "ID": (a, b) => a.id.localeCompare(b.id),
     "Name": (a, b) => a.name.localeCompare(b.name),
+    "Modifier Type": (a, b) => a.modifier.type.localeCompare(b.modifier.type),
     "Progress": (a, b) => a.progress - b.progress,
     "Created at": (a, b) => a.createdAt.toMillis() - b.createdAt.toMillis(),
 };
@@ -50,13 +52,13 @@ onMounted(() => treatmentStore.fetchAllOnce()
 </script>
 
 <template>
-    <div class="flex flex-col h-full bg-slate-50" ref="root">
+    <div class="flex flex-col h-full" ref="root">
         <div class="grow overflow-scroll">
             <table class="datatable bg-white" v-if="treatments">
                 <thead>
                 <tr>
                     <DatatableHeader v-for="column in Object.keys(columns)"
-                                     :class="{'left-aligned': (column === 'Name' || column === 'Progress' || column === 'ID')}"
+                                     :class="{'left-aligned': ['Name', 'Progress', 'ID', 'Modifier Type'].includes(column)}"
                                      :name="column" :index="treatments.index(column)" :order="treatments.order(column)"
                                      @click="(event) => toggleSorting(column, event)" />
                 </tr>
@@ -65,6 +67,7 @@ onMounted(() => treatmentStore.fetchAllOnce()
                 <tr v-for="treatment in treatments.items" :key="treatment.id" @click="selectedTreatment = treatment" class="selectable" :class="{'selected': isSelected(treatment)}">
                     <td class="!text-left font-mono w-96">{{treatment.id}}</td>
                     <td class="!text-left">{{treatment.name}}</td>
+                    <td class="!text-left">{{treatment.modifier.type}}</td>
                     <td class="font-mono">
                         <GameGroupProgressBar :group="treatment" />
                     </td>
@@ -111,5 +114,6 @@ onMounted(() => treatmentStore.fetchAllOnce()
                 </tbody>
             </table>
         </div>
+        <TreatmentDetails :treatment="selectedTreatment" v-if="selectedTreatment !== undefined" @close-self="() => selectedTreatment = undefined" />
     </div>
 </template>

@@ -3,7 +3,11 @@ import {auth} from "@/security/AuthProvider";
 
 export abstract class RestClient {
 
-    constructor(protected readonly baseUrl: string) {}
+    constructor(protected readonly baseUrlLoader: () => string) {}
+
+    get baseUrl(): string {
+        return this.baseUrlLoader();
+    }
 
     get client(): AxiosInstance {
         return auth.client(this.baseUrl);

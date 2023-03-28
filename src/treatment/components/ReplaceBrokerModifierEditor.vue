@@ -26,12 +26,9 @@ function replace(original: Broker, replacement: Broker|undefined): void {
 function isValid(mapping: {[key: string]: string}): boolean {
     const replacedIds = Object.keys(mapping)
         .filter((originalId) => originalId !== brokerMapping.value[originalId]);
-    console.log(replacedIds);
     const atLeastOneReplaced = replacedIds.length > 0;
-    console.log("at least one replaced", atLeastOneReplaced)
     // circular replacement: brokers should not be replaced with brokers from the original set
     const hasCircularReplacement = replacedIds.filter(id => Object.keys(props.brokers).includes(mapping[id])).length > 0;
-    console.log("has circular", hasCircularReplacement);
     return atLeastOneReplaced && !hasCircularReplacement;
 }
 </script>

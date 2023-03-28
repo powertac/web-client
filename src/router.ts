@@ -7,6 +7,7 @@ import BaselineTableView from "@/baseline/views/BaselineTableView.vue";
 import BrokerTableView from "@/broker/views/BrokerTableView.vue";
 import NewTreatmentView from "@/treatment/views/NewTreatmentView.vue";
 import AddBrokerView from "@/broker/views/AddBrokerView.vue";
+import TreatmentTableView from "@/treatment/views/TreatmentTableView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,6 +41,11 @@ const router = createRouter({
       path: '/treatments/new',
       name: 'new-treatment',
       component: NewTreatmentView
+    },
+    {
+      path: '/treatments/table',
+      name: 'treatment-table',
+      component: TreatmentTableView
     },
     {
       path: '/brokers/table',

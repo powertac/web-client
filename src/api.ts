@@ -1,5 +1,5 @@
 import {AuthClient} from "@/security/AuthClient";
-import {config} from "@/config";
+import config from "@/config";
 import {BrokerClient} from "@/broker/BrokerClient";
 import {GameClient} from "@/game/GameClient";
 import {BaselineClient} from "@/baseline/BaselineClient";
@@ -8,17 +8,20 @@ import {ParameterClient} from "@/simulation/ParameterClient";
 import {TreatmentClient} from "@/treatment/TreatmentClient";
 import {DockerClient} from "@/util/DockerClient";
 
+const orchestratorUrlLoader = () => config.services.orchestrator.url;
+const weatherServerUrlLoader = () => config.services.weatherserver.url;
+
 export const api = {
     orchestrator: {
-        auth: new AuthClient(config.orchestrator.url),
-        baselines: new BaselineClient(config.orchestrator.url),
-        brokers: new BrokerClient(config.orchestrator.url),
-        docker: new DockerClient(config.orchestrator.url),
-        games: new GameClient(config.orchestrator.url),
-        parameters: new ParameterClient(config.orchestrator.url),
-        treatments: new TreatmentClient(config.orchestrator.url),
+        auth: new AuthClient(orchestratorUrlLoader),
+        baselines: new BaselineClient(orchestratorUrlLoader),
+        brokers: new BrokerClient(orchestratorUrlLoader),
+        docker: new DockerClient(orchestratorUrlLoader),
+        games: new GameClient(orchestratorUrlLoader),
+        parameters: new ParameterClient(orchestratorUrlLoader),
+        treatments: new TreatmentClient(orchestratorUrlLoader),
     },
     weather: {
-        locations: new WeatherLocationClient(config.weatherserver.url)
+        locations: new WeatherLocationClient(weatherServerUrlLoader)
     }
 };
