@@ -1,0 +1,15 @@
+table.directory-table {
+  @apply rounded-sm border border-slate-300 border-separate border-spacing-0;
+  & > thead > tr > th {
+    @apply bg-slate-200 uppercase text-xs font-normal px-4 py-1.5 border-b border-slate-300;
+  }
+  & > tbody > tr > td {
+    @apply border-b border-slate-200 px-4 py-1.5;
+  }
+  & > tbody > tr:last-child > td {
+    @apply border-b-0;
+  }
+  & > tbody > tr:hover > td {
+    @apply bg-slate-100;
+  }
+}

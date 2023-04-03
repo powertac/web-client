@@ -10,17 +10,20 @@ import {
     faCheck,
     faCheckCircle,
     faChess,
-    faCircle,
+    faCircle, faCircleNotch,
     faClock,
     faCodeBranch,
     faDiceD6,
+    faFolder,
     faPlay,
     faPlus,
     faSeedling,
     faSquareArrowUpRight,
     faTimes,
+    faTurnUp,
     faUser
 } from "@fortawesome/free-solid-svg-icons";
+import {faFile} from "@fortawesome/free-regular-svg-icons";
 
 library.add(
     faBolt,
@@ -42,5 +45,9 @@ library.add(
     faCheckCircle,
     faCodeBranch,
     faArrowRight,
-    faArrowRotateLeft
+    faArrowRotateLeft,
+    faFile,
+    faFolder,
+    faTurnUp,
+    faCircleNotch
 );

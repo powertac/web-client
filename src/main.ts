@@ -10,10 +10,17 @@ const pinia = createPinia();
 import router from "./router";
 import config from "@/config";
 
-config.load().then(() =>
+function init(): void {
     app.use(pinia)
         .use(router)
         .component('icon', FontAwesomeIcon)
-        .mount("#app"))
-    .then((error) => console.error(error));
+        .mount("#app");
+}
+
+config.load()
+    .then(init)
+    .catch((error) => {
+        console.warn("using local config")
+        init();
+    });
 

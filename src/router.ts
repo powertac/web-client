@@ -8,6 +8,7 @@ import BrokerTableView from "@/broker/views/BrokerTableView.vue";
 import NewTreatmentView from "@/treatment/views/NewTreatmentView.vue";
 import AddBrokerView from "@/broker/views/AddBrokerView.vue";
 import TreatmentTableView from "@/treatment/views/TreatmentTableView.vue";
+import GamePageView from "@/game/views/GamePageView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,6 +27,11 @@ const router = createRouter({
       path: '/games/table',
       name: 'game-table',
       component: GameTableView
+    },
+    {
+      path: '/games/:id',
+      name: 'game-page',
+      component: GamePageView
     },
     {
       path: '/baselines/new',

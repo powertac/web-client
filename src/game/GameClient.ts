@@ -1,5 +1,6 @@
 import {RestClient} from "@/util/RestClient";
 import type {GameData, NewGameData} from "@/game/domain/Game";
+import type FileNode from "@/file/domain/FileNode";
 
 export class GameClient extends RestClient {
 
@@ -13,6 +14,10 @@ export class GameClient extends RestClient {
 
     public getAll(): Promise<GameData[]> {
         return this.get("/v2/games/");
+    }
+
+    public getRootNode(gameId: string): Promise<FileNode> {
+        return this.get("/v2/games/" + gameId + "/file-root");
     }
 
 }

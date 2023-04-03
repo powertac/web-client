@@ -94,6 +94,7 @@ onMounted(() => gameStore.fetchAllOnce()
                                      :class="{'left-aligned': (column === 'Name' || column === 'Baseline / Treatment' || column === 'ID')}"
                                      :name="column" :index="games.index(column)" :order="games.order(column)"
                                      @click="(event) => toggleSorting(column, event)" />
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -115,6 +116,12 @@ onMounted(() => gameStore.fetchAllOnce()
                     <td class="!text-left">{{game.name}}</td>
                     <td class="font-mono">{{datetime(game.createdAt)}}</td>
                     <td class="font-mono">{{ game.end !== null ? datetime(game.end) : '-' }}</td>
+                    <td class="!p-0">
+                        <router-link :to="'/games/' + game.id" class="button !py-1.5 !px-2 !bg-slate-50 hover:!bg-blue-100">
+                            <icon icon="dice-d6" class="mr-1" />
+                            Game Page
+                        </router-link>
+                    </td>
                 </tr>
                 </tbody>
             </table>
