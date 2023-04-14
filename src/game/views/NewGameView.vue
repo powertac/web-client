@@ -10,6 +10,7 @@ import {WeatherConfig} from "@/weather/domain/WeatherConfig";
 import {api} from "@/api";
 import router from "@/router";
 import ValidationBadge from "@/form/ValidationBadge.vue";
+import GamesHeader from "@/file/components/GamesHeader.vue";
 
 const name = ref("" as string);
 const brokers = ref([] as Broker[]);
@@ -46,9 +47,7 @@ function isValid(): boolean {
 
 <template>
     <div class="form" @submit="createGame" @keyup.ctrl.enter="createGame">
-        <div class="form-header">
-            <h1 class="mx-auto max-w-7xl form-title pl-44">New Game</h1>
-        </div>
+        <GamesHeader />
         <div class="form-content">
             <div class="form-group mt-3" ref="nameElement">
                 <h2 class="form-group-title">Name</h2>
@@ -79,6 +78,7 @@ function isValid(): boolean {
                 </div>
             </div>
         </div>
+        <!-- TODO : move to sidebar (on high res) -->
         <div class="form-footer">
             <div class="form-group !pt-7 !pb-10">
                 <h2 class="form-group-title"></h2>

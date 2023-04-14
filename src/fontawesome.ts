@@ -10,15 +10,18 @@ import {
     faCheck,
     faCheckCircle,
     faChess,
-    faCircle, faCircleNotch,
+    faCircle,
+    faCircleNotch,
     faClock,
     faCodeBranch,
     faDiceD6,
     faFolder,
+    faGears,
     faPlay,
     faPlus,
     faSeedling,
     faSquareArrowUpRight,
+    faTable,
     faTimes,
     faTurnUp,
     faUser
@@ -49,5 +52,7 @@ library.add(
     faFile,
     faFolder,
     faTurnUp,
-    faCircleNotch
+    faCircleNotch,
+    faTable,
+    faGears
 );

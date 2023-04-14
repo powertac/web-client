@@ -1,0 +1,11 @@
+.sidebar {
+  div.tuple-group {
+    @apply rounded-none overflow-scroll border-x-0 border-y-slate-300;
+    div.tuple-header {
+      @apply bg-transparent text-slate-600 border-slate-300 bg-slate-100;
+    }
+  }
+  div.tuple-group + div.tuple-group {
+    @apply border-t-0;
+  }
+}

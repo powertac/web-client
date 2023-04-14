@@ -16,16 +16,29 @@ const emit = defineEmits<{
 </script>
 
 <template>
-    <div class="w-full bg-slate-100">
-        <div class="flex items-center border-t border-slate-300">
-            <button class="block uppercase text-xs px-6 text-slate-700 bg-slate-200 border-slate-300 self-stretch pt-0.5 border -mt-[1px] border-l-0 rounded-br-sm hover:bg-slate-300 hover-text-slate-900"
+    <div>
+        <div class="flex justify-between bg-slate-200 -mb-[1px]">
+            <h1 class="text-lg font-semibold text-slate-700 py-2.5 pl-6">{{props.game.name}}</h1>
+            <button class="button self-center mr-1.5"
                     type="button" @click="emit('close-self')">
-                <icon class="mr-2" icon="times" />
-                Close
+                <icon icon="times" />
             </button>
-            <h1 class="text-lg font-semibold text-slate-800 pt-3 pb-2 pl-6">{{props.game.name}}</h1>
         </div>
-        <div class="flex gap-5 mt-5 mx-7 mb-16">
+        <div class="p-3 flex border-t border-slate-300 gap-1">
+            <router-link :to="'/games/' + game.id" class="button button-sm block">
+                <icon icon="dice-d6" class="mr-1.5" />
+                Details
+            </router-link>
+            <router-link :to="'/games/' + game.id + '/files'" class="button button-sm block">
+                <icon :icon="['far', 'file']" class="mr-1.5" />
+                Files
+            </router-link>
+            <router-link :to="'/games/' + game.id + '/actions'" class="button button-sm block">
+                <icon icon="gears" class="mr-1.5" />
+                Actions
+            </router-link>
+        </div>
+        <div class="flex flex-col">
             <GameMeta :game="props.game" />
             <GameRunsBlock :runs="props.game.runs" />
             <BrokersBlock :brokers="props.game.config.brokers" />

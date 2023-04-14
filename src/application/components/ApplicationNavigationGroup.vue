@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {computed, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
 
 const props = defineProps<{
@@ -9,38 +9,52 @@ const props = defineProps<{
     items: {routeName: string, label: string}[]
 }>();
 const router = useRouter();
-const open = ref(true);
+const open = ref(false);
 const activeGroup = computed(() => router.currentRoute.value.fullPath.startsWith(props.pathPrefix));
+const root = ref<HTMLElement>();
+const button = ref<HTMLElement>();
+const dropdown = ref<HTMLElement>();
 
 function activeRoute(name: string): boolean {
     return router.currentRoute.value.name === name;
 }
+
+function handleClickOutsideRunSelection(event: Event): void {
+    if (root.value !== undefined && !(root.value as HTMLDivElement).contains(event.target as Node)) {
+        open.value = false;
+    }
+}
+onMounted(() => document.addEventListener('click', handleClickOutsideRunSelection));
 </script>
 
 <template>
-    <div class="ml-6 px-5 py-3 text-slate-500 hover:text-slate-700">
-        <h2 class="uppercase font-semibold mb-1 flex items-center cursor-pointer" @click="open = !open"
-            :class="{'!text-blue-700': activeGroup}">
-            <icon :icon="props.icon" class="mr-1.5 w-6 -mt-[1px]" />
+    <div class="ml-6 py-3 text-slate-100 relative" ref="root">
+        <h2 class="font-semibold flex items-center cursor-pointer rounded border border-slate-800 pl-2.5 pr-4 py-1.5 z-50" @click="open = !open"
+            :class="{'!border-slate-300': activeGroup}"
+            ref="button">
+            <icon :icon="props.icon" class="mr-0.5 w-6 text-sm" />
             <span class="ml-1">{{props.label}}</span>
-            <icon :icon="open ? 'angle-up' : 'angle-down'" class="text-sm ml-3.5 -mt-[1px]" />
         </h2>
-        <div class="ml-2.5 border-l pl-2 border-blue-400 py-1"
-             :class="{'border-slate-400': !activeGroup, 'text-slate-600': activeGroup}"
-             v-if="open">
-            <router-link class="nav-item" :to="{name: item.routeName}" v-for="item in props.items" :key="item.routeName">
-                <icon icon="caret-right" v-if="activeRoute(item.routeName)" class="mr-1" />
+        <!--<div class="absolute border border-slate-300 bg-white top-full self-center -mt-2 rounded py-1 z-40 dropdown"
+             :class="{'text-slate-600': activeGroup}"
+             v-if="open"
+             ref="dropdown"
+             :style="{'margin-left': (button?.clientWidth - dropdown?.clientWidth) / 2 + 'px'}">
+            <router-link class="nav-item" :to="{name: item.routeName}" v-for="item in props.items" :key="item.routeName" @click="open = false">
                 {{item.label}}
             </router-link>
-        </div>
+        </div>-->
     </div>
 </template>
 
 <style lang="scss" scoped>
 .nav-item {
-    @apply block py-1 px-3 hover:text-black;
+    @apply block py-2 px-5 text-slate-600 break-keep;
     &.router-link-active {
-        @apply text-blue-700 font-semibold;
+        @apply text-slate-900 bg-slate-100;
     }
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 </style>

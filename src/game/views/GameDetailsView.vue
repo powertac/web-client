@@ -5,13 +5,13 @@ import {Game} from "@/game/domain/Game";
 import {onMounted, ref} from "vue";
 import {api} from "@/api";
 import type FileNode from "@/file/domain/FileNode";
-import FileTreeViewer from "@/file/components/FileTreeViewer.vue";
+import {hydrateParents} from "@/file/domain/FileNode";
 import GameMetaBlock from "@/game/components/GameMetaBlock.vue";
 import BrokersBlock from "@/broker/components/BrokersBlock.vue";
 import WeatherBlock from "@/weather/components/WeatherBlock.vue";
 import ParametersBlock from "@/simulation/components/ParametersBlock.vue";
-import {hydrateParents} from "@/file/domain/FileNode";
 import GameRunsBlock from "@/game/components/GameRunsBlock.vue";
+import GamePageHeader from "@/game/components/GamePageHeader.vue";
 
 const gameStore = useGameStore();
 const gameId = useRouter().currentRoute.value.params.id as string;
@@ -28,24 +28,31 @@ onMounted(() => api.orchestrator.games.getRootNode(gameId)
 
 <template>
 <div v-if="game !== undefined">
-    <h1 class="text-4xl mx-5 mt-10 mb-7">{{game.name}}</h1>
-    <div class="flex gap-2 mx-5 flex-wrap">
-        <h2 class="w-full uppercase font-semibold text-sm ml-2">Meta</h2>
-        <GameMetaBlock :game="game" />
-        <GameRunsBlock :runs="game.runs" />
-    </div>
-    <div class="flex gap-2 mx-5 mt-7 flex-wrap">
-        <h2 class="w-full uppercase font-semibold text-sm ml-2">Configuration</h2>
-        <BrokersBlock :brokers="game.config.brokers" />
-        <WeatherBlock :weather="game.config.weather" />
-        <ParametersBlock :parameters="game.config.parameters" />
-    </div>
-    <div class="flex gap-2 mx-5 mt-7 mb-20 flex-wrap">
-        <h2 class="w-full uppercase font-semibold text-sm ml-2">Files</h2>
-        <FileTreeViewer :root="root" v-if="root !== undefined" />
+    <GamePageHeader :game="game" />
+    <div class="max-w-screen-lg mx-auto">
+        <div class="flex gap-2 mx-5 flex-wrap mt-10">
+            <h2 class="text-2xl w-full mb-4">Meta</h2>
+            <GameMetaBlock :game="game" />
+            <GameRunsBlock :runs="game.runs" />
+        </div>
+        <div class="flex gap-2 mx-5 mt-10 flex-wrap">
+            <h2 class="text-2xl w-full mb-4">Configuration</h2>
+            <BrokersBlock :brokers="game.config.brokers" />
+            <WeatherBlock :weather="game.config.weather" />
+            <ParametersBlock :parameters="game.config.parameters" />
+        </div>
     </div>
 </div>
 <div v-else>
     LOADING
 </div>
 </template>
+
+<style lang="scss" scoped>
+.table-header .nav-item {
+    @apply px-4 py-3 block border-b -mb-[1px] border-transparent;
+    &.router-link-active {
+        @apply text-blue-700 border-b border-blue-700;
+    }
+}
+</style>

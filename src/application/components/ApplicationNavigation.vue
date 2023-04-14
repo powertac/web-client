@@ -1,39 +1,40 @@
 <script lang="ts" setup>
-import ApplicationNavigationGroup from "@/application/components/ApplicationNavigationGroup.vue";
-
-const gamesItems: {routeName: string, label: string}[] = [
-    {routeName: "new-game", label: "New Game"},
-    {routeName: "game-table", label: "Game Table"},
-];
-const baselinesItems: {routeName: string, label: string}[] = [
-    {routeName: "new-baseline", label: "New Baseline"},
-    {routeName: "baseline-table", label: "Baseline Table"},
-];
-const treatmentsItems: {routeName: string, label: string}[] = [
-    {routeName: "treatment-table", label: "Treatment Table"},
-    {routeName: "new-treatment", label: "New Treatment"},
-];
-const brokersItems: {routeName: string, label: string}[] = [
-    {routeName: "broker-table", label: "Broker Table"},
-    {routeName: "add-broker", label: "Add Broker"},
-];
+import {useRouter} from "vue-router";
+const router = useRouter();
+function activeGroup(prefix: string): boolean {
+    return router.currentRoute.value.fullPath.startsWith(prefix);
+}
 </script>
 
 <template>
-    <div class="relative w-64 h-full">
-        <div class="h-full bg-slate-100 border-r border-slate-300 w-64 fixed overflow-scroll">
-            <router-link class="logo  px-[3.33rem] pt-[1.9rem]" to="/">POWER TAC</router-link>
-            <ApplicationNavigationGroup icon="dice-d6" label="Games" path-prefix="/games" :items="gamesItems" />
-            <ApplicationNavigationGroup icon="seedling" label="Baselines" path-prefix="/baselines" :items="baselinesItems" />
-            <ApplicationNavigationGroup icon="code-branch" label="Treatments" path-prefix="/treatments" :items="treatmentsItems" />
-            <ApplicationNavigationGroup icon="chess" label="Brokers" path-prefix="/brokers" :items="brokersItems" />
+    <div>
+        <div class="bg-slate-800 border-r border-slate-300 flex w-full">
+            <router-link class="block text-slate-400 uppercase font-extrabold py-4 pl-9 pr-7 self-center hover:text-white" to="/">Power TAC</router-link>
+            <router-link to="/games/table" :class="{'nav-item': true, 'active': activeGroup('/games')}">
+                <icon icon="dice-d6" class="mr-2 text-sm" />
+                Games
+            </router-link>
+            <router-link to="/baselines/table" :class="{'nav-item': true, 'active': activeGroup('/baselines')}">
+                <icon icon="seedling" class="mr-2 text-sm" />
+                Baselines
+            </router-link>
+            <router-link to="/treatments/table" :class="{'nav-item': true, 'active': activeGroup('/treatments')}">
+                <icon icon="code-branch" class="mr-2 text-sm" />
+                Treatments
+            </router-link>
+            <router-link to="/brokers/table" :class="{'nav-item': true, 'active': activeGroup('/brokers')}">
+                <icon icon="chess" class="mr-2 text-sm" />
+                Brokers
+            </router-link>
         </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
-.logo {
-    @apply block pb-3;
-    @apply text-blue-800 uppercase font-extrabold;
+.nav-item {
+    @apply block rounded border border-transparent text-slate-200 font-semibold py-1.5 my-2.5 px-4 hover:text-slate-400;
+    &.active {
+        @apply text-white border-slate-500;
+    }
 }
 </style>

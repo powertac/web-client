@@ -35,6 +35,17 @@ export abstract class RestClient {
         });
     }
 
+    protected delete(path: string): Promise<void> {
+        return new Promise<void>((resolve: () => void, reject: (error: AxiosError) => void) => {
+            this.rawDelete(path)
+                .then(() => resolve())
+                .catch((error: AxiosError) => {
+                    this.processError(error);
+                    reject(error);
+                });
+        });
+    }
+
     protected processError(error: AxiosError): void {
         if (error.response !== undefined && error.response.status === 401) {
             auth.revoke(this.baseUrl);

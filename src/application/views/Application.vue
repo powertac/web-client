@@ -26,18 +26,15 @@ const defaultStyle = computed(() => ({ fontSize: size.value + "px" }));
 </script>
 
 <template>
-    <Transition>
+    <Transition class="h-full flex flex-col">
         <ApplicationLoader class="absolute top-0 left-0 z-50"
                            @updated="(state) => loading = (state !== LoadingState.Successful)"
                            v-if="loading" />
-        <div class="flex flex-auto flex-row h-full z-0" v-else-if="!loading">
-            <ApplicationNavigation/>
-            <div class="grow">
-                <RouterView/>
-            </div>
+        <div v-else-if="!loading">
+            <ApplicationNavigation />
+            <RouterView />
         </div>
     </Transition>
-
 </template>
 
 <style lang="scss">

@@ -8,7 +8,9 @@ import BrokerTableView from "@/broker/views/BrokerTableView.vue";
 import NewTreatmentView from "@/treatment/views/NewTreatmentView.vue";
 import AddBrokerView from "@/broker/views/AddBrokerView.vue";
 import TreatmentTableView from "@/treatment/views/TreatmentTableView.vue";
-import GamePageView from "@/game/views/GamePageView.vue";
+import GameDetailsView from "@/game/views/GameDetailsView.vue";
+import GameFilesView from "@/game/views/GameFilesView.vue";
+import GameActionsView from "@/game/views/GameActionsView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,6 +20,7 @@ const router = createRouter({
       name: 'home',
       component: DashboardView
     },
+      // GAME
     {
       path: '/games/new',
       name: 'new-game',
@@ -30,9 +33,20 @@ const router = createRouter({
     },
     {
       path: '/games/:id',
-      name: 'game-page',
-      component: GamePageView
+      name: 'game-details',
+      component: GameDetailsView
     },
+    {
+      path: '/games/:id/actions',
+      name: 'game-actions',
+      component: GameActionsView
+    },
+    {
+      path: '/games/:id/files/:relativePath*',
+      name: 'game-files',
+      component: GameFilesView
+    },
+      // BASELINE
     {
       path: '/baselines/new',
       name: 'new-baseline',
@@ -43,6 +57,7 @@ const router = createRouter({
       name: 'baseline-table',
       component: BaselineTableView
     },
+      // TREATMENT
     {
       path: '/treatments/new',
       name: 'new-treatment',
@@ -53,6 +68,7 @@ const router = createRouter({
       name: 'treatment-table',
       component: TreatmentTableView
     },
+      // BROKER
     {
       path: '/brokers/table',
       name: 'broker-table',

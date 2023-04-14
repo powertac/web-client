@@ -9,6 +9,10 @@
     @apply px-6 pt-3 pb-2.5 text-sm font-semibold;
   }
 
+  &.button-sm {
+    @apply px-3 pt-1.5 pb-1 text-xs;
+  }
+
   &[disabled] {
     @apply bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed;
     &:hover {@apply border-slate-200 text-slate-400}
@@ -18,5 +22,10 @@
     @apply text-red-400 border bg-blue-100 text-blue-700 border-blue-500;
     &:hover { @apply border-blue-400 text-blue-600 bg-blue-50 }
     &[disabled] { @apply bg-slate-200 text-slate-500 rounded-sm border border-slate-300 }
+  }
+
+  &.button-danger {
+    @apply bg-pink-50 border-pink-300 text-pink-600;
+    &:hover { @apply bg-pink-100 border-pink-500 text-pink-800 }
   }
 }

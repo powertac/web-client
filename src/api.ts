@@ -8,6 +8,7 @@ import {ParameterClient} from "@/simulation/ParameterClient";
 import {TreatmentClient} from "@/treatment/TreatmentClient";
 import {DockerClient} from "@/util/DockerClient";
 import {FileClient} from "@/file/FileClient";
+import {GameRunClient} from "@/game/GameRunClient";
 
 const orchestratorUrlLoader = () => config.services.orchestrator.url;
 const weatherServerUrlLoader = () => config.services.weatherserver.url;
@@ -21,6 +22,7 @@ export const api = {
         files: new FileClient(orchestratorUrlLoader),
         games: new GameClient(orchestratorUrlLoader),
         parameters: new ParameterClient(orchestratorUrlLoader),
+        runs: new GameRunClient(orchestratorUrlLoader),
         treatments: new TreatmentClient(orchestratorUrlLoader),
     },
     weather: {

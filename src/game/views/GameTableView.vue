@@ -2,12 +2,13 @@
 import {useGameStore} from "@/game/domain/GameStore";
 import {onMounted, ref, watch} from "vue";
 import {Game} from "@/game/domain/Game";
-import GameDetails from "@/game/components/GameDetails.vue";
+import GameDetails from "@/game/components/GameSidebar.vue";
 import {datetime} from "@/util/DateTimeFormat";
 import GameStatusIcon from "@/game/components/GameStatusIcon.vue";
 import {Dataset, SortOrder} from "@/util/Dataset";
 import DatatableHeader from "@/datatable/DatatableHeader.vue";
 import {v4} from "uuid";
+import GamesHeader from "@/file/components/GamesHeader.vue";
 
 const gameStore = useGameStore();
 const loading = ref<boolean>(); // TODO : add loading
@@ -65,11 +66,6 @@ function toggleSorting(column: string, event: MouseEvent): void {
 
 function select(game: Game): void {
     selectedGame.value = game;
-    const id = rowId(game);
-    const row = rows.value.filter(r => r.id === id).shift();
-    if (row !== undefined) {
-        row.scrollIntoView();
-    }
 }
 
 function rowId(game: Game): string {
@@ -85,85 +81,85 @@ onMounted(() => gameStore.fetchAllOnce()
 </script>
 
 <template>
-    <div class="flex flex-col h-full bg-slate-50" ref="root">
-        <div class="grow overflow-scroll">
-            <table class="datatable bg-white" v-if="games">
-                <thead>
-                <tr>
-                    <DatatableHeader v-for="column in Object.keys(columns)"
-                                     :class="{'left-aligned': (column === 'Name' || column === 'Baseline / Treatment' || column === 'ID')}"
-                                     :name="column" :index="games.index(column)" :order="games.order(column)"
-                                     @click="(event) => toggleSorting(column, event)" />
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="game in games.items" ref="rows" :id="rowId(game)" @click="select(game)" class="selectable" :class="{'selected': isSelected(game)}">
-                    <td class="!text-left font-mono w-96">{{game.id}}</td>
-                    <td class="uppercase text-xs">
-                        <GameStatusIcon class="mr-2 text-slate-500" :status="game.status" />
-                        {{game.status}}
-                    </td>
-                    <td class="!text-left">
-                        <router-link :to="'/baselines/' + game.baseline.id" v-if="game.baseline !== null">
-                            {{game.baseline.name}}
-                        </router-link>
-                        <router-link :to="'/treatments/' + game.treatment.id" v-else-if="game.treatment !== null">
-                            {{game.treatment.name}}
-                        </router-link>
-                        <span v-else>&mdash;</span>
-                    </td>
-                    <td class="!text-left">{{game.name}}</td>
-                    <td class="font-mono">{{datetime(game.createdAt)}}</td>
-                    <td class="font-mono">{{ game.end !== null ? datetime(game.end) : '-' }}</td>
-                    <td class="!p-0">
-                        <router-link :to="'/games/' + game.id" class="button !py-1.5 !px-2 !bg-slate-50 hover:!bg-blue-100">
-                            <icon icon="dice-d6" class="mr-1" />
-                            Game Page
-                        </router-link>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <table class="datatable bg-white" v-else>
-                <thead>
-                <tr>
-                    <th>Status</th>
-                    <th class="!text-left">ID</th>
-                    <th class="!text-left">Baseline / Treatment</th>
-                    <th class="!text-left">Name</th>
-                    <th>Created at</th>
-                    <th>Completed at</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                </tr>
-                <tr>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                </tr>
-                <tr>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                </tr>
-                </tbody>
-            </table>
+    <div class="flex grow flex-col" ref="root">
+        <GamesHeader />
+        <div class="flex relative grow">
+            <div class="table-wrapper border-r border-slate-300 grow">
+                <table class="datatable" v-if="games">
+                    <thead>
+                    <tr>
+                        <DatatableHeader v-for="column in Object.keys(columns)"
+                                         :class="{'left-aligned': (column === 'Name' || column === 'Baseline / Treatment' || column === 'ID')}"
+                                         :name="column" :index="games.index(column)" :order="games.order(column)"
+                                         @click="(event) => toggleSorting(column, event)" />
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="game in games.items" ref="rows" :id="rowId(game)" @click="select(game)" class="selectable" :class="{'selected': isSelected(game)}">
+                        <td class="!text-left font-mono w-96">{{game.id}}</td>
+                        <td class="uppercase text-xs">
+                            <GameStatusIcon class="mr-2 text-slate-500" :status="game.status" />
+                            {{game.status}}
+                        </td>
+                        <td class="!text-left">
+                            <router-link :to="'/baselines/' + game.baseline.id" v-if="game.baseline !== null">
+                                {{game.baseline.name}}
+                            </router-link>
+                            <router-link :to="'/treatments/' + game.treatment.id" v-else-if="game.treatment !== null">
+                                {{game.treatment.name}}
+                            </router-link>
+                            <span v-else>&mdash;</span>
+                        </td>
+                        <td class="!text-left">{{game.name}}</td>
+                        <td class="font-mono">{{datetime(game.createdAt)}}</td>
+                        <td class="font-mono">{{ game.end !== null ? datetime(game.end) : '-' }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table class="datatable bg-white" v-else>
+                    <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th class="!text-left">ID</th>
+                        <th class="!text-left">Baseline / Treatment</th>
+                        <th class="!text-left">Name</th>
+                        <th>Created at</th>
+                        <th>Completed at</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                    </tr>
+                    <tr>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                    </tr>
+                    <tr>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <GameDetails class="sticky top-0 self-start sidebar"
+                         :game="selectedGame"
+                         v-if="selectedGame !== undefined"
+                         @close-self="() => selectedGame = undefined"
+                         ref="gameDetails" />
         </div>
-        <GameDetails :game="selectedGame" v-if="selectedGame !== undefined" @close-self="() => selectedGame = undefined" ref="gameDetails" />
     </div>
 </template>

@@ -6,9 +6,6 @@ import {api} from "@/api";
 const props = defineProps<{
     file: FileNode
 }>();
-const emit = defineEmits<{
-    (e: "select", node: FileNode): void
-}>();
 
 const content = ref<string>();
 const lines = computed(() => undefined !== content.value
@@ -51,7 +48,6 @@ div.filler {
 }
 table {
     @apply bg-white text-slate-700;
-    font-size: 14px;
     font-family: "Inconsolata", monospace;
     //background: #fdf6e3;
     margin: 0;
