@@ -5,6 +5,7 @@ import {api} from "@/api";
 import Autocomplete from "@/util/components/Autocomplete.vue";
 import type {NewBrokerData} from "@/broker/domain/Broker";
 import {useRouter} from "vue-router";
+import BrokersHeader from "@/broker/components/BrokersHeader.vue";
 
 const name = ref("");
 const version = ref("");
@@ -43,10 +44,15 @@ onMounted(() => api.orchestrator.docker.getImageTags()
 
 <template>
     <div class="form" @submit="addBroker" @keyup.ctrl.enter="addBroker">
-        <div class="form-header">
-            <h1 class="mx-auto max-w-7xl form-title pl-44">New Game</h1>
-        </div>
+        <BrokersHeader />
         <div class="form-content">
+            <div class="form-group mt-3" ref="imageTagElement">
+                <h2 class="form-group-title">Image</h2>
+                <div class="form-group-content">
+                    <Autocomplete class="w-[32rem]" :items="availableImageTags" value="" v-if="availableImageTags.length > 0" @selected="tag => imageTag = tag" />
+                    <p class="mt-5 text-slate-500">Please select an existing broker image. Images must be built or downloaded before being available.</p>
+                </div>
+            </div>
             <div class="form-group mt-3" ref="nameElement">
                 <h2 class="form-group-title">Name</h2>
                 <div class="form-group-content">
@@ -59,12 +65,6 @@ onMounted(() => api.orchestrator.docker.getImageTags()
                 <div class="form-group-content">
                     <input type="text" class="default w-[32rem]" v-model="version" />
                     <p class="mt-5 text-slate-500">The version identifier must consist of at least 3 characters. Only alphanumeric characters are allowed.</p>
-                </div>
-            </div>
-            <div class="form-group mt-3" ref="imageTagElement">
-                <h2 class="form-group-title">Image</h2>
-                <div class="form-group-content">
-                    <Autocomplete class="w-[32rem]" :items="availableImageTags" value="" v-if="availableImageTags.length > 0" @selected="tag => imageTag = tag" />
                 </div>
             </div>
         </div>

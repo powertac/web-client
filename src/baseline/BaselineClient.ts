@@ -15,4 +15,12 @@ export class BaselineClient extends RestClient {
         return this.post("/v2/baselines/", newBaseline);
     }
 
+    public getManifest(baselineId: string): Promise<string> {
+        return this.get("/v2/baselines/" + baselineId + "/manifest");
+    }
+
+    public createManifest(baselineId: string): Promise<void> {
+        return this.post("/v2/baselines/" + baselineId + "/manifest", undefined);
+    }
+
 }

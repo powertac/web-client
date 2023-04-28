@@ -71,7 +71,7 @@ export class Dataset<E> {
         } else if (SortOrder.ASC === order) {
             this.orderBy(name, SortOrder.DESC);
         } else {
-            this.remove(name);
+            this.orderBy(name, SortOrder.ASC);
         }
         return this;
     }

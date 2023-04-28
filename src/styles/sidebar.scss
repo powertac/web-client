@@ -2,7 +2,7 @@
   div.tuple-group {
     @apply rounded-none overflow-scroll border-x-0 border-y-slate-300;
     div.tuple-header {
-      @apply bg-transparent text-slate-600 border-slate-300 bg-slate-100;
+      @apply bg-transparent text-slate-600 border-slate-300 bg-slate-50;
     }
   }
   div.tuple-group + div.tuple-group {

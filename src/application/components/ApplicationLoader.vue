@@ -6,6 +6,8 @@ import {computed, ref, watch} from "vue";
 import {LoadingState} from "@/util/LoadingState";
 import LoadingStateIndicator from "@/util/components/LoadingStateIndicator.vue";
 import {useParameterStore} from "@/simulation/domain/ParameterStore";
+import {useAuthStore} from "@/security/domain/AuthStore";
+import {buildUser} from "@/user/domain/User";
 
 const emit = defineEmits<{
     (e: "updated", parameter: LoadingState): void
@@ -14,24 +16,36 @@ const emit = defineEmits<{
 const brokersLoaded = ref<LoadingState>(LoadingState.Pending);
 const weatherLocationsLoaded = ref<LoadingState>(LoadingState.Pending);
 const parametersLoaded = ref<LoadingState>(LoadingState.Pending);
-const login = ref<LoadingState>(LoadingState.Pending);
+const userLoaded = ref<LoadingState>(LoadingState.Pending);
 
 const state = computed(() => {
    if (brokersLoaded.value === LoadingState.Successful
        && weatherLocationsLoaded.value === LoadingState.Successful
        && parametersLoaded.value === LoadingState.Successful
-       && login.value === LoadingState.Successful) {
+       && userLoaded.value === LoadingState.Successful) {
        return LoadingState.Successful
    } else if (brokersLoaded.value === LoadingState.Failed
        && weatherLocationsLoaded.value === LoadingState.Failed
        && parametersLoaded.value === LoadingState.Failed
-       && login.value === LoadingState.Failed) {
+       && userLoaded.value === LoadingState.Failed) {
        return LoadingState.Failed
    } else {
        return LoadingState.Pending;
    }
 });
-watch(state, () => emit("updated", state.value))
+
+function loadUser(): Promise<void> {
+    return new Promise<void>((resolve, reject) =>  {
+        api.orchestrator.users.getCurrent()
+            .then(userData => {
+                useAuthStore().setCurrentUser(buildUser(userData));
+                resolve();
+            })
+            .catch(error => reject(error));
+    });
+}
+
+watch(state, () => emit("updated", state.value));
 </script>
 
 <template>
@@ -52,9 +66,9 @@ watch(state, () => emit("updated", state.value))
                                :loader="() => useParameterStore().fetchAllOnce()"
                                @updated="(loaded) => parametersLoaded = loaded" />
         <LoadingStateIndicator class="loading-state-indicator"
-                               label="Login"
-                               :loader="() => api.orchestrator.auth.login({username: 'admin', password: 'supersecure'})"
-                               @updated="(loaded) => login = loaded" />
+                               label="User"
+                               :loader="loadUser"
+                               @updated="(loaded) => userLoaded = loaded" />
     </div>
 </template>
 

@@ -40,3 +40,12 @@ export interface UpdateUserData {
     roleNames: string[];
     enabled: boolean;
 }
+
+export function buildUser(data: UserData): User {
+    return new User(
+        data.id,
+        data.username,
+        data.roles.map(role => role as UserRole),
+        data.enabled
+    );
+}

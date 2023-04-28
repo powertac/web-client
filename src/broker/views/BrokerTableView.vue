@@ -4,6 +4,7 @@ import {Dataset, SortOrder} from "@/util/Dataset";
 import DatatableHeader from "@/datatable/DatatableHeader.vue";
 import {Broker} from "@/broker/domain/Broker";
 import {useBrokerStore} from "@/broker/domain/BrokerStore";
+import BrokersHeader from "@/broker/components/BrokersHeader.vue";
 
 const brokerStore = useBrokerStore();
 const selectedBroker = ref<Broker>();
@@ -44,66 +45,69 @@ function toggleSorting(column: string, event: MouseEvent): void {
 </script>
 
 <template>
-    <div class="flex flex-col h-full bg-slate-50" ref="root">
-        <div class="grow overflow-scroll">
-            <table class="datatable bg-white" v-if="brokers">
-                <thead>
-                <tr>
-                    <DatatableHeader v-for="column in Object.keys(columns)"
-                                     :class="{'left-aligned': (column === 'Name' || column === 'Version' || column === 'Image Tag' || column === 'ID')}"
-                                     :name="column" :index="brokers.index(column)" :order="brokers.order(column)"
-                                     @click="(event) => toggleSorting(column, event)" />
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="broker in brokers.items" :key="broker.id" @click="selectedBroker = broker" class="selectable" :class="{'selected': isSelected(broker)}">
-                    <td class="!text-left font-mono w-96">{{broker.id}}</td>
-                    <td class="uppercase text-xs">{{broker.enabled ? 'AVAILABLE' : 'DISABLED'}}</td>
-                    <td class="!text-left">{{broker.name}}</td>
-                    <td class="!text-left uppercase text-xs">{{broker.version}}</td>
-                    <td class="!text-left font-mono">{{broker.imageTag}}</td>
+    <div class="flex grow flex-col" ref="root">
+        <BrokersHeader />
+        <div class="flex relative grow">
+            <div class="table-wrapper border-r border-slate-300 grow">
+                <table class="datatable bg-white" v-if="brokers">
+                    <thead>
+                    <tr>
+                        <DatatableHeader v-for="column in Object.keys(columns)"
+                                         :class="{'left-aligned': (column === 'Name' || column === 'Version' || column === 'Image Tag' || column === 'ID')}"
+                                         :name="column" :index="brokers.index(column)" :order="brokers.order(column)"
+                                         @click="(event) => toggleSorting(column, event)" />
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="broker in brokers.items" :key="broker.id" @click="selectedBroker = broker" class="selectable" :class="{'selected': isSelected(broker)}">
+                        <td class="!text-left font-mono w-96">{{broker.id}}</td>
+                        <td class="uppercase text-xs">{{broker.enabled ? 'AVAILABLE' : 'DISABLED'}}</td>
+                        <td class="!text-left">{{broker.name}}</td>
+                        <td class="!text-left uppercase text-xs">{{broker.version}}</td>
+                        <td class="!text-left font-mono">{{broker.imageTag}}</td>
 
-                </tr>
-                </tbody>
-            </table>
-            <table class="datatable bg-white" v-else>
-                <thead>
-                <tr>
-                    <th>Status</th>
-                    <th class="!text-left">ID</th>
-                    <th class="!text-left">Baseline / Treatment</th>
-                    <th class="!text-left">Name</th>
-                    <th>Created at</th>
-                    <th>Completed at</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                </tr>
-                <tr>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                </tr>
-                <tr>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                    <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
-                </tr>
-                </tbody>
-            </table>
+                    </tr>
+                    </tbody>
+                </table>
+                <table class="datatable bg-white" v-else>
+                    <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th class="!text-left">ID</th>
+                        <th class="!text-left">Baseline / Treatment</th>
+                        <th class="!text-left">Name</th>
+                        <th>Created at</th>
+                        <th>Completed at</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                    </tr>
+                    <tr>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                    </tr>
+                    <tr>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                        <td><div class="bg-slate-200 rounded-sm animate-pulse">&nbsp;</div></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </template>

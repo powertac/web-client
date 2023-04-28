@@ -14,26 +14,37 @@ const emit = defineEmits<{
 }>();
 const gamePartitions = computed(() => {
     const buckets: Game[][] = [];
-    let bucketIndex = -1;
-    for (let i=0; i < props.baseline.games.length; i++) {
-        if (i % 4 === 0) buckets[++bucketIndex] = [];
-        buckets[bucketIndex].push(props.baseline.games[i]);
-    }
-    return buckets;
+    const cutoffset = Math.ceil(props.baseline.games.length / 2);
+    buckets[0] = props.baseline.games.slice(0, cutoffset);
+    buckets[1] = props.baseline.games.slice(cutoffset);
+    return buckets
 });
 </script>
 
 <template>
-    <div class="w-full bg-slate-100">
-        <div class="flex items-center border-t border-slate-300">
-            <button class="block uppercase text-xs px-6 text-slate-700 bg-slate-200 border-slate-300 self-stretch pt-0.5 border -mt-[1px] border-l-0 rounded-br-sm hover:bg-slate-300 hover-text-slate-900"
+    <div>
+        <div class="flex justify-between bg-slate-200 -mb-[1px]">
+            <h1 class="text-lg font-semibold text-slate-700 py-2.5 pl-6">{{props.baseline.name}}</h1>
+            <button class="button self-center mr-1.5"
                     type="button" @click="emit('close-self')">
-                <icon class="mr-2" icon="times" />
-                Close
+                <icon icon="times" />
             </button>
-            <h1 class="text-lg font-semibold text-slate-800 pt-3 pb-2 pl-6">{{props.baseline.name}}</h1>
         </div>
-        <div class="flex gap-5 mt-5 mx-7 mb-16">
+        <div class="p-3 flex border-t border-slate-300 gap-1">
+            <router-link :to="'/baselines/' + props.baseline.id" class="button button-sm block">
+                <icon icon="seedling" class="mr-1.5" />
+                Details
+            </router-link>
+            <router-link :to="'/baselines/' + props.baseline.id + '/games'" class="button button-sm block">
+                <icon icon="dice-d6" class="mr-1.5" />
+                Games
+            </router-link>
+            <router-link :to="'/baselines/' + props.baseline.id + '/actions'" class="button button-sm block">
+                <icon icon="gears" class="mr-1.5" />
+                Actions
+            </router-link>
+        </div>
+        <div class="flex flex-col">
             <div class="tuple-group">
                 <div class="tuple-header">Metadata</div>
                 <div class="tuple">
@@ -51,7 +62,7 @@ const gamePartitions = computed(() => {
             </div>
             <div class="tuple-group">
                 <div class="tuple-header">Games ({{props.baseline.games.length}})</div>
-                <div class="grid gap-1 p-1.5 grid-flow-col" :class="['grid-cols-' + gamePartitions.length]">
+                <div class="grid gap-1 p-1.5 grid-flow-col max-h-48 overflow-y-auto" :class="['grid-cols-' + gamePartitions.length]">
                     <div class="grid grid-cols-1 gap-1 place-content-start" v-for="partition in gamePartitions">
                         <GameStatusBadge :index="props.baseline.games.indexOf(game)" :status="game.status" v-for="game in partition" :key="game.id" />
                     </div>

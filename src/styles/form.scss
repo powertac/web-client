@@ -24,24 +24,24 @@
       label.attached-label + input.default {
         @apply rounded-l-none;
       }
+    }
+  }
 
-      input.default {
-        @apply  px-5 pt-3 pb-2.5
-                border border-stone-300 rounded-sm outline-none
-                text-base text-stone-700;
+  input.default {
+    @apply  px-5 pt-3 pb-2.5
+    border border-stone-300 rounded-sm outline-none
+    text-base text-stone-700;
 
-        &:active, &:focus {
-          @apply border-blue-400 text-stone-900;
-        }
+    &:active, &:focus {
+      @apply border-blue-400 text-stone-900;
+    }
 
-        &[disabled] {
-          @apply bg-slate-50 border-slate-200 cursor-not-allowed;
-        }
+    &[disabled] {
+      @apply bg-slate-50 border-slate-200 cursor-not-allowed;
+    }
 
-        &.valid {
-          @apply border-emerald-400 bg-emerald-50 text-emerald-700;
-        }
-      }
+    &.valid {
+      @apply border-emerald-400 bg-emerald-50 text-emerald-700;
     }
   }
 }

@@ -6,17 +6,20 @@ const props = defineProps<{
     label: string,
     loader: () => Promise<any>
 }>();
+
 const emit = defineEmits<{
     (e: 'updated', parameter: LoadingState): void
 }>();
 
 const state = ref<LoadingState>(LoadingState.Pending);
+
 props.loader()
     .then(() => state.value = LoadingState.Successful)
     .catch((error) => {
         console.error(`loader '${props.label}' failed`, error);
         state.value = LoadingState.Failed;
     });
+
 watch(state, () => emit("updated", state.value));
 </script>
 

@@ -15,10 +15,13 @@ import {
     faClock,
     faCodeBranch,
     faDiceD6,
+    faDownload,
     faFolder,
     faGears,
     faPlay,
     faPlus,
+    faPowerOff,
+    faRotate,
     faSeedling,
     faSquareArrowUpRight,
     faTable,
@@ -54,5 +57,8 @@ library.add(
     faTurnUp,
     faCircleNotch,
     faTable,
-    faGears
+    faGears,
+    faRotate,
+    faDownload,
+    faPowerOff
 );

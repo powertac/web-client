@@ -9,6 +9,9 @@ import {WeatherConfig} from "@/weather/domain/WeatherConfig";
 import {api} from "@/api";
 import type {NewBaselineData} from "@/baseline/domain/Baseline";
 import ValidationBadge from "@/form/ValidationBadge.vue";
+import BaselinesHeader from "@/baseline/components/BaselinesHeader.vue";
+import {useBaselineStore} from "@/baseline/domain/BaselineStore";
+import {useRouter} from "vue-router";
 
 const name = ref("" as string);
 const size = ref(0);
@@ -31,9 +34,13 @@ const config = computed((): Partial<NewBaselineData> => ({
 
 function createBaseline(): void {
     if (isValid()) {
+        const baselineStore = useBaselineStore();
+        const router = useRouter();
         api.orchestrator.baselines.create(config.value as NewBaselineData)
-            .then(() => console.log("")) // TODO : add routing later to allow HMR
-            .catch((error) => console.error(error));
+            .then(baseline => baselineStore.fetchOnceById(baseline.id)
+                .then(() => router.push("/baselines/table"))
+                .catch(error => console.error("unable to load newly created baseline", baseline, error)))
+            .catch(error => console.error("unable to create baseline", error));
     } else {
         console.error("game data not valid");
     }
@@ -50,9 +57,7 @@ function isValid(): boolean {
 
 <template>
     <div class="form" @keyup.ctrl.enter="createBaseline">
-        <div class="form-header">
-            <h1 class="mx-auto max-w-7xl form-title pl-44">New Baseline</h1>
-        </div>
+        <BaselinesHeader />
         <div class="form-content">
             <div class="form-group mt-3" ref="nameElement">
                 <h2 class="form-group-title">Name</h2>

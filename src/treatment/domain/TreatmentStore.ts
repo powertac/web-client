@@ -27,6 +27,7 @@ export const useTreatmentStore = defineStore({
                 this.treatments[id] = buildTreatment(data);
                 const sync = new SyncGroup();
                 const gameStore = useGameStore();
+                console.log(data.baselineId);
                 data.gameIds.forEach((gid) => sync.add(gameStore.fetchOnceById(gid)));
                 sync.add(useBaselineStore().fetchOnceById(data.baselineId));
                 return sync.wait();

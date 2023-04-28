@@ -10,6 +10,7 @@ import {useBaselineStore} from "@/baseline/domain/BaselineStore";
 import ModifierForm from "@/treatment/components/ModifierForm.vue";
 import BaselineSelector from "@/baseline/components/BaselineSelector.vue";
 import {useRouter} from "vue-router";
+import TreatmentsHeader from "@/treatment/components/TreatmentsHeader.vue";
 
 const baselineStore = useBaselineStore();
 const loading = ref(true);
@@ -56,9 +57,7 @@ onMounted(() => baselineStore.fetchAllOnce()
 
 <template>
     <div class="form" @submit="createTreatment" @keyup.ctrl.enter="createTreatment">
-        <div class="form-header">
-            <h1 class="mx-auto max-w-7xl form-title pl-44">New Treatment</h1>
-        </div>
+        <TreatmentsHeader />
         <div class="form-content" v-if="!loading">
             <div class="form-group mt-3" ref="nameElement">
                 <h2 class="form-group-title">Name</h2>

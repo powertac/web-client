@@ -2,31 +2,31 @@
 import {RouterView} from 'vue-router'
 import ApplicationNavigation from "@/application/components/ApplicationNavigation.vue";
 import {api} from "@/api";
-import {computed, ref} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 import {SyncGroup} from "@/util/SyncGroup";
 import {useBrokerStore} from "@/broker/domain/BrokerStore";
 import {useWeatherStore} from "@/weather/domain/WeatherStore";
 import ApplicationLoader from "@/application/components/ApplicationLoader.vue";
 import {LoadingState} from "@/util/LoadingState";
+import {useAuthStore} from "@/security/domain/AuthStore";
+import LoginForm from "@/security/components/LoginForm.vue";
 
 const loading = ref(true);
-
-const sync = new SyncGroup();
-sync.add(useBrokerStore().fetchAll());
-sync.add(useWeatherStore().fetchAllLocations());
-sync.add(api.orchestrator.auth.login({username: "admin", password: "supersecure"}));
-sync.wait()
-    .then(() => loading.value = false)
-    .catch((error) => console.error("unable to load base resources", error));
+const authStore = useAuthStore();
+const authenticated = computed(() => authStore.isAuthenticated)
 
 // FIXME : move to store
 const size = ref(10);
 const increaseDefaultFontSize = () => size.value = size.value + 1;
 const defaultStyle = computed(() => ({ fontSize: size.value + "px" }));
+
+onMounted(() => {
+    api.orchestrator.auth.verify().then(() => authStore.setAuthenticated(true));
+})
 </script>
 
 <template>
-    <Transition class="h-full flex flex-col">
+    <Transition class="h-full flex flex-col" v-if="authenticated">
         <ApplicationLoader class="absolute top-0 left-0 z-50"
                            @updated="(state) => loading = (state !== LoadingState.Successful)"
                            v-if="loading" />
@@ -35,6 +35,7 @@ const defaultStyle = computed(() => ({ fontSize: size.value + "px" }));
             <RouterView />
         </div>
     </Transition>
+    <LoginForm v-else />
 </template>
 
 <style lang="scss">
