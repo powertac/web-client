@@ -63,7 +63,7 @@ watch(state, () => emit("updated", state.value));
                                @updated="(loaded) => weatherLocationsLoaded = loaded" />
         <LoadingStateIndicator class="loading-state-indicator"
                                label="Parameters"
-                               :loader="() => useParameterStore().fetchAllOnce()"
+                               :loader="() => useParameterStore().fetchAll()"
                                @updated="(loaded) => parametersLoaded = loaded" />
         <LoadingStateIndicator class="loading-state-indicator"
                                label="User"

@@ -29,7 +29,7 @@ export const useBaselineStore = defineStore({
                 await useGameStore().fetchByIds(data.gameIds);
             }
         },
-        async fetchAllOnce(): Promise<void> {
+        async fetchAll(): Promise<void> {
             const data = await api.orchestrator.baselines.getAll();
             const gameIds = new Set<string>();
             for (const baselineData of data) {

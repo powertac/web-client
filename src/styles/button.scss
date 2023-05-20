@@ -28,4 +28,8 @@
     @apply bg-pink-50 border-pink-300 text-pink-600;
     &:hover { @apply bg-pink-100 border-pink-500 text-pink-800 }
   }
+
+  &.active {
+    @apply border-blue-500 text-blue-700;
+  }
 }

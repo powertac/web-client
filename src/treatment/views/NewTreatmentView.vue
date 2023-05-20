@@ -50,7 +50,7 @@ function isValid(): boolean {
         && modifier.value !== undefined;
 }
 
-onMounted(() => baselineStore.fetchAllOnce()
+onMounted(() => baselineStore.fetchAll()
     .then(() => loading.value = false)
     .catch(error => console.error(error)));
 </script>

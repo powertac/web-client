@@ -1,9 +1,11 @@
 <script lang="ts" setup>
 import type FileNode from "@/file/domain/FileNode";
 import {computed} from "vue";
+import RootPath from "@/file/components/RootPath.vue";
 
 const props = defineProps<{
-    file: FileNode
+    file: FileNode;
+    fullPath?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -22,15 +24,17 @@ const pathNodes = computed(() => {
 </script>
 
 <template>
-    <div class="inline-block" v-for="(node, index) in pathNodes">
-        <span v-if="index === 0">... /</span>
-        <span v-else>/</span>
-        <span class="node-link" @click="$emit('selected', node)">{{node.name}}</span>
-    </div>
-    <div class="inline-block">
-        <span v-if="pathNodes.length === 0">... /</span>
-        <span v-else>/</span>
-        <span class="mx-0.5">{{file.name}}</span>
+    <div class="font-mono">
+        <div class="inline-block" v-for="(node, index) in pathNodes">
+            <RootPath :file="node" v-if="index === 0" :full-path="props.fullPath" />
+            <span v-else>/</span>
+            <span class="node-link" @click="$emit('selected', node)">{{node.name}}</span>
+        </div>
+        <div class="inline-block">
+            <RootPath :file="file" v-if="pathNodes.length === 0" :full-path="props.fullPath" />
+            <span v-else>/</span>
+            <span class="mx-0.5">{{file.name}}</span>
+        </div>
     </div>
 </template>
 

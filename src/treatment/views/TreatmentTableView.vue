@@ -48,7 +48,7 @@ function toggleSorting(column: string, event: MouseEvent): void {
     }
 }
 
-onMounted(() => treatmentStore.fetchAllOnce()
+onMounted(() => treatmentStore.fetchAll()
     .then(() => treatments.value = createDataset())
     .catch((error) => console.error(error)));
 </script>

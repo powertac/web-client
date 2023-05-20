@@ -2,8 +2,8 @@
 import {ref} from "vue";
 import {api} from "@/api";
 
-const username = ref("admin");
-const password = ref("supersecure");
+const username = ref("");
+const password = ref("");
 const hasError = ref(false);
 
 function login(): void {
@@ -11,7 +11,7 @@ function login(): void {
         username: username.value,
         password: password.value
     })
-        .then(() => console.log("HI"))
+        .then(() => console.log("authenticated"))
         .catch(error => {
             console.error("unable to authenticate", error);
             hasError.value = true;

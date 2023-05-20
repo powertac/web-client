@@ -27,13 +27,12 @@ export const useTreatmentStore = defineStore({
                 this.treatments[id] = buildTreatment(data);
                 const sync = new SyncGroup();
                 const gameStore = useGameStore();
-                console.log(data.baselineId);
                 data.gameIds.forEach((gid) => sync.add(gameStore.fetchOnceById(gid)));
                 sync.add(useBaselineStore().fetchOnceById(data.baselineId));
                 return sync.wait();
             }
         },
-        async fetchAllOnce(): Promise<void> {
+        async fetchAll(): Promise<void> {
             const data: TreatmentData[] = await api.orchestrator.treatments.getAll();
             const baselineIds = new Set<string>();
             const gameIds = new Set<string>();

@@ -72,7 +72,7 @@ function rowId(game: Game): string {
     return tableId + ":" + game.id;
 }
 
-onMounted(() => gameStore.fetchAllOnce()
+onMounted(() => gameStore.fetchAll()
     .then(() => {
         loading.value = false
         games.value = createDataset();

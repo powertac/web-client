@@ -12,7 +12,7 @@ export const useParameterStore = defineStore({
         findAll: (state: ParameterStoreState) => () => Array.from(state.parameters.values()).sort()
     },
     actions: {
-        async fetchAllOnce(): Promise<void> {
+        async fetchAll(): Promise<void> {
             if (this.parameters.size < 1) {
                 const data = await api.orchestrator.parameters.getSupported();
                 data.forEach((parameter) => this.parameters.add(parameter));

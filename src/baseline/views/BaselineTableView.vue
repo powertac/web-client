@@ -45,7 +45,7 @@ function toggleSorting(column: string, event: MouseEvent): void {
     }
 }
 
-onMounted(() => baselineStore.fetchAllOnce()
+onMounted(() => baselineStore.fetchAll()
     .then(() => baselines.value = createDataset())
     .catch((error) => console.error(error)));
 </script>

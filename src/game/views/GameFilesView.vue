@@ -19,7 +19,6 @@ const node = ref<FileNode>();
 
 function selectNode(newNode: FileNode): void {
     const newPath = relativePath(newNode);
-
     router.push('/games/' + gameId + '/files' + newPath);
 }
 

@@ -13,9 +13,9 @@ import {
     faCircle,
     faCircleNotch,
     faClock,
-    faCodeBranch,
+    faCodeBranch, faCopy,
     faDiceD6,
-    faDownload,
+    faDownload, faEyeSlash,
     faFolder,
     faGears,
     faPlay,
@@ -24,6 +24,7 @@ import {
     faRotate,
     faSeedling,
     faSquareArrowUpRight,
+    faSquareUpRight,
     faTable,
     faTimes,
     faTurnUp,
@@ -60,5 +61,8 @@ library.add(
     faGears,
     faRotate,
     faDownload,
-    faPowerOff
+    faPowerOff,
+    faSquareUpRight,
+    faEyeSlash,
+    faCopy
 );
