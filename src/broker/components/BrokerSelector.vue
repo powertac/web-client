@@ -2,15 +2,18 @@
 import {useBrokerStore} from "@/broker/domain/BrokerStore";
 import {ref} from "vue";
 import type {Broker} from "@/broker/domain/Broker";
-import {Selection} from "@/util/Selection";
+import type {BrokerConfigData} from "@/broker/domain/BrokerConfig";
+import BrokerPill from "@/broker/components/BrokerPill.vue";
+import BrokerConfigModal from "@/broker/components/BrokerConfigModal.vue";
 
 const emit = defineEmits<{
-    (e: 'selected', parameter: Broker[]): void
+    (e: 'updated', configs: BrokerConfigData[]): void
 }>();
 
 const brokerStore = useBrokerStore();
 const loading = ref(false);
-const selection = ref(new Selection<Broker>());
+const brokerConfigs = ref([] as BrokerConfigData[]);
+const selectedBroker = ref<Broker|undefined>();
 const brokers = () => brokerStore.findAll()
     .slice()
     .sort((a, b) => {
@@ -18,9 +21,18 @@ const brokers = () => brokerStore.findAll()
         return primary !== 0 ? primary : a.version.localeCompare(b.version)
     });
 
-function select(broker: Broker): void {
-    selection.value.toggle(broker);
-    emit('selected', selection.value.entities);
+const addBrokerConfig = (config: BrokerConfigData): void => {
+    brokerConfigs.value.push(config);
+    selectedBroker.value = undefined;
+}
+const createConfigCopy = (config: BrokerConfigData): void => {
+
+}
+const removeBrokerConfig = (config: BrokerConfigData): void => {
+    const index = brokerConfigs.value.indexOf(config);
+    if (index >= 0) {
+        brokerConfigs.value.splice(index, 1);
+    }
 }
 </script>
 
@@ -29,16 +41,48 @@ function select(broker: Broker): void {
         Loading...
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2" v-else>
-        <div class="card" :class="{'selected': selection.includes(broker)}"
-             v-for="broker in brokers()" :key="broker.id"
-             @click="select(broker)">
-            <h6 class="card-title">
-                {{broker.name}}
-                <icon icon="check" class="text-xs ml-1.5 mb-0.5" v-if="selection.includes(broker)" />
-            </h6>
-            <span class="uppercase text-xs">{{broker.version}}</span>
+        <div class="card flex" v-for="broker in brokers()" :key="broker.id" @click="selectedBroker = broker">
+            <div class="flex items-center mr-2.5 -ml-1">
+                <icon icon="plus-circle" class="text-lg" />
+            </div>
+            <div>
+                <h6 class="font-semibold leading-4 mt-1">
+                    {{broker.name}}
+                </h6>
+                <span class="uppercase text-xs leading-4">{{broker.version}}</span>
+            </div>
         </div>
     </div>
+    <hr class="mt-2 border-slate-200" />
+    <div class="flex flex-col">
+        <div v-for="config in brokerConfigs" :key="config.name"
+             class="border border-slate-300 rounded bg-slate-50 py-3 px-4 mt-2">
+            <div class="flex justify-between">
+                <div class="flex items-center">
+                    <BrokerPill :broker="brokerStore.findById(config.brokerId)" />
+                    <span class="font-semibold ml-3">{{config.name}}</span>
+                </div>
+                <div>
+                    <button type="button" class="button button-sm mr-1.5" @click="createConfigCopy(config)">
+                        <icon icon="copy" class="mr-1" />
+                        Copy
+                    </button>
+                    <button type="button" class="button button-sm" @click="removeBrokerConfig(config)">
+                        <icon icon="times" class="mr-1" />
+                        Remove
+                    </button>
+                </div>
+            </div>
+            <div class="mt-1">
+
+            </div>
+            <div class="mt-2">
+                <pre class="bg-white py-2 px-3 rounded-sm border border-slate-300">{{config.parameters}}</pre>
+            </div>
+        </div>
+    </div>
+    <BrokerConfigModal :broker="selectedBroker" v-if="selectedBroker !== undefined"
+                       @create="addBrokerConfig" @close="selectedBroker = undefined" />
 </template>
 
 <style lang="scss" scoped>

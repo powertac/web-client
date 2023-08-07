@@ -13,20 +13,23 @@ import {
     faCircle,
     faCircleNotch,
     faClock,
-    faCodeBranch, faCopy,
+    faCodeBranch,
+    faCopy,
     faDiceD6,
-    faDownload, faEyeSlash,
+    faDownload,
+    faEyeSlash,
     faFolder,
+    faGear,
     faGears,
     faPlay,
-    faPlus,
+    faPlus, faPlusCircle,
     faPowerOff,
     faRotate,
     faSeedling,
     faSquareArrowUpRight,
     faSquareUpRight,
     faTable,
-    faTimes,
+    faTimes, faTrash,
     faTurnUp,
     faUser
 } from "@fortawesome/free-solid-svg-icons";
@@ -64,5 +67,8 @@ library.add(
     faPowerOff,
     faSquareUpRight,
     faEyeSlash,
-    faCopy
+    faCopy,
+    faGear,
+    faTrash,
+    faPlusCircle
 );
