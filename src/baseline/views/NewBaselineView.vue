@@ -76,7 +76,7 @@ function isValid(): boolean {
             <div class="form-group" ref="brokersElement">
                 <h2 class="form-group-title">Brokers</h2>
                 <div class="form-group-content">
-                    <BrokerSelector @selected="(newBrokers) => brokers = newBrokers" />
+                    <BrokerSelector @updated="(newBrokers) => brokers = newBrokers" />
                     <p class="mt-5 text-slate-500">Please choose at least one broker.</p>
                 </div>
             </div>
