@@ -3,9 +3,10 @@ import {useRouter} from "vue-router";
 import {ref} from "vue";
 import {useAuthStore} from "@/security/domain/AuthStore";
 import {api} from "@/api";
+import type {User} from "@/user/domain/User";
 
 const router = useRouter();
-const user = ref(useAuthStore().findCurrentUser);
+const user = ref<User|undefined>(useAuthStore().findCurrentUser);
 
 function activeGroup(prefix: string): boolean {
     return router.currentRoute.value.fullPath.startsWith(prefix);
@@ -36,6 +37,10 @@ function logout(): void {
             <router-link to="/brokers/table" :class="{'nav-item': true, 'active': activeGroup('/brokers')}">
                 <icon icon="chess" class="mr-2 text-sm" />
                 Brokers
+            </router-link>
+            <router-link to="/tasks/table" :class="{'nav-item': true, 'active': activeGroup('/tasks')}">
+                <icon icon="bars-progress" class="mr-2 text-sm" />
+                Tasks
             </router-link>
         </div>
         <div class="text-white items-center flex mr-3">

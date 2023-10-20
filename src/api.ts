@@ -11,6 +11,7 @@ import {FileClient} from "@/file/FileClient";
 import {GameRunClient} from "@/game/GameRunClient";
 import {PathClient} from "@/application/PathClient";
 import {UserClient} from "@/user/UserClient";
+import {TaskClient} from "@/task/TaskClient";
 
 const orchestratorUrlLoader = () => config.services.orchestrator.url;
 const weatherServerUrlLoader = () => config.services.weatherserver.url;
@@ -26,6 +27,7 @@ export const api = {
         parameters: new ParameterClient(orchestratorUrlLoader),
         paths: new PathClient(orchestratorUrlLoader),
         runs: new GameRunClient(orchestratorUrlLoader),
+        tasks: new TaskClient(orchestratorUrlLoader),
         treatments: new TreatmentClient(orchestratorUrlLoader),
         users: new UserClient(orchestratorUrlLoader)
     },

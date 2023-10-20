@@ -4,7 +4,7 @@ import {
     faAngleUp,
     faArrowRight,
     faArrowRotateLeft,
-    faBars,
+    faBars, faBarsProgress,
     faBolt,
     faCaretRight,
     faCheck,
@@ -70,5 +70,6 @@ library.add(
     faCopy,
     faGear,
     faTrash,
-    faPlusCircle
+    faPlusCircle,
+    faBarsProgress
 );

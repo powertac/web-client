@@ -1,26 +1,20 @@
 <script lang="ts" setup>
-import {SortOrder} from "@/util/Dataset";
-const props = defineProps<{
-    name: string,
-    order: SortOrder|null,
-    index: number|null
-}>();
+import DatatableHeaderField from "@/datatable/DatatableHeaderField.vue";
+import type {Column} from "@/datatable/Column";
 
+const props = defineProps<{
+    columns: Column<any>[];
+}>();
 </script>
 
 <template>
-    <th class="cursor-pointer outline-0 hover:text-blue-700 hover:!bg-slate-200 select-none">
-        <div class="flex justify-center items-center gap-1.5">{{props.name}}
-            <div class="flex flex-row gap-1 items-center bg-slate-50 py-1 px-2 border border-blue-400 rounded-full" v-if="order !== null">
-                <icon icon="angle-up" v-if="props.order === SortOrder.ASC" />
-                <icon icon="angle-down" v-if="props.order === SortOrder.DESC" />
-                <div v-if="index !== null">{{index + 1}}</div>
-            </div>
-        </div>
-    </th>
+    <thead>
+    <tr>
+        <DatatableHeaderField v-for="column in props.columns"
+                         :class="column.classes"
+                         :name="column.name" :index="treatments.index(column)" :order="treatments.order(column)"
+                         @click="(event) => toggleSorting(column, event)" />
+        <slot name="header"></slot>
+    </tr>
+    </thead>
 </template>
-
-<style lang="scss">
-th.left-aligned > div { @apply justify-start; }
-th.right-aligned > div { @apply justify-end; }
-</style>

@@ -6,4 +6,8 @@ export class PathClient extends RestClient {
         return this.get("/paths/baselines/" + baselineId + "/manifest");
     }
 
+    public exportRoot(): Promise<string> {
+        return this.get("/paths/export");
+    }
+
 }

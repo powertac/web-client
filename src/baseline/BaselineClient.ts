@@ -1,5 +1,7 @@
 import {RestClient} from "@/util/RestClient";
 import type {BaselineData, NewBaselineData} from "@/baseline/domain/Baseline";
+import type {ExportGameFileConfig} from "@/game/domain/ExportGameFileConfig";
+import type {ExportBaselineGameFilesTaskData} from "@/baseline/domain/ExportBaselineGameFilesTask";
 
 export class BaselineClient extends RestClient {
 
@@ -21,6 +23,14 @@ export class BaselineClient extends RestClient {
 
     public createManifest(baselineId: string): Promise<void> {
         return this.post("/v2/baselines/" + baselineId + "/manifest", undefined);
+    }
+
+    public exportFiles(baselineId: string, config: ExportGameFileConfig): Promise<ExportBaselineGameFilesTaskData> {
+        return this.post("/baselines/" + baselineId + "/exports", config);
+    }
+
+    public getExportTasks(baselineId: string): Promise<ExportBaselineGameFilesTaskData[]> {
+        return this.get("/baselines/" + baselineId + "/exports");
     }
 
 }

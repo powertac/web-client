@@ -5,6 +5,7 @@ import {useRouter} from "vue-router";
 import {computed, onMounted, ref} from "vue";
 import {Baseline} from "@/baseline/domain/Baseline";
 import GenerateBaselineManifestAction from "@/baseline/components/GenerateBaselineManifestAction.vue";
+import ExportBaselineFiles from "@/baseline/components/ExportBaselineFiles.vue";
 
 const baselineStore = useBaselineStore();
 const baselineId = useRouter().currentRoute.value.params.id as string;
@@ -22,7 +23,7 @@ onMounted(() => baselineStore.fetchOnceById(baselineId)
 <template>
     <div v-if="baseline !== undefined">
         <BaselinePageHeader :baseline="baseline" />
-        <div class="max-w-screen-md mx-auto">
+        <div class="max-w-screen-md mx-auto mb-20">
             <div class="mt-10 text-slate-700">
                 <h2 class="text-2xl w-full mb-4 pb-3 border-b border-slate-200 text-slate-700">Generate manifest</h2>
                 <p class="my-4 leading-relaxed">
@@ -34,6 +35,13 @@ onMounted(() => baselineStore.fetchOnceById(baselineId)
                 </p>
                 <pre class="bg-slate-100 border border-slate-300 rounded px-5 py-3">{{manifestHeader}}</pre>
                 <GenerateBaselineManifestAction :baseline-id="baselineId" />
+            </div>
+            <div class="mt-10 text-slate-700">
+                <h2 class="text-2xl w-full mb-4 pb-3 border-b border-slate-200 text-slate-700">Export game files</h2>
+                <p class="my-4 leading-relaxed">
+                    Exports game archives (as *.tar.gz) and a manifest (*.games.csv) to the specified target directory.
+                </p>
+                <ExportBaselineFiles :baseline-id="baselineId" />
             </div>
         </div>
     </div>

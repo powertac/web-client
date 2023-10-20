@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import DatatableHeader from "@/datatable/DatatableHeader.vue";
+import DatatableHeader from "@/datatable/DatatableHeaderField.vue";
 import GameGroupProgressBar from "@/game/components/GameGroupProgressBar.vue";
 import {onMounted, ref} from "vue";
 import {Baseline} from "@/baseline/domain/Baseline";

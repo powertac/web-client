@@ -2,7 +2,7 @@
 import {onMounted, ref} from "vue";
 import {datetime} from "@/util/DateTimeFormat";
 import {Dataset, SortOrder} from "@/util/Dataset";
-import DatatableHeader from "@/datatable/DatatableHeader.vue";
+import DatatableHeader from "@/datatable/DatatableHeaderField.vue";
 import {Baseline} from "@/baseline/domain/Baseline";
 import {useBaselineStore} from "@/baseline/domain/BaselineStore";
 import GameGroupProgressBar from "@/game/components/GameGroupProgressBar.vue";

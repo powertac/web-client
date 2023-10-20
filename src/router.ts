@@ -16,6 +16,7 @@ import BaselineGamesView from "@/baseline/views/BaselineGamesView.vue";
 import BaselineActionsView from "@/baseline/views/BaselineActionsView.vue";
 import TreatmentDetailsView from "@/treatment/views/TreatmentDetailsView.vue";
 import TreatmentGamesView from "@/treatment/components/TreatmentGamesView.vue";
+import {taskRoutes} from "@/task/routes";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -114,6 +115,7 @@ const router = createRouter({
       name: 'add-broker',
       component: AddBrokerView
     },
+    ...taskRoutes
   ]
 });
 
