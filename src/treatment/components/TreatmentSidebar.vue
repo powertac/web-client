@@ -41,12 +41,10 @@ const gamePartitions = computed(() => {
                 <icon icon="dice-d6" class="mr-1.5" />
                 Games
             </router-link>
-            <!--
             <router-link :to="'/treatments/' + props.treatment.id + '/actions'" class="button button-sm block">
                 <icon icon="gears" class="mr-1.5" />
                 Actions
             </router-link>
-            -->
         </div>
         <div class="flex flex-col">
             <div class="tuple-group">

@@ -17,6 +17,7 @@ import BaselineActionsView from "@/baseline/views/BaselineActionsView.vue";
 import TreatmentDetailsView from "@/treatment/views/TreatmentDetailsView.vue";
 import TreatmentGamesView from "@/treatment/components/TreatmentGamesView.vue";
 import {taskRoutes} from "@/task/routes";
+import TreatmentActionsView from "@/treatment/views/TreatmentActionsView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -102,7 +103,7 @@ const router = createRouter({
     {
       path: '/treatments/:id/actions',
       name: 'treatment-actions',
-      component: BaselineActionsView
+      component: TreatmentActionsView
     },
       // BROKER
     {

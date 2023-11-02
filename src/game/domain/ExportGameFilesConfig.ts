@@ -1,4 +1,4 @@
-export interface ExportGameFileConfig {
+export interface ExportGameFilesConfig {
     target: string;
     baseUri: string;
 }
