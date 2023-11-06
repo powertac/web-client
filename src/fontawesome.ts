@@ -17,7 +17,7 @@ import {
     faCopy,
     faDiceD6,
     faDownload,
-    faEyeSlash,
+    faEyeSlash, faFlask,
     faFolder,
     faGear,
     faGears,
@@ -29,7 +29,7 @@ import {
     faSquareArrowUpRight,
     faSquareUpRight,
     faTable,
-    faTimes, faTrash,
+    faTimes, faTrash, faTurnDown,
     faTurnUp,
     faUser
 } from "@fortawesome/free-solid-svg-icons";
@@ -71,5 +71,7 @@ library.add(
     faGear,
     faTrash,
     faPlusCircle,
-    faBarsProgress
+    faBarsProgress,
+    faFlask,
+    faTurnDown
 );

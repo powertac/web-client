@@ -1,4 +1,12 @@
 import {DateTime} from "luxon";
+import type {LogProcessorTaskConfig} from "@/logprocessor/domain/LogProcessorTask";
+import type {ExportBaselineGameFilesTaskConfig} from "@/baseline/domain/ExportBaselineGameFilesTask";
+import type {ExportTreatmentGameFilesTaskConfig} from "@/treatment/domain/ExportTreatmentGameFilesTask";
+
+export type TaskConfig =
+    LogProcessorTaskConfig
+    | ExportBaselineGameFilesTaskConfig
+    | ExportTreatmentGameFilesTaskConfig;
 
 export interface TaskData {
     type: string;
@@ -9,6 +17,7 @@ export interface TaskData {
     end: number;
     priority: number;
     failed: boolean;
+    config: TaskConfig
 }
 
 export const enum TaskStatus {
@@ -18,16 +27,31 @@ export const enum TaskStatus {
     FAILED
 }
 
-export class Task {
+export class Task<E extends TaskConfig> {
 
     constructor(public type: string,
                 public id: string,
                 public creatorId: string,
                 public createdAt: DateTime,
-                public start: DateTime|null,
-                public end: DateTime|null,
+                public start: DateTime | null,
+                public end: DateTime | null,
                 public priority: number,
-                public failed: boolean) {}
+                public failed: boolean,
+                public config: E) {
+    }
+
+    static from(data: TaskData) {
+        return new Task(
+            data.type,
+            data.id,
+            data.creatorId,
+            DateTime.fromMillis(data.createdAt),
+            data.start !== null ? DateTime.fromMillis(data.start) : null,
+            data.end !== null ? DateTime.fromMillis(data.end) : null,
+            data.priority,
+            data.failed,
+            data.config);
+    }
 
     get status(): TaskStatus {
         if (this.start === null) {
@@ -41,25 +65,21 @@ export class Task {
         }
     }
 
-}
+    get statusText(): string {
+        return statusText(this.status);
+    }
 
-export function buildTask(data: TaskData) {
-    return new Task(
-        data.type,
-        data.id,
-        data.creatorId,
-        DateTime.fromMillis(data.createdAt),
-        data.start !== null ? DateTime.fromMillis(data.start) : null,
-        data.end !== null ? DateTime.fromMillis(data.end) : null,
-        data.priority,
-        data.failed);
 }
 
 export function statusText(status: TaskStatus): string {
     switch (status) {
-        case TaskStatus.QUEUED: return "queued";
-        case TaskStatus.RUNNING: return "running";
-        case TaskStatus.COMPLETED: return "completed";
-        case TaskStatus.FAILED: return "failed";
+        case TaskStatus.QUEUED:
+            return "queued";
+        case TaskStatus.RUNNING:
+            return "running";
+        case TaskStatus.COMPLETED:
+            return "completed";
+        case TaskStatus.FAILED:
+            return "failed";
     }
 }

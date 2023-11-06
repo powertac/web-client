@@ -21,6 +21,10 @@ const props = defineProps<{
                 <icon :icon="['far', 'file']" class="mr-1 text-sm" />
                 Files
             </router-link>
+            <router-link class="nav-item" :to="{name: 'game-analysis', params: {id: game.id, relativePath: ''}}">
+                <icon icon="flask" class="mr-1 text-sm" />
+                Analysis
+            </router-link>
             <router-link class="nav-item" :to="{name: 'game-actions', params: {id: game.id}}">
                 <icon icon="gears" class="mr-1 text-sm" />
                 Actions

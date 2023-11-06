@@ -1,11 +1,10 @@
 import {defineStore} from "pinia";
 import {createFindAllGetter, createFindByIdGetter} from "@/store/StoreUtils";
-import type {Task} from "@/task/domain/Task";
+import {Task, type TaskConfig} from "@/task/domain/Task";
 import {api} from "@/api";
-import {buildTask} from "@/task/domain/Task";
 
 interface TaskStoreState {
-    tasks: {[id: string]: Task}
+    tasks: {[id: string]: Task<TaskConfig>}
 }
 
 export const useTaskStore = defineStore({
@@ -18,7 +17,7 @@ export const useTaskStore = defineStore({
     actions: {
         async fetchAll(): Promise<void> {
             const data = await api.orchestrator.tasks.getAll();
-            data.forEach(t => this.tasks[t.id] = buildTask(t));
+            data.forEach(t => this.tasks[t.id] = Task.from(t));
         },
     }
 });

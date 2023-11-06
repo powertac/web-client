@@ -4,14 +4,13 @@ import {onMounted, ref} from "vue";
 import {Dataset, SortOrder} from "@/util/Dataset";
 import {datetime} from "@/util/DateTimeFormat";
 import {useTaskStore} from "@/task/domain/TaskStore";
-import type {Task} from "@/task/domain/Task";
+import type {Task, TaskConfig} from "@/task/domain/Task";
 import {dateComp} from "@/util/Dates";
 import TasksHeader from "@/task/components/TasksHeader.vue";
-import {statusText} from "@/task/domain/Task";
 
 const taskStore = useTaskStore();
-const tasks = ref(null as Dataset<Task>|null);
-const columns: { [name: string]: (a: Task, b: Task) => number } = {
+const tasks = ref(null as Dataset<Task<TaskConfig>>|null);
+const columns: { [name: string]: (a: Task<TaskConfig>, b: Task<TaskConfig>) => number } = {
     "ID": (a, b) => a.id.localeCompare(b.id),
     "Type": (a, b) => a.type.localeCompare(b.type),
     "Created at": (a, b) => dateComp(a.createdAt, b.createdAt),
@@ -21,7 +20,7 @@ const columns: { [name: string]: (a: Task, b: Task) => number } = {
     "Status": (a, b) => a.status - b.status
 };
 
-function createDataset(): Dataset<Task> {
+function createDataset(): Dataset<Task<TaskConfig>> {
     return Dataset.create(columns, taskStore.findAll())
         .orderBy("Status", SortOrder.DESC)
         .orderBy("Priority", SortOrder.DESC)
@@ -71,7 +70,7 @@ onMounted(() => taskStore.fetchAll()
                         <td>{{task.start !== null ? datetime(task.start) : '-'}}</td>
                         <td>{{task.end !== null ? datetime(task.end) : '-'}}</td>
                         <td>{{task.priority}}</td>
-                        <td class="uppercase text-sm">{{statusText(task.status)}}</td>
+                        <td class="uppercase text-sm">{{task.statusText}}</td>
                     </tr>
                     </tbody>
                 </table>

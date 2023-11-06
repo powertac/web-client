@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import {onMounted, ref} from "vue";
-import {buildBaselineExportTask, ExportBaselineGameFilesTask} from "@/baseline/domain/ExportBaselineGameFilesTask";
+import type {ExportBaselineGameFilesTaskConfig} from "@/baseline/domain/ExportBaselineGameFilesTask";
 import {datetime} from "@/util/DateTimeFormat";
 import {api} from "@/api";
 import {LoadingState} from "@/util/LoadingState";
-import {statusText} from "@/task/domain/Task";
+import {Task} from "@/task/domain/Task";
 
 const props = defineProps<{
     baselineId: string
@@ -12,7 +12,7 @@ const props = defineProps<{
 const exportRoot = ref<string>();
 const target = ref(props.baselineId);
 const baseUri = ref("");
-const tasks = ref<ExportBaselineGameFilesTask[]>([]);
+const tasks = ref<Task<ExportBaselineGameFilesTaskConfig>[]>([]);
 const addingTask = ref(false);
 const loadingTasks = ref(LoadingState.Pending);
 
@@ -28,7 +28,7 @@ onMounted(() => api.orchestrator.paths.exportRoot()
     .catch(e => console.log("unable to load export root path", e)));
 onMounted(() => api.orchestrator.baselines.getExportTasks(props.baselineId)
     .then(data => {
-        data.map(buildBaselineExportTask).forEach(t => tasks.value.push(t));
+        data.map(d => Task.from(d)).forEach(t => tasks.value.push(t as Task<ExportBaselineGameFilesTaskConfig>));
         loadingTasks.value = LoadingState.Successful;
     })
     .catch(e => {
@@ -43,16 +43,16 @@ onMounted(() => api.orchestrator.baselines.getExportTasks(props.baselineId)
             <h2 class="font-semibold px-6 mt-4 pb-2.5 border-b">Existing export tasks</h2>
             <div v-for="task in tasks" :key="task.id" v-if="loadingTasks === LoadingState.Successful" class="px-6 py-2.5 border-b">
                 <div>
-                    <span class="font-semibold">{{datetime(task.createdAt)}}</span> - <span class="uppercase text-sm">{{statusText(task.status)}}</span>
+                    <span class="font-semibold">{{datetime(task.createdAt)}}</span> - <span class="uppercase text-sm">{{task.statusText}}</span>
                 </div>
                 <table>
                     <tr>
                         <th class="font-normal text-left pr-2">Export Path:</th>
-                        <td><span class="bg-slate-100 text-slate-800 rounded-sm inline-block py-0.5 px-2 font-mono border border-slate-300">{{exportRoot + task.target}}</span></td>
+                        <td><span class="bg-slate-100 text-slate-800 rounded-sm inline-block py-0.5 px-2 font-mono border border-slate-300">{{exportRoot + task.config.target}}</span></td>
                     </tr>
                     <tr>
                         <th class="font-normal text-left pr-2">Base URI:</th>
-                        <td><span class="bg-slate-100 text-slate-800 rounded-sm inline-block py-0.5 px-2 font-mono mt-[1px] border border-slate-300">{{task.baseUri}}</span></td>
+                        <td><span class="bg-slate-100 text-slate-800 rounded-sm inline-block py-0.5 px-2 font-mono mt-[1px] border border-slate-300">{{task.config.baseUri}}</span></td>
                     </tr>
                 </table>
             </div>
