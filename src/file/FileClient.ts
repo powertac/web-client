@@ -10,4 +10,13 @@ export class FileClient extends RestClient {
         });
     }
 
+    public getDownloadToken(path: string): Promise<string> {
+        return this.post("/files/download/" + path, undefined);
+    }
+
+    public getDownloadTokens(paths: string[]): Promise<{[path: string]: string}> {
+        console.log(paths);
+        return this.post("/files/download/", paths);
+    }
+
 }

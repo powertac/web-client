@@ -2,19 +2,26 @@
 import {useGameStore} from "@/game/domain/GameStore";
 import {useRouter} from "vue-router";
 import {Game} from "@/game/domain/Game";
-import {onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import GamePageHeader from "@/game/components/GamePageHeader.vue";
 import type {LogProcessor} from "@/logprocessor/domain/LogProcessor";
 import {api} from "@/api";
 import {statusText, Task, TaskStatus} from "@/task/domain/Task";
 import type {LogProcessorTaskConfig} from "@/logprocessor/domain/LogProcessorTask";
+import type {LogProcessorArtifact} from "@/logprocessor/domain/LogProcessorArtifact";
+import {filename} from "@/util/Path";
+import {useDownloadTokenStore} from "@/file/domain/DownloadTokenStore";
+import config from "@/config";
 
 const gameStore = useGameStore();
+const downloadTokenStore = useDownloadTokenStore();
 const gameId = useRouter().currentRoute.value.params.id as string;
+const ready = ref(false);
 const game = ref<Game>();
 const availableProcessors = ref<LogProcessor[]>([]);
 const selectedProcessors = ref<Set<string>>(new Set());
 const tasks = ref<Task<LogProcessorTaskConfig>[]>([]);
+const artifacts = ref<LogProcessorArtifact[]>([]);
 
 onMounted(() => gameStore.fetchOnceById(gameId)
     .then(() => game.value = gameStore.findById(gameId))
@@ -25,6 +32,16 @@ onMounted(() => api.orchestrator.processors.availableProcessors()
 onMounted(() => api.orchestrator.processors.getGameTasks(gameId)
     .then(t => t.map(d => Task.from(d)).forEach(l => tasks.value.push(l as Task<LogProcessorTaskConfig>)))
     .catch(e => console.error("unable to load log processor tasks for game", e)));
+onMounted(() => api.orchestrator.processors.getGameArtifacts(gameId)
+    .then(a => {
+        artifacts.value = a
+        downloadTokenStore.fetchMany(
+            a.map(a => "/games/" + gameId + "/artifacts/" + filename(a.filePath)))
+            .then(() => ready.value = true)
+            .catch(e => console.error(e))
+    })
+    .catch(e => console.error("unable to load log processor artifacts for game", e)));
+
 
 function toggleAll(): void {
     if (selectedProcessors.value.size === availableProcessors.value.length) {
@@ -32,6 +49,28 @@ function toggleAll(): void {
     } else {
         availableProcessors.value.map(p => p.name).forEach(n => selectedProcessors.value.add(n));
     }
+}
+
+function getArtifact(processorName: string): LogProcessorArtifact|undefined {
+    return artifacts.value
+        .filter(a => a.processorName === processorName)
+        .shift();
+}
+
+function getFileUrl(processorName: string): string {
+    const artifact = getArtifact(processorName);
+    return artifact !== undefined
+        ? "/games/" + gameId + "/files/artifacts/" + filename(artifact.filePath)
+        : "";
+}
+
+function getDownloadUrl(processorName: string): string|undefined {
+    const artifact = getArtifact(processorName);
+    return artifact !== undefined
+        ? config.services.orchestrator.url
+            + "/files/download/"
+            + downloadTokenStore.findByPath("/games/" + gameId + "/artifacts/" + filename(artifact.filePath))
+        : "";
 }
 
 function getTaskStatus(processorName: string): TaskStatus|undefined {
@@ -63,7 +102,7 @@ function runSelected(): void {
 
 
 <template>
-    <div v-if="game !== undefined">
+    <div v-if="game !== undefined && ready">
         <GamePageHeader :game="game" />
         <div class="max-w-screen-md mx-auto">
             <div class="mt-10 text-slate-700">
@@ -95,16 +134,16 @@ function runSelected(): void {
                         <td class="!text-left">{{processor.name}}</td>
                         <td class="uppercase text-xs">{{ getTaskStatus(processor.name) !== undefined ? statusText(getTaskStatus(processor.name)) : '-' }}</td>
                         <td>
-                            <!--<div class="text-right" v-if="getTaskStatus(processor.name) === TaskStatus.COMPLETED">
-                                <button class="button button-sm">
-                                    <icon :icon="['far', 'file']" />
+                            <div class="text-right" v-if="getArtifact(processor.name) !== undefined">
+                                <router-link :to="getFileUrl(processor.name)" class="button button-sm">
+                                    <icon :icon="['far', 'file']" class="mr-1" />
                                     Open file
-                                </button>
-                                <button class="button button-sm ml-1">
-                                    <icon icon="download" />
+                                </router-link>
+                                <a :href="getDownloadUrl(processor.name)" class="button button-sm ml-1">
+                                    <icon icon="download" class="mr-1" />
                                     Download
-                                </button>
-                            </div>-->
+                                </a>
+                            </div>
                         </td>
                     </tr>
                     </tbody>

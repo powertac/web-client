@@ -2,6 +2,7 @@ import {RestClient} from "@/util/RestClient";
 import type {LogProcessor} from "@/logprocessor/domain/LogProcessor";
 import type {LogProcessorTaskConfig} from "@/logprocessor/domain/LogProcessorTask";
 import type {Task, TaskData} from "@/task/domain/Task";
+import type {LogProcessorArtifact} from "@/logprocessor/domain/LogProcessorArtifact";
 
 export class LogProcessorClient extends RestClient {
 
@@ -15,6 +16,10 @@ export class LogProcessorClient extends RestClient {
 
     public getGameTasks(gameId: string): Promise<TaskData[]> {
         return this.get("/v2/log-processors/game/" + gameId);
+    }
+
+    public getGameArtifacts(gameId: string): Promise<LogProcessorArtifact[]> {
+        return this.get("/v2/log-processors/game/" + gameId + "/artifacts");
     }
 
 }
