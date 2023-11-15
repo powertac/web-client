@@ -41,6 +41,10 @@ const gamePartitions = computed(() => {
                 <icon icon="dice-d6" class="mr-1.5" />
                 Games
             </router-link>
+            <router-link :to="'/treatments/' + props.treatment.id + '/analysis'" class="button button-sm block">
+                <icon icon="flask" class="mr-1.5" />
+                Analysis
+            </router-link>
             <router-link :to="'/treatments/' + props.treatment.id + '/actions'" class="button button-sm block">
                 <icon icon="gears" class="mr-1.5" />
                 Actions

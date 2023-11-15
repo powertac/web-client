@@ -13,7 +13,7 @@
     @apply px-3 pt-1.5 pb-1 text-xs;
   }
 
-  &[disabled] {
+  &[disabled], &.disabled {
     @apply bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed;
     &:hover {@apply border-slate-200 text-slate-400}
   }

@@ -22,6 +22,10 @@ const props = defineProps<{
                 <icon icon="dice-d6" class="mr-1 text-sm" />
                 Games
             </router-link>
+            <router-link class="nav-item" :to="{name: 'baseline-analysis', params: {id: props.baseline.id}}">
+                <icon icon="flask" class="mr-1 text-sm" />
+                Analysis
+            </router-link>
             <router-link class="nav-item" :to="{name: 'baseline-actions', params: {id: props.baseline.id}}">
                 <icon icon="gears" class="mr-1 text-sm" />
                 Actions

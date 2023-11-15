@@ -19,6 +19,8 @@ import TreatmentGamesView from "@/treatment/components/TreatmentGamesView.vue";
 import {taskRoutes} from "@/task/routes";
 import TreatmentActionsView from "@/treatment/views/TreatmentActionsView.vue";
 import {gameRoutes} from "@/game/routes";
+import {baselineRoutes} from "@/baseline/routes";
+import {treatmentRoutes} from "@/treatment/routes";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,58 +29,6 @@ const router = createRouter({
             path: '/',
             name: 'home',
             component: DashboardView
-        },
-        // BASELINE
-        {
-            path: '/baselines/new',
-            name: 'new-baseline',
-            component: NewBaselineView
-        },
-        {
-            path: '/baselines/table',
-            name: 'baseline-table',
-            component: BaselineTableView
-        },
-        {
-            path: '/baselines/:id',
-            name: 'baseline-details',
-            component: BaselineDetailsView
-        },
-        {
-            path: '/baselines/:id/games',
-            name: 'baseline-games',
-            component: BaselineGamesView
-        },
-        {
-            path: '/baselines/:id/actions',
-            name: 'baseline-actions',
-            component: BaselineActionsView
-        },
-        // TREATMENT
-        {
-            path: '/treatments/new',
-            name: 'new-treatment',
-            component: NewTreatmentView
-        },
-        {
-            path: '/treatments/table',
-            name: 'treatment-table',
-            component: TreatmentTableView
-        },
-        {
-            path: '/treatments/:id',
-            name: 'treatment-details',
-            component: TreatmentDetailsView
-        },
-        {
-            path: '/treatments/:id/games',
-            name: 'treatment-games',
-            component: TreatmentGamesView
-        },
-        {
-            path: '/treatments/:id/actions',
-            name: 'treatment-actions',
-            component: TreatmentActionsView
         },
         // BROKER
         {
@@ -91,8 +41,10 @@ const router = createRouter({
             name: 'add-broker',
             component: AddBrokerView
         },
+        ...baselineRoutes,
         ...gameRoutes,
-        ...taskRoutes
+        ...taskRoutes,
+        ...treatmentRoutes
     ]
 });
 

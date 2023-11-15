@@ -13,12 +13,14 @@ import {PathClient} from "@/application/PathClient";
 import {UserClient} from "@/user/UserClient";
 import {TaskClient} from "@/task/TaskClient";
 import {LogProcessorClient} from "@/logprocessor/LogProcessorClient";
+import {AnalysisClient} from "@/analysis/AnalysisClient";
 
 const orchestratorUrlLoader = () => config.services.orchestrator.url;
 const weatherServerUrlLoader = () => config.services.weatherserver.url;
 
 export const api = {
     orchestrator: {
+        analysis: new AnalysisClient(orchestratorUrlLoader),
         auth: new AuthClient(orchestratorUrlLoader),
         baselines: new BaselineClient(orchestratorUrlLoader),
         brokers: new BrokerClient(orchestratorUrlLoader),
