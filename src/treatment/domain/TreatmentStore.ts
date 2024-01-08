@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import {createFindAllGetter, createFindByIdGetter} from "@/store/StoreUtils";
+import {createFindAllGetter, createFindByIdGetter} from "@/util/domain/StoreUtils";
 import {Treatment, type TreatmentData} from "@/treatment/domain/Treatment";
 import {buildModifier} from "@/treatment/domain/Modifier";
 import {DateTime} from "luxon";

@@ -4,7 +4,8 @@ import {
     faAngleUp,
     faArrowRight,
     faArrowRotateLeft,
-    faBars, faBarsProgress,
+    faBars,
+    faBarsProgress,
     faBolt,
     faCaretRight,
     faCheck,
@@ -17,23 +18,28 @@ import {
     faCopy,
     faDiceD6,
     faDownload,
-    faEyeSlash, faFlask,
+    faEyeSlash,
+    faFlask,
     faFolder,
     faGear,
     faGears,
     faPlay,
-    faPlus, faPlusCircle,
+    faPlus,
+    faPlusCircle,
     faPowerOff,
     faRotate,
     faSeedling,
     faSquareArrowUpRight,
     faSquareUpRight,
     faTable,
-    faTimes, faTrash, faTurnDown,
+    faTimes,
+    faTrash,
+    faTurnDown,
     faTurnUp,
-    faUser
+    faUser,
+    faUsers
 } from "@fortawesome/free-solid-svg-icons";
-import {faFile} from "@fortawesome/free-regular-svg-icons";
+import {faFile, faCircle as farCircle} from "@fortawesome/free-regular-svg-icons";
 
 library.add(
     faBolt,
@@ -73,5 +79,7 @@ library.add(
     faPlusCircle,
     faBarsProgress,
     faFlask,
-    faTurnDown
+    faTurnDown,
+    faUsers,
+    farCircle
 );

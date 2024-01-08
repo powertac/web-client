@@ -1,14 +1,14 @@
 <template>
     <div class="bg-slate-50 border-b border-slate-300 table-header">
-        <h1 class="text-2xl px-10 pt-5 text-slate-700">Baselines</h1>
+        <h1 class="text-2xl px-10 pt-5 text-slate-700">Users</h1>
         <div class="pt-2 px-7 flex">
-            <router-link class="nav-item" :to="{name: 'baseline-table'}">
+            <router-link class="nav-item" :to="{name: 'user-table'}">
                 <icon icon="table" class="mr-1 text-sm" />
-                Baseline Table
+                Users
             </router-link>
-            <router-link class="nav-item" :to="{name: 'new-baseline'}">
-                <icon icon="plus" class="mr-1 text-sm" />
-                New Baseline
+            <router-link class="nav-item" :to="{name: 'registration-table'}">
+                <icon icon="table" class="mr-1 text-sm" />
+                Registrations
             </router-link>
         </div>
     </div>
@@ -22,3 +22,5 @@
     }
 }
 </style>
+<script setup lang="ts">
+</script>

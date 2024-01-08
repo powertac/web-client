@@ -1,7 +1,7 @@
 import type {WeatherLocation} from "@/weather/domain/WeatherLocation";
 import {buildWeatherLocation} from "@/weather/domain/WeatherLocation";
 import {defineStore} from "pinia";
-import {createFindAllGetter, createFindByIdGetter} from "@/store/StoreUtils";
+import {createFindAllGetter, createFindByIdGetter} from "@/util/domain/StoreUtils";
 import {api} from "@/api";
 
 export interface WeatherStoreState {

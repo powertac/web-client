@@ -19,9 +19,9 @@ function logout(): void {
 </script>
 
 <template>
-    <div class="bg-slate-800 border-r border-slate-300 flex w-full justify-between items-stretch">
+    <div class="bg-white flex w-full justify-between items-stretch border-b border-slate-300">
         <div class="flex">
-            <router-link class="block text-slate-400 uppercase font-extrabold py-4 pl-9 pr-7 self-center hover:text-white" to="/">Power TAC</router-link>
+            <router-link class="block text-blue-800 uppercase font-extrabold py-4 pl-9 pr-7 self-center" to="/">Power TAC</router-link>
             <router-link to="/games/table" :class="{'nav-item': true, 'active': activeGroup('/games')}">
                 <icon icon="dice-d6" class="mr-2 text-sm" />
                 Games
@@ -43,14 +43,27 @@ function logout(): void {
                 Tasks
             </router-link>
         </div>
-        <div class="text-white items-center flex mr-3">
-            <div class="block text-slate-200 font-semibold py-1.5 my-2.5 px-4">
-                <icon icon="user" class="mr-2 text-sm" />
-                {{user.username}}
+        <div class="flex" v-if="user">
+            <div class="border-x border-slate-300 pl-7 pr-4 flex items-center bg-slate-50" v-if="user.isAdmin">
+                <span class="text-slate-500 font-semibold uppercase text-sm mr-6">System</span>
+                <router-link class="mr-2 darker" to="/users/table" :class="{'nav-item': true, 'active': activeGroup('/users')}">
+                    <icon icon="users" class="mr-2 text-sm" />
+                    Users
+                </router-link>
+                <router-link class="darker" to="/users/table" :class="{'nav-item': true, 'active': activeGroup('/system')}">
+                    <icon icon="gear" class="mr-2 text-sm" />
+                    Config
+                </router-link>
             </div>
-            <div class="nav-item cursor-pointer hover:border hover:border-slate-200 hover:!text-white hover:bg-slate-600" @click="logout">
-                <icon icon="power-off" class="mr-2 text-sm" />
-                Logout
+            <div class="text-white items-center flex mx-3">
+                <div class="block text-slate-600 py-1.5 my-2.5 px-4">
+                    <icon icon="user" class="mr-2 text-sm" />
+                    {{user.username}}
+                </div>
+                <div class="nav-item cursor-pointer" @click="logout">
+                    <icon icon="power-off" class="mr-2 text-sm" />
+                    Logout
+                </div>
             </div>
         </div>
     </div>
@@ -58,9 +71,13 @@ function logout(): void {
 
 <style lang="scss" scoped>
 .nav-item {
-    @apply block rounded border border-transparent text-slate-200 font-semibold py-1.5 my-2.5 px-4 hover:text-slate-400;
+    @apply block rounded border border-transparent mr-1 text-slate-600 py-1.5 my-2.5 px-4 hover:text-slate-900 hover:border-slate-300;
+    &.darker { @apply hover:border-slate-400}
     &.active {
-        @apply text-white border-slate-500;
+        @apply text-slate-800 border-slate-300 bg-slate-50;
+        &.darker {
+            @apply bg-slate-200 border-slate-400;
+        }
     }
 }
 </style>

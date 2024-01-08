@@ -6,11 +6,21 @@ export class RegistrationToken {
 
     constructor(public readonly id: number,
                 public readonly token: string,
-                public readonly issuedBy: User,
+                public readonly issuedById: string,
                 public readonly issuedAt: DateTime,
-                public readonly claimedBy: User|null,
+                public readonly claimedById: string|null,
                 public readonly claimedAt: DateTime|null,
                 public readonly expiresAt: DateTime) {}
+
+    get issuedBy() : User {
+        return useUserStore().findById(this.issuedById);
+    }
+
+    get claimedBy() : User|null {
+        return this.claimedById !== null
+            ? useUserStore().findById(this.claimedById)
+            : null;
+    }
 
     get status(): string {
         if (this.claimedAt !== null && this.claimedBy !== null) {
@@ -34,15 +44,13 @@ export interface RegistrationTokenData {
     expiresAt: number;
 }
 
-const userStore = useUserStore();
-
 export function buildRegistrationToken(data: RegistrationTokenData): RegistrationToken {
     return new RegistrationToken(
         data.id,
         data.token,
-        userStore.findById(data.issuedBy),
+        data.issuedBy,
         DateTime.fromMillis(data.issuedAt),
-        data.claimedBy !== null ? userStore.findById(data.claimedBy) : null,
+        data.claimedBy,
         data.claimedAt !== null ? DateTime.fromMillis(data.claimedAt) : null,
         DateTime.fromMillis(data.expiresAt));
 }

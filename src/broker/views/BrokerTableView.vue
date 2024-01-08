@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {ref} from "vue";
 import {Dataset, SortOrder} from "@/util/Dataset";
-import DatatableHeader from "@/datatable/DatatableHeaderField.vue";
+import DatatableHeader from "@/util/datatable/DatatableHeaderField.vue";
 import {Broker} from "@/broker/domain/Broker";
 import {useBrokerStore} from "@/broker/domain/BrokerStore";
 import BrokersHeader from "@/broker/components/BrokersHeader.vue";

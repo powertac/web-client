@@ -1,6 +1,6 @@
 import {Game, type GameData} from "@/game/domain/Game";
 import {defineStore} from "pinia";
-import {createFindAllGetter, createFindByIdGetter} from "@/store/StoreUtils";
+import {createFindAllGetter, createFindByIdGetter} from "@/util/domain/StoreUtils";
 import {buildGameConfig} from "@/game/domain/GameConfig";
 import {buildGameRun} from "@/game/domain/GameRun";
 import {api} from "@/api";

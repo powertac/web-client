@@ -1,4 +1,4 @@
-import {EntityNotFoundError} from "@/store/EntityNotFoundError";
+import {EntityNotFoundError} from "@/util/domain/EntityNotFoundError";
 import type {Store, StoreDefinition} from "pinia";
 
 export function createFindByIdGetter<E>(type: string, entities: {[id: string]: E|undefined}): (id: string) => E {

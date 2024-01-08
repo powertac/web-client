@@ -8,7 +8,7 @@ import {Broker} from "@/broker/domain/Broker";
 import {WeatherConfig} from "@/weather/domain/WeatherConfig";
 import {api} from "@/api";
 import type {NewBaselineData} from "@/baseline/domain/Baseline";
-import ValidationBadge from "@/form/ValidationBadge.vue";
+import ValidationBadge from "@/util/components/ValidationBadge.vue";
 import BaselinesHeader from "@/baseline/components/BaselinesHeader.vue";
 import {useBaselineStore} from "@/baseline/domain/BaselineStore";
 import {useRouter} from "vue-router";

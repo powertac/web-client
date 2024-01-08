@@ -15,7 +15,6 @@ export class FileClient extends RestClient {
     }
 
     public getDownloadTokens(paths: string[]): Promise<{[path: string]: string}> {
-        console.log(paths);
         return this.post("/files/download/", paths);
     }
 

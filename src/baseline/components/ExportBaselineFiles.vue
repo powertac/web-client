@@ -25,14 +25,14 @@ function addExportTask(): void {
 
 onMounted(() => api.orchestrator.paths.exportRoot()
     .then(p => exportRoot.value = p)
-    .catch(e => console.log("unable to load export root path", e)));
+    .catch(e => console.error("unable to load export root path", e)));
 onMounted(() => api.orchestrator.baselines.getExportTasks(props.baselineId)
     .then(data => {
         data.map(d => Task.from(d)).forEach(t => tasks.value.push(t as Task<ExportBaselineGameFilesTaskConfig>));
         loadingTasks.value = LoadingState.Successful;
     })
     .catch(e => {
-        console.log("unable to load existing tasks for baseline with id=" + props.baselineId, e);
+        console.error("unable to load existing tasks for baseline with id=" + props.baselineId, e);
         loadingTasks.value = LoadingState.Failed;
     }));
 </script>

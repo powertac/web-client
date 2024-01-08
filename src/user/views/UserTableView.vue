@@ -1,77 +1,65 @@
 <script lang="ts" setup>
-import {onMounted, ref} from "vue";
-import {datetime} from "@/util/DateTimeFormat";
-import {Dataset, SortOrder} from "@/util/Dataset";
 import DatatableHeader from "@/util/datatable/DatatableHeaderField.vue";
-import {Baseline} from "@/baseline/domain/Baseline";
-import {useBaselineStore} from "@/baseline/domain/BaselineStore";
-import GameGroupProgressBar from "@/game/components/GameGroupProgressBar.vue";
-import BaselinesHeader from "@/baseline/components/BaselinesHeader.vue";
-import BaselineSidebar from "@/baseline/components/BaselineSidebar.vue";
+import {onMounted, ref} from "vue";
+import {Dataset, SortOrder} from "@/util/Dataset";
+import {useUserStore} from "@/user/domain/UserStore";
+import type {User} from "@/user/domain/User";
+import UsersHeader from "@/user/components/UsersHeader.vue";
 
-const baselineStore = useBaselineStore();
-const selectedBaseline = ref<Baseline>();
-const baselines = ref(null as Dataset<Baseline>|null);
-const columns: { [name: string]: (a: Baseline, b: Baseline) => number } = {
+const userStore = useUserStore();
+const users = ref(null as Dataset<User>|null);
+const columns: { [name: string]: (a: User, b: User) => number } = {
     "ID": (a, b) => a.id.localeCompare(b.id),
-    "Name": (a, b) => a.name.localeCompare(b.name),
-    "Progress": (a, b) => a.progress - b.progress,
-    "Created at": (a, b) => a.createdAt.toMillis() - b.createdAt.toMillis(),
+    "Username": (a, b) => a.username.localeCompare(b.username),
+    "Roles": (a, b) => a.roles.length - b.roles.length,
+    "Status": (a, b) => a.enabled && !b.enabled ? 1 : !a.enabled && b.enabled ? -1 : 0
 };
 
-function isSelected(game: Baseline): boolean {
-    return selectedBaseline.value !== undefined
-        && selectedBaseline.value.id === game.id;
-}
-
-function createDataset(): Dataset<Baseline> {
-    return Dataset.create(columns, baselineStore.findAll())
-        .orderBy("Created at", SortOrder.DESC);
+function createDataset(): Dataset<User> {
+    return Dataset.create(columns, userStore.findAll()).orderBy("Created at", SortOrder.DESC);
 }
 
 function toggleSorting(column: string, event: MouseEvent): void {
-    if (baselines.value !== null) {
+    if (users.value !== null) {
         if (event.ctrlKey) {
-            baselines.value.toggle(column)
+            users.value.toggle(column)
         } else {
-            const currentIndex = baselines.value.index(column);
-            const currentOrder = baselines.value.order(column);
-            baselines.value.reset();
+            const currentIndex = users.value.index(column);
+            const currentOrder = users.value.order(column);
+            users.value.reset();
             if (currentIndex !== null && currentOrder !== null) {
-                baselines.value.orderBy(column, currentOrder);
+                users.value.orderBy(column, currentOrder);
             }
-            baselines.value.toggle(column);
+            users.value.toggle(column);
         }
     }
 }
 
-onMounted(() => baselineStore.fetchAll()
-    .then(() => baselines.value = createDataset())
-    .catch((error) => console.error(error)));
+onMounted(() => userStore.fetchAll()
+    .then(() => users.value = createDataset())
+    .catch((e) => console.error(e)));
 </script>
 
 <template>
     <div class="flex grow flex-col" ref="root">
-        <BaselinesHeader />
+        <UsersHeader />
         <div class="flex relative grow">
             <div class="table-wrapper border-r border-slate-300 grow">
-                <table class="datatable bg-white" v-if="baselines">
+                <table class="datatable bg-white" v-if="users">
                     <thead>
                     <tr>
                         <DatatableHeader v-for="column in Object.keys(columns)"
-                                         :class="{'left-aligned': (column === 'Name' || column === 'Progress' || column === 'ID')}"
-                                         :name="column" :index="baselines.index(column)" :order="baselines.order(column)"
+                                         :class="{'left-aligned': ['ID', 'Username', 'Roles'].includes(column)}"
+                                         :name="column" :index="users.index(column)" :order="users.order(column)"
                                          @click="(event) => toggleSorting(column, event)" />
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="baseline in baselines.items" :key="baseline.id" @click="selectedBaseline = baseline" class="selectable" :class="{'selected': isSelected(baseline)}">
-                        <td class="!text-left font-mono w-96">{{baseline.id}}</td>
-                        <td class="!text-left">{{baseline.name}}</td>
-                        <td class="font-mono">
-                            <GameGroupProgressBar :group="baseline" />
-                        </td>
-                        <td class="font-mono">{{datetime(baseline.createdAt)}}</td>
+                    <tr v-for="user in users.items" :key="user.id">
+                        <td class="!text-left font-mono w-96">{{user.id}}</td>
+                        <td class="!text-left">{{user.username}}</td>
+                        <td class="!text-left uppercase text-sm">{{user.roles.join(',')}}</td>
+                        <td class="uppercase text-sm">{{user.enabled ? 'ACTIVE' : 'DISABLED'}}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -114,10 +102,6 @@ onMounted(() => baselineStore.fetchAll()
                     </tbody>
                 </table>
             </div>
-            <BaselineSidebar class="sticky top-0 self-start sidebar"
-                         :baseline="selectedBaseline"
-                         v-if="selectedBaseline !== undefined"
-                         @close-self="() => selectedBaseline = undefined" />
         </div>
     </div>
 </template>

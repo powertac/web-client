@@ -5,7 +5,7 @@ import GameDetails from "@/game/components/GameSidebar.vue";
 import {datetime} from "@/util/DateTimeFormat";
 import GameStatusIcon from "@/game/components/GameStatusIcon.vue";
 import {Dataset, SortOrder} from "@/util/Dataset";
-import DatatableHeader from "@/datatable/DatatableHeaderField.vue";
+import DatatableHeader from "@/util/datatable/DatatableHeaderField.vue";
 import {v4} from "uuid";
 
 const availableColumns: { [name: string]: (a: Game, b: Game) => number } = {

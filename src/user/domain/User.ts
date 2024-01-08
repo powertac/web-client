@@ -1,5 +1,6 @@
 export enum UserRole {
     Admin = "ADMIN",
+    Base = "BASE",
     Authenticated = "AUTHENTICATED"
 }
 
@@ -9,6 +10,13 @@ export class User {
                 public readonly username: string,
                 public readonly roles: UserRole[],
                 public readonly enabled: boolean) {}
+
+    static compare(a: User|undefined, b: User|undefined): number {
+        if (a == undefined && b === undefined) return 0;
+        if (a === undefined) return 1;
+        if (b === undefined) return -1;
+        return a.username.localeCompare(b.username);
+    }
 
     get isAdmin(): boolean {
         return this.hasRole(UserRole.Admin);
@@ -29,8 +37,8 @@ export interface UserData {
 
 export interface CreateUserData {
     username: string;
-    roleNames: string[];
     password: string;
+    roles: string[];
     token: string;
 }
 

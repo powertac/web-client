@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {RouterView} from 'vue-router'
+import {RouterView, useRouter} from 'vue-router'
 import ApplicationNavigation from "@/application/components/ApplicationNavigation.vue";
 import {api} from "@/api";
 import {computed, onMounted, ref} from "vue";
@@ -12,18 +12,14 @@ import {LoadingState} from "@/util/LoadingState";
 const loading = ref(true);
 const authStore = useAuthStore();
 const authenticated = computed(() => authStore.isAuthenticated);
-
-// FIXME : move to store
-const size = ref(10);
-const increaseDefaultFontSize = () => size.value = size.value + 1;
-const defaultStyle = computed(() => ({ fontSize: size.value + "px" }));
+const isPublic = computed(() => useRouter().currentRoute.value.meta.public as boolean);
 
 onMounted(() => api.orchestrator.auth.verify().then(() => authStore.setAuthenticated(true)));
 onMounted(() => useApplicationStore().startClock());
 </script>
 
 <template>
-    <Transition class="h-full flex flex-col" v-if="authenticated">
+    <div class="h-full flex flex-col" v-if="authenticated && !isPublic">
         <ApplicationLoader class="absolute top-0 left-0 z-50"
                            @updated="(state) => loading = state !== LoadingState.Successful"
                            v-if="loading" />
@@ -31,7 +27,8 @@ onMounted(() => useApplicationStore().startClock());
             <ApplicationNavigation />
             <RouterView />
         </div>
-    </Transition>
+    </div>
+    <RouterView v-else-if="isPublic" />
     <LoginForm v-else />
 </template>
 

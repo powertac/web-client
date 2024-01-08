@@ -14,6 +14,7 @@ import {UserClient} from "@/user/UserClient";
 import {TaskClient} from "@/task/TaskClient";
 import {LogProcessorClient} from "@/logprocessor/LogProcessorClient";
 import {AnalysisClient} from "@/analysis/AnalysisClient";
+import {RegistrationTokenClient} from "@/user/RegistrationTokenClient";
 
 const orchestratorUrlLoader = () => config.services.orchestrator.url;
 const weatherServerUrlLoader = () => config.services.weatherserver.url;
@@ -30,6 +31,7 @@ export const api = {
         parameters: new ParameterClient(orchestratorUrlLoader),
         paths: new PathClient(orchestratorUrlLoader),
         processors: new LogProcessorClient(orchestratorUrlLoader),
+        registrations: new RegistrationTokenClient(orchestratorUrlLoader),
         runs: new GameRunClient(orchestratorUrlLoader),
         tasks: new TaskClient(orchestratorUrlLoader),
         treatments: new TreatmentClient(orchestratorUrlLoader),

@@ -2,7 +2,7 @@
 import {computed, onMounted, ref} from "vue";
 import {GameValidator} from "@/game/domain/GameValidator";
 import {api} from "@/api";
-import ValidationBadge from "@/form/ValidationBadge.vue";
+import ValidationBadge from "@/util/components/ValidationBadge.vue";
 import {Baseline} from "@/baseline/domain/Baseline";
 import type {NewTreatmentDTO} from "@/treatment/domain/Treatment";
 import type {NewModifierData} from "@/treatment/domain/Modifier";

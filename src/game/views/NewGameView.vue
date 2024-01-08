@@ -9,7 +9,7 @@ import {Broker} from "@/broker/domain/Broker";
 import {WeatherConfig} from "@/weather/domain/WeatherConfig";
 import {api} from "@/api";
 import router from "@/router";
-import ValidationBadge from "@/form/ValidationBadge.vue";
+import ValidationBadge from "@/util/components/ValidationBadge.vue";
 import GamesHeader from "@/file/components/GamesHeader.vue";
 
 const name = ref("" as string);

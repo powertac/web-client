@@ -1,13 +1,11 @@
 import {defineStore} from "pinia";
 import {Baseline, type BaselineData} from "@/baseline/domain/Baseline";
-import {createFindAllGetter, createFindByIdGetter} from "@/store/StoreUtils";
+import {createFindAllGetter, createFindByIdGetter} from "@/util/domain/StoreUtils";
 import {api} from "@/api";
 import {buildGameConfig} from "@/game/domain/GameConfig";
 import {useGameStore} from "@/game/domain/GameStore";
 import {DateTime} from "luxon";
 import {SyncGroup} from "@/util/SyncGroup";
-import {useTreatmentStore} from "@/treatment/domain/TreatmentStore";
-import {useBrokerStore} from "@/broker/domain/BrokerStore";
 
 export interface BaselineStoreState {
     baselines: {[id: string]: Baseline}
@@ -40,7 +38,7 @@ export const useBaselineStore = defineStore({
             }
             const sync = new SyncGroup();
             const gameStore = useGameStore();
-            await [...gameIds.values()].forEach((gid) => sync.add(gameStore.fetchOnceById(gid)));
+            [...gameIds.values()].forEach((gid) => sync.add(gameStore.fetchOnceById(gid)));
             return sync.wait();
         }
     }

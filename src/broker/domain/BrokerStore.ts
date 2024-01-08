@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
 import type {Broker} from "@/broker/domain/Broker";
-import {createFindAllGetter, createFindByIdGetter} from "@/store/StoreUtils";
+import {createFindAllGetter, createFindByIdGetter} from "@/util/domain/StoreUtils";
 import {api} from "@/api";
 import {buildBroker} from "@/broker/domain/Broker";
 

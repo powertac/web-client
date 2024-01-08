@@ -1,4 +1,4 @@
-import type {Identifiable} from "@/store/Identifiable";
+import type {Identifiable} from "@/util/domain/Identifiable";
 
 export class Selection<E extends Identifiable> {
 

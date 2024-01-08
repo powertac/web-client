@@ -5,7 +5,6 @@ const props = defineProps<{
     order: SortOrder|null,
     index: number|null
 }>();
-
 </script>
 
 <template>

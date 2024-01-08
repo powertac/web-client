@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {onMounted, ref} from "vue";
-import ValidationBadge from "@/form/ValidationBadge.vue";
+import ValidationBadge from "@/util/components/ValidationBadge.vue";
 import {api} from "@/api";
 import Autocomplete from "@/util/components/Autocomplete.vue";
 import type {NewBrokerData} from "@/broker/domain/Broker";

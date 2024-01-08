@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import {createFindAllGetter, createFindByIdGetter} from "@/store/StoreUtils";
+import {createFindAllGetter, createFindByIdGetter} from "@/util/domain/StoreUtils";
 import {Task, type TaskConfig} from "@/task/domain/Task";
 import {api} from "@/api";
 
