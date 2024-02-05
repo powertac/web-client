@@ -50,10 +50,12 @@ function logout(): void {
                     <icon icon="users" class="mr-2 text-sm" />
                     Users
                 </router-link>
+                <!--
                 <router-link class="darker" to="/users/table" :class="{'nav-item': true, 'active': activeGroup('/system')}">
                     <icon icon="gear" class="mr-2 text-sm" />
                     Config
                 </router-link>
+                -->
             </div>
             <div class="text-white items-center flex mx-3">
                 <div class="block text-slate-600 py-1.5 my-2.5 px-4">

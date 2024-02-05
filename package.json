@@ -1,6 +1,6 @@
 {
   "name": "powertac-web-client",
-  "version": "0.0.0",
+  "version": "0.3.0",
   "type": "module",
   "scripts": {
     "dev": "vite",

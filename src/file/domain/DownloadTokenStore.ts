@@ -16,8 +16,10 @@ export const useDownloadTokenStore = defineStore({
             this.tokens[path] = await api.orchestrator.files.getDownloadToken(path);
         },
         async fetchMany(paths: string[]): Promise<void> {
-            const tokens = await api.orchestrator.files.getDownloadTokens(paths);
-            Object.keys(tokens).forEach(path => this.tokens[path] = tokens[path]);
+            if (paths.length > 0) {
+                const tokens = await api.orchestrator.files.getDownloadTokens(paths);
+                Object.keys(tokens).forEach(path => this.tokens[path] = tokens[path]);
+            }
         }
     }
 });

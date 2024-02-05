@@ -89,7 +89,7 @@ function runSelected(): void {
 
 <template>
     <div class="mt-10 text-slate-700">
-        <h2 class="text-2xl font-semibold">Log processing</h2>
+        <h2 class="text-2xl">Log processing</h2>
         <div class="border-t border-x border-slate-300 rounded-t py-2 px-4 mt-4 flex items-center">
             <icon icon="turn-down" :rotation="270" class="ml-2 text-slate-500" />
             <button class="button ml-5" v-if="selectedProcessors.size > 0" @click="runSelected">
