@@ -7,6 +7,7 @@ import GamePageHeader from "@/game/components/GamePageHeader.vue";
 import GameLogProcessors from "@/game/components/GameLogProcessors.vue";
 import {api} from "@/api";
 import type {LogProcessorArtifact} from "@/logprocessor/domain/LogProcessorArtifact";
+import GameJupyterNotebook from "@/game/components/GameJupyterNotebook.vue";
 
 const gameStore = useGameStore();
 const gameId = useRouter().currentRoute.value.params.id as string;
@@ -27,6 +28,7 @@ onMounted(() => api.orchestrator.processors.getGameArtifacts(gameId)
         <GamePageHeader :game="game" />
         <div class="max-w-screen-md mx-auto">
             <GameLogProcessors :game="game" :artifacts="artifacts" />
+            <GameJupyterNotebook class="mt-10" :game="game" />
         </div>
     </div>
     <div v-else>

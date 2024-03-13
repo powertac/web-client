@@ -15,6 +15,7 @@ import {TaskClient} from "@/task/TaskClient";
 import {LogProcessorClient} from "@/logprocessor/LogProcessorClient";
 import {AnalysisClient} from "@/analysis/AnalysisClient";
 import {RegistrationTokenClient} from "@/user/RegistrationTokenClient";
+import {JupyterClient} from "@/analysis/JupyterClient";
 
 const orchestratorUrlLoader = () => config.services.orchestrator.url;
 const weatherServerUrlLoader = () => config.services.weatherserver.url;
@@ -28,6 +29,7 @@ export const api = {
         docker: new DockerClient(orchestratorUrlLoader),
         files: new FileClient(orchestratorUrlLoader),
         games: new GameClient(orchestratorUrlLoader),
+        jupyter: new JupyterClient(orchestratorUrlLoader),
         parameters: new ParameterClient(orchestratorUrlLoader),
         paths: new PathClient(orchestratorUrlLoader),
         processors: new LogProcessorClient(orchestratorUrlLoader),

@@ -16,7 +16,7 @@ export abstract class RestClient {
     protected get<R>(path: string): Promise<R> {
         return new Promise<R>((resolve: (value: R) => void, reject: (error: AxiosError) => void) => {
             this.rawGet<R>(path)
-                .then((response: AxiosResponse<R>) => resolve(response.data))
+                .then((response: AxiosResponse<R>) => resolve(this.emptyStringToNull(response.data)))
                 .catch((error: AxiosError) => {
                     this.processError(error);
                     reject(error);
@@ -27,7 +27,7 @@ export abstract class RestClient {
     protected post<D,R>(path: string, data: D): Promise<R> {
         return new Promise<R>((resolve: (value: R) => void, reject: (error: AxiosError) => void) => {
             this.rawPost<D,R>(path, data)
-                .then((response: AxiosResponse<R>) => resolve(response.data))
+                .then((response: AxiosResponse<R>) => resolve(this.emptyStringToNull(response.data)))
                 .catch((error: AxiosError) => {
                     this.processError(error);
                     reject(error);
@@ -66,6 +66,12 @@ export abstract class RestClient {
 
     protected getUrl(path: string): string {
         return new URL(path, this.baseUrl).toString();
+    }
+
+    private emptyStringToNull(data: any): any {
+        return data !== ""
+            ? data
+            : null;
     }
 
 }

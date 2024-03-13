@@ -11,12 +11,10 @@ export class FileClient extends RestClient {
     }
 
     public getDownloadToken(path: string): Promise<string> {
-        console.log("single token - ", path);
         return this.post("/files/download/" + path, undefined);
     }
 
     public getDownloadTokens(paths: string[]): Promise<{[path: string]: string}> {
-        console.log("multitoken - ", paths);
         return this.post("/files/download", paths);
     }
 
