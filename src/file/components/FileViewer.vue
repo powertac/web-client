@@ -8,9 +8,13 @@ const props = defineProps<{
 }>();
 
 const content = ref<string>();
-const lines = computed(() => undefined !== content.value
-        ? content.value.split(/\r\n|\r|\n/)
-        : []);
+const lines = computed(() => {
+    if (undefined === content.value) {
+        return [];
+    }
+    const contentString = typeof(content.value) !== "string" ? JSON.stringify(content.value, null, 2) : content.value
+    return contentString.split(/\r\n|\r|\n/);
+});
 
 onMounted(() => api.orchestrator.files.getFileContents(props.file.path)
     .then((c) => content.value = c)

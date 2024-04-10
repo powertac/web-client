@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-import type {Game} from "@/game/domain/Game";
 import {computed, onMounted, ref} from "vue";
 import {api} from "@/api";
 import type {JupyterInstance} from "@/analysis/domain/JupyterInstance";
+import type {Baseline} from "@/baseline/domain/Baseline";
 
+// TODO - this component is exactly the same as GameJupyterNotebook except for id getter and start endpoint -> merge
 const props = defineProps<{
-    game: Game
+    baseline: Baseline
 }>();
 
 const JUPYTER_OPEN_DELAY = 1750;
@@ -18,7 +19,7 @@ const url = computed(() => instance.value !== null? "http://localhost:" + instan
 
 function start(): void {
     toggling.value = true;
-    api.orchestrator.jupyter.startGameNotebook(props.game.id)
+    api.orchestrator.jupyter.startBaselineNotebook(props.baseline.id)
         .then(i => {
             setTimeout(() => { // give jupyter some time to start up (application, not container)
                 toggling.value = false;
@@ -31,7 +32,7 @@ function start(): void {
 
 function stop(): void {
     toggling.value = true;
-    api.orchestrator.jupyter.stop(props.game.id)
+    api.orchestrator.jupyter.stop(props.baseline.id)
         .then(() => {
             toggling.value = false;
             instance.value = null;
@@ -39,7 +40,7 @@ function stop(): void {
         .catch(e => console.error(e));
 }
 
-onMounted(() => api.orchestrator.jupyter.getInstance(props.game.id)
+onMounted(() => api.orchestrator.jupyter.getInstance(props.baseline.id)
     .then(i => {
         instance.value = i;
         loading.value = false;

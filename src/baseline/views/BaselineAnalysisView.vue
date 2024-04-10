@@ -8,7 +8,7 @@ import {useBaselineStore} from "@/baseline/domain/BaselineStore";
 import type {Baseline} from "@/baseline/domain/Baseline";
 import BaselineLogProcessors from "@/baseline/components/BaselineLogProcessors.vue";
 import type {Game} from "@/game/domain/Game";
-import BaselineAnalyzers from "@/baseline/components/BaselineAnalyzers.vue";
+import BaselineJupyterNotebook from "@/baseline/components/BaselineJupyterNotebook.vue";
 
 const baselineStore = useBaselineStore();
 const baselineId = useRouter().currentRoute.value.params.id as string;
@@ -30,13 +30,13 @@ watch(baseline, () =>
 )
 </script>
 
-
 <template>
     <div v-if="baseline !== undefined && artifacts !== undefined">
         <BaselinePageHeader :baseline="baseline" />
         <div class="max-w-screen-md mx-auto pb-20">
             <BaselineLogProcessors :baseline="baseline" :artifacts="artifacts" />
-            <BaselineAnalyzers :baseline="baseline" :artifacts="artifacts" />
+            <BaselineJupyterNotebook class="mt-10" :baseline="baseline" />
+            <!--<BaselineAnalyzers :baseline="baseline" :artifacts="artifacts" />-->
         </div>
     </div>
     <div v-else>
