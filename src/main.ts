@@ -7,15 +7,17 @@ import "./fontawesome";
 import router from "./router";
 import axios from "axios";
 import config from "@/config";
+import {useAuthStore} from "@/security/domain/AuthStore";
 
-const serviceFileUrl = window.location.protocol + "//" + window.location.host + "/services.json"
+const serviceFileUrl = window.location.protocol + "//" + window.location.host + "/services.json";
 
 axios.get(serviceFileUrl)
     .then(res => {
         config.services.orchestrator.url = res.data.orchestrator;
         config.services.weatherserver.url = res.data.weatherserver;
+        const pinia = createPinia();
         createApp(Application)
-            .use(createPinia())
+            .use(pinia)
             .use(router)
             .component('icon', FontAwesomeIcon) // TODO - might be replaced by individual imports
             .mount("#app");

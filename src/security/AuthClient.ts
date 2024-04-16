@@ -2,6 +2,7 @@ import type {AxiosError} from "axios";
 import type {Credentials} from "@/security/domain/Credentials";
 import {RestClient} from '@/util/RestClient';
 import {auth} from "@/security/AuthProvider";
+import type {AuthState} from "@/security/domain/AuthState";
 
 export class AuthClient extends RestClient {
 
@@ -19,7 +20,7 @@ export class AuthClient extends RestClient {
         });
     }
 
-    public verify(): Promise<boolean> {
+    public getAuthState(): Promise<AuthState> {
         return this.get("/auth/");
     }
 

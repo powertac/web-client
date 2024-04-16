@@ -1,21 +1,17 @@
 <script lang="ts" setup>
 import {ref} from "vue";
 import {api} from "@/api";
+import {useRouter} from "vue-router";
 
 const username = ref("");
 const password = ref("");
 const hasError = ref(false);
+const router = useRouter();
 
 function login(): void {
-    api.orchestrator.auth.login({
-        username: username.value,
-        password: password.value
-    })
-        .then(() => console.log("authenticated"))
-        .catch(error => {
-            console.error("unable to authenticate", error);
-            hasError.value = true;
-        });
+    api.orchestrator.auth.login({ username: username.value, password: password.value })
+        .then(() => router.push({path: "/"}).catch(e => console.error(e)))
+        .catch(e => hasError.value = true);
 }
 </script>
 

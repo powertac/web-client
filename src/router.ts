@@ -7,14 +7,23 @@ import {gameRoutes} from "@/game/routes";
 import {baselineRoutes} from "@/baseline/routes";
 import {treatmentRoutes} from "@/treatment/routes";
 import {userRoutes} from "@/user/routes";
+import LoginView from "@/security/views/LoginView.vue";
+import {useAuthStore} from "@/security/domain/AuthStore";
+import type {AuthState} from "@/security/domain/AuthState";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
             path: '/',
-            name: 'home',
+            name: 'dash',
             component: DashboardView
+        },
+        {
+            path: '/login',
+            name: 'login',
+            component: LoginView,
+            meta: {public: true}
         },
         {
             path: '/brokers/table',
@@ -32,6 +41,21 @@ const router = createRouter({
         ...treatmentRoutes,
         ...userRoutes
     ]
+});
+
+router.beforeEach((to, from, next) => {
+    const authStore = useAuthStore();
+    authStore.loadAuthState().then(() => {
+        const authenticated = (authStore.findAuthState as AuthState).isAuthenticated;
+        if (to.meta.public !== true && !authenticated) {
+            next({name: 'login'});
+        } else if (to.name === 'login' && authenticated) {
+            next({name: 'dash'});
+        } else {
+            next();
+        }
+    })
+    .catch(e => console.log("unable to determine auth state", e));
 });
 
 export default router;

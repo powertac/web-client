@@ -13,8 +13,7 @@ function activeGroup(prefix: string): boolean {
 }
 
 function logout(): void {
-    api.orchestrator.auth.logout()
-        .then(() => router.push("/"))
+    api.orchestrator.auth.logout().then(() => router.push({name: 'login'}));
 }
 </script>
 
