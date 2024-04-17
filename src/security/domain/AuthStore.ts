@@ -18,11 +18,9 @@ export const useAuthStore = defineStore({
     },
     actions: {
         async loadAuthState(): Promise<void> {
-            console.log("load");
             return new Promise((resolve, reject) =>
                 api.orchestrator.auth.getAuthState()
                     .then((authState) => {
-                        console.log(authState);
                         this.authState = authState;
                         resolve();
                     })

@@ -16,7 +16,8 @@ onMounted(() => useApplicationStore().startClock());
 <template>
     <div class="h-full flex flex-col">
         <PublicView v-if="isPublic" />
-        <AuthorizedView v-else-if="authStore.findAuthState !== undefined" />
-        <div v-else>Loading auth state</div>
+        <div v-else-if="authStore.findAuthState === undefined">Loading auth state</div>
+        <AuthorizedView v-else-if="authStore.isAuthenticated" />
+        <div v-else>ERROR: unauthorized</div>
     </div>
 </template>

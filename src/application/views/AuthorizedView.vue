@@ -6,7 +6,6 @@ import {RouterView} from "vue-router";
 import {ref} from "vue";
 
 const loading = ref(true);
-
 </script>
 
 <template>

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {ref, watch} from "vue";
+import {onMounted, ref, watch} from "vue";
 import {LoadingState} from "@/util/LoadingState";
 
 const props = defineProps<{
@@ -13,13 +13,13 @@ const emit = defineEmits<{
 
 const state = ref<LoadingState>(LoadingState.Pending);
 
-props.loader()
-    .then(() => state.value = LoadingState.Successful)
-    .catch((error) => {
-        console.error(`loader '${props.label}' failed`, error);
-        state.value = LoadingState.Failed;
-    });
-
+onMounted(() =>
+    props.loader()
+        .then(() => state.value = LoadingState.Successful)
+        .catch((error) => {
+            console.error(`loader '${props.label}' failed`, error);
+            state.value = LoadingState.Failed;
+        }));
 watch(state, () => emit("updated", state.value));
 </script>
 
