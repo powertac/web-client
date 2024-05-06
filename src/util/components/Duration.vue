@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {DateTime, Duration} from "luxon";
 import {computed} from "vue";
-import {useApplicationStore} from "@/application/ApplicationStore";
+import {useApplicationStore} from "@/application/domain/ApplicationStore";
 
 const appStore = useApplicationStore();
 

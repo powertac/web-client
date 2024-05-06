@@ -1,84 +1,125 @@
 <script lang="ts" setup>
 import type {Game} from "@/game/domain/Game";
-import {computed, onMounted, ref} from "vue";
+import {computed, onMounted, onUnmounted, ref} from "vue";
 import {api} from "@/api";
-import type {JupyterInstance} from "@/analysis/domain/JupyterInstance";
+import {type JupyterInstance, JupyterServerStatus} from "@/analysis/domain/JupyterInstance";
+import {GameStatus} from "@/game/domain/GameStatus";
+import {useMessageStore} from "@/application/domain/MessageStore";
+import JupyterServerStatusBar from "@/analysis/components/JupyterServerStatusBatch.vue";
+import CopyToClipboard from "@/util/components/CopyToClipboard.vue";
+import {FontAwesomeIcon as Icon} from "@fortawesome/vue-fontawesome";
 
-const props = defineProps<{
-    game: Game
-}>();
+const props = defineProps<{ game: Game }>();
 
-const JUPYTER_OPEN_DELAY = 1750;
+const messages = useMessageStore();
+const instance = ref<JupyterInstance|null>(null);
+const url = computed(() => instance.value !== null? "http://localhost:" + instance.value.port + "/lab?token=" + instance.value.token : null);
 
 const loading = ref(true);
-const instance = ref<JupyterInstance|null>(null);
-const toggling = ref<boolean>(false);
-const running = computed(() => instance.value !== null && instance.value.isRunning);
-const url = computed(() => instance.value !== null? "http://localhost:" + instance.value.port + "/lab?token=" + instance.value.token : null)
+const running = computed(() => instance.value !== null && (instance.value as JupyterInstance).isRunning);
+const reachable = computed(() => instance.value !== null && (instance.value as JupyterInstance).isReachable);
+const starting = ref<boolean>(false);
+const stopping = ref<boolean>(false);
+const openOnReachableOption = ref<boolean>(true);
+const status = computed(() => {
+    if (starting.value) { // -> adding first to represent state change in UI immediately
+        return JupyterServerStatus.STARTING
+    } else if (instance.value === null) {
+        return JupyterServerStatus.NONE;
+    } else if (stopping.value) {
+      return JupyterServerStatus.STOPPING;
+    } else if (running.value && !reachable.value) {
+        return JupyterServerStatus.STARTING;
+    } else if (reachable.value) {
+        return JupyterServerStatus.RUNNING;
+    }
+});
+let updateId: number|undefined;
+let openOnReachable: boolean = false;
 
 function start(): void {
-    toggling.value = true;
+    starting.value = true;
     api.orchestrator.jupyter.startGameNotebook(props.game.id)
         .then(i => {
-            setTimeout(() => { // give jupyter some time to start up (application, not container)
-                toggling.value = false;
-                instance.value = i;
-                window.open(url.value as string, "_blank")
-            }, JUPYTER_OPEN_DELAY);
+            starting.value = false;
+            instance.value = i;
+            openOnReachable = openOnReachableOption.value;
         })
         .catch(e => (toggling.value = false) && (console.error(e)));
 }
 
 function stop(): void {
-    toggling.value = true;
+    stopping.value = true;
     api.orchestrator.jupyter.stop(props.game.id)
         .then(() => {
-            toggling.value = false;
+            stopping.value = false;
             instance.value = null;
         })
         .catch(e => console.error(e));
 }
 
-onMounted(() => api.orchestrator.jupyter.getInstance(props.game.id)
-    .then(i => {
-        instance.value = i;
-        loading.value = false;
-    })
-    .catch(e => null));
+function updateInstance(): void {
+    api.orchestrator.jupyter.getInstance(props.game.id)
+        .then(i => {
+            loading.value = false;
+            instance.value = i;
+            updateId = setTimeout(updateInstance, 1000);
+            if (i != null && i.isReachable && openOnReachable) {
+                window.open(url.value as string, "_blank");
+                openOnReachable = false;
+            }
+        })
+        .catch(e => {
+            instance.value = null;
+            messages.error(e);
+            updateId = setTimeout(updateInstance, 1000);
+        });
+}
+
+onMounted(updateInstance);
+onUnmounted(() => clearTimeout(updateId));
 </script>
 
 <template>
     <div>
-        <h2 class="text-2xl">Jupyter Server</h2>
-        <div class="mt-4">
-            <div>
-                <div class="status-badge" v-if="loading">Jupyter status unknown</div>
-                <div class="status-badge border-emerald-400 text-emerald-600 bg-emerald-50" v-else-if="running">Jupyter running</div>
-                <div class="status-badge border-slate-300 text-slate-500 bg-slate-50" v-else>Jupyter not running</div>
-            </div>
-            <div class="border-x border-b rounded-b border-slate-300">
-                <div class="px-4 py-3">
-                    <icon icon="circle-notch" class="animate-spin text-2xl text-blue-600" v-if="toggling" />
-                    <button type="button" class="button" @click="stop" v-else-if="running">Stop Jupyter server</button>
-                    <button type="button" class="button" @click="start" v-else>Start Jupyter server</button>
-
-                    <a class="button" v-if="!toggling && running && instance !== null" target="_blank"
-                       :href="url">Open in new tab</a>
+        <h2 class="text-2xl mb-4">Jupyter Server</h2>
+        <div class="border border-slate-300 rounded">
+            <div class="flex px-4 py-3 h-20 items-center">
+                <button type="button" class="button font-semibold flex items-center" v-if="status === JupyterServerStatus.RUNNING" @click="stop">
+                    <icon icon="stop" class="-mt-[1px] mr-2.5 text-lg" />
+                    Stop server
+                </button>
+                <div v-else-if="status === JupyterServerStatus.NONE" class="flex items-center">
+                    <button type="button" class="button font-semibold flex items-center" @click="start">
+                        <icon icon="play" class="-mt-[1px] mr-2.5 text-lg" />
+                        Start server
+                    </button>
+                    <div class="ml-6 mt-[1px] cursor-default" @click="openOnReachableOption = !openOnReachableOption">
+                        <input type="checkbox" :checked="openOnReachableOption" class="mr-1" /> Open in new tab when ready
+                    </div>
                 </div>
-                <table class="tuples w-full" v-if="!toggling && instance !== null">
-                    <tr>
-                        <th>Port</th>
-                        <td>{{ instance.port }}</td>
-                    </tr>
-                    <tr>
-                        <th>Token</th>
-                        <td>{{ instance.token }}</td>
-                    </tr>
-                    <tr>
-                        <th>URL</th>
-                        <td>{{ url }}</td>
-                    </tr>
-                </table>
+                <div class="p-2.5" v-else>
+                    <icon icon="circle-notch" class="animate-spin text-2xl text-blue-600" />
+                </div>
+            </div>
+            <div class="bg-slate-50 border-t border-slate-200 py-3">
+                <div class="flex items-center px-4 h-11">
+                    <div class="w-24 font-semibold uppercase text-sm text-slate-600">Status</div>
+                    <div class="grow"><JupyterServerStatusBar :status="status" /></div>
+                </div>
+                <div class="flex items-center px-4 h-11">
+                    <div class="w-24 font-semibold uppercase text-sm text-slate-600">URL</div>
+                    <div class="grow">
+                        <div v-if="status === JupyterServerStatus.RUNNING && url !== null" class="flex items-center">
+                            <div class="block grow font-mono">{{url}}</div>
+                            <CopyToClipboard :value="url" class="button-sm mr-0.5" />
+                            <a :href="url" target="_blank" class="button button-sm" type="button">
+                                <icon icon="arrow-up-right-from-square" />
+                            </a>
+                        </div>
+                        <div class="text-slate-400" v-else>&mdash;</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

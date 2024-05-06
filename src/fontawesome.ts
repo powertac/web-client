@@ -3,7 +3,7 @@ import {
     faAngleDown,
     faAngleUp,
     faArrowRight,
-    faArrowRotateLeft,
+    faArrowRotateLeft, faArrowUpRightFromSquare,
     faBars,
     faBarsProgress,
     faBolt,
@@ -30,7 +30,7 @@ import {
     faRotate,
     faSeedling,
     faSquareArrowUpRight,
-    faSquareUpRight,
+    faSquareUpRight, faStop,
     faTable,
     faTimes,
     faTrash,
@@ -81,5 +81,7 @@ library.add(
     faFlask,
     faTurnDown,
     faUsers,
-    farCircle
+    farCircle,
+    faStop,
+    faArrowUpRightFromSquare
 );
