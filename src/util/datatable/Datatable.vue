@@ -9,6 +9,7 @@ const props = defineProps<{
     view: View<E>;
     items: E[]|undefined;
     selectable?: boolean;
+    loading?: boolean;
 }>();
 
 const view = ref<View<E>>(props.view);
@@ -59,7 +60,12 @@ function toggleSelect(item: E): void {
                                 @click="e => toggleSorting(field.name, e)" />
         </tr>
         </thead>
-        <tbody v-if="items && items.length > 0">
+        <tbody v-if="loading">
+        <tr v-for="i in 5" :key="i">
+            <td v-for="j in fields.length" :key="j">PLACEHOLDER</td>
+        </tr>
+        </tbody>
+        <tbody v-else-if="items && items.length > 0">
         <template v-for="item in view.sort(items)" :key="item.id">
             <tr @click="toggleSelect(item)" :class="{'selected': selected === item}">
                 <slot v-for="field in fields" :name="field.name" :field="field" :item="item">
@@ -78,11 +84,6 @@ function toggleSelect(item: E): void {
             <td :colspan="fields.length" class="italic text-center !py-6 font-semibold bg-slate-100 !text-slate-500">
                 No items available.
             </td>
-        </tr>
-        </tbody>
-        <tbody v-else>
-        <tr v-for="i in 5" :key="i">
-            <td v-for="j in fields.length" :key="j">PLACEHOLDER</td>
         </tr>
         </tbody>
     </table>

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {onMounted, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import {useTaskStore} from "@/task/domain/TaskStore";
 import type {Task, TaskConfig} from "@/task/domain/Task";
 import TasksHeader from "@/task/components/TasksHeader.vue";
@@ -9,7 +9,8 @@ import {datetime} from "@/util/DateTimeFormat";
 import TaskStatus from "@/task/components/TaskStatus.vue";
 
 const taskStore = useTaskStore();
-const tasks = ref<Task<TaskConfig>[]>();
+const tasks = computed(() => taskStore.findAll())
+const tasksLoading = computed(() => !taskStore.isReady);
 
 const view = new View<Task<TaskConfig>>()
     .field("ID", t => t.id, Compare.string, {classes: ['font-mono', 'w-[20.75rem]']})
@@ -25,7 +26,6 @@ const view = new View<Task<TaskConfig>>()
     .orderBy("Created at", true);
 
 onMounted(() => taskStore.fetchAll()
-    .then(() => tasks.value = taskStore.findAll())
     .catch((e) => console.error("unable to load tasks", e)));
 </script>
 
@@ -33,7 +33,7 @@ onMounted(() => taskStore.fetchAll()
     <div class="flex grow flex-col" ref="root">
         <TasksHeader />
         <div class="grow">
-            <Datatable :view="view" :items="tasks">
+            <Datatable :view="view" :items="tasks" :loading="tasksLoading">
                 <template #Status="props">
                     <td class="text-center">
                         <TaskStatus :status="props.item.status" class="text-xs w-9" />

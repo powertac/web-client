@@ -1,13 +1,13 @@
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {createApp} from "vue";
 import {createPinia} from "pinia";
 import Application from "./application/views/Application.vue";
-import "./styles/index.scss";
-import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-import "./fontawesome";
 import router from "./router";
 import axios from "axios";
 import config from "@/config";
-import {useAuthStore} from "@/security/domain/AuthStore";
+import "./styles/index.scss";
+import "./fontawesome";
+import "./store-update";
 
 const serviceFileUrl = window.location.protocol + "//" + window.location.host + "/services.json";
 

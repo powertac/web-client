@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import {LoadingState} from "@/util/LoadingState";
 import ApplicationLoader from "@/application/components/ApplicationLoader.vue";
 import ApplicationNavigation from "@/application/components/ApplicationNavigation.vue";
 import {RouterView} from "vue-router";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import StatusBar from "@/application/components/StatusBar.vue";
+import {updateManager} from "@/util/store/StoreUpdateManager";
+import {LoadingState} from "@/util/LoadingState";
 
 const loading = ref(true);
+
+onMounted(() => updateManager.start());
 </script>
 
 <template>

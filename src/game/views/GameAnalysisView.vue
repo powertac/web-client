@@ -27,7 +27,7 @@ onMounted(() => api.orchestrator.processors.getGameArtifacts(gameId)
 <template>
     <div v-if="game !== undefined && artifacts !== null">
         <GamePageHeader :game="game" />
-        <div class="max-w-screen-md mx-auto">
+        <div class="max-w-screen-md mx-auto mb-20">
             <div v-if="game.status === GameStatus.Failed || game.status === GameStatus.Cancelled" class="border border-fuchsia-300 rounded px-5 py-4 mt-10 bg-fuchsia-50 text-fuchsia-800">
                 <span class="font-semibold">Game analysis not available</span>
                 <ul class="list-disc mt-2">

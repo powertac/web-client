@@ -5,7 +5,6 @@ import {useAuthStore} from "@/security/domain/AuthStore";
 import {useApplicationStore} from "@/application/domain/ApplicationStore";
 import AuthorizedView from "@/application/views/AuthorizedView.vue";
 import PublicView from "@/application/views/PublicView.vue";
-import {useMessageStore} from "@/application/domain/MessageStore";
 
 const authStore = useAuthStore();
 const route = useRoute();

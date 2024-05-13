@@ -5,7 +5,7 @@ import {api} from "@/api";
 import {type JupyterInstance, JupyterServerStatus} from "@/analysis/domain/JupyterInstance";
 import {GameStatus} from "@/game/domain/GameStatus";
 import {useMessageStore} from "@/application/domain/MessageStore";
-import JupyterServerStatusBar from "@/analysis/components/JupyterServerStatusBatch.vue";
+import JupyterServerStatusBar from "@/analysis/components/JupyterServerStatusBadge.vue";
 import CopyToClipboard from "@/util/components/CopyToClipboard.vue";
 import {FontAwesomeIcon as Icon} from "@fortawesome/vue-fontawesome";
 

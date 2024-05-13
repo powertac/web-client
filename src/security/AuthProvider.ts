@@ -1,6 +1,7 @@
 import axios, {type AxiosInstance, type CreateAxiosDefaults} from 'axios';
 import {tokenStorage} from "@/security/TokenStorage";
 import {useAuthStore} from "@/security/domain/AuthStore";
+import {updateManager} from "@/util/store/StoreUpdateManager";
 
 class AuthProvider {
 
@@ -26,6 +27,7 @@ class AuthProvider {
 
     public revoke(baseUrl: string): void {
         tokenStorage.clearToken(baseUrl);
+        updateManager.stop();
         this.clients[baseUrl] = AuthProvider.createClient(baseUrl, null);
         useAuthStore().setAuthenticated(false); // FIXME : granular auth state
     }

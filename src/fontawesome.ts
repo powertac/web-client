@@ -11,7 +11,7 @@ import {
     faCheck,
     faCheckCircle,
     faChess,
-    faCircle,
+    faCircle, faCircleExclamation,
     faCircleNotch,
     faClock,
     faCodeBranch,
@@ -83,5 +83,6 @@ library.add(
     faUsers,
     farCircle,
     faStop,
-    faArrowUpRightFromSquare
+    faArrowUpRightFromSquare,
+    faCircleExclamation
 );
