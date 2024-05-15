@@ -11,4 +11,8 @@ div.tuple-group {
     &:last-child { @apply border-b-0 }
     .header { @apply text-slate-500 }
   }
+  &.compact {
+    div.tuple-header { @apply py-1.5 px-2.5}
+    div.tuple > * { @apply py-1 px-2.5 }
+  }
 }

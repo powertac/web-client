@@ -7,8 +7,8 @@ const props = defineProps<{
 </script>
 
 <template>
-    <span class="inline-block border border-stone-400 rounded-sm bg-white">
-        <span class="inline-block py-0.5 px-1.5 border-r border-stone-300">{{props.broker.name}}</span>
-        <span class="inline-block py-0.5 px-1.5 bg-rose-50 text-pink-700">{{props.broker.version}}</span>
-    </span>
+    <div class="border border-slate-400 bg-slate-50 rounded-sm flex items-stretch justify-between">
+        <div class="py-0.5 px-3">{{props.broker.name}}</div>
+        <div class="flex py-0.5 border-l border-slate-300 px-2 bg-slate-200 uppercase text-xs items-center">{{props.broker.version}}</div>
+    </div>
 </template>

@@ -3,5 +3,6 @@
 }
 
 .link {
-  @apply text-blue-700 underline
+  @apply text-blue-800;
+  &:hover { @apply text-blue-900 underline; }
 }

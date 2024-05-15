@@ -24,12 +24,25 @@ table.datatable {
   }
   tbody > tr:first-child > td { @apply border-t-0 }
   tbody > tr.selectable > td { @apply cursor-pointer }
-  tbody > tr.selected {
-    & > td { @apply bg-slate-50 border-slate-300 text-black border-t }
-    &:first-child > td { @apply border-t-0 }
-    &:hover td { @apply bg-slate-100 }
-  }
-  tbody > tr.selected + tr > td { @apply border-slate-300 }
+
   tbody > tr:hover > td { @apply bg-slate-50 }
+
+  &.has-selected {
+    tbody > tr > td {
+      @apply bg-slate-100 text-slate-500;
+    }
+    tbody > tr.selected {
+      & > td { @apply bg-blue-50 border-t-indigo-300 border-x-blue-100 text-blue-800 border-t }
+      &:first-child > td { @apply border-t-0 }
+      &:hover td { @apply bg-blue-100 border-x-blue-200 }
+    }
+    tbody > tr.selected + tr > td { @apply border-blue-200 }
+    tbody > tr.datatable-inlay > td {
+      @apply bg-white text-slate-800;
+    }
+    tbody > tr.datatable-inlay + tr > td {
+      @apply border-t-indigo-300
+    }
+  }
 
 }

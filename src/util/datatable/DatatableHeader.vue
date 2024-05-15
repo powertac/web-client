@@ -5,7 +5,7 @@ import {computed} from "vue";
 const props = defineProps<{
     name: string,
     index: number|undefined,
-    reverse: boolean|undefined,
+    reverse?: boolean,
     additive?: boolean
     align?: Align
 }>();
@@ -19,7 +19,7 @@ const classes = computed(() => ({
 </script>
 
 <template>
-    <th class="cursor-pointer outline-0 select-none hover:text-slate-700" :class="classes">
+    <th class="cursor-n-resize outline-0 select-none hover:text-slate-700" :class="classes">
         <div class="flex">
             <div class="relative" :class="{
                 'mr-8': props.align === Align.RIGHT && reverse !== undefined && index !== undefined,

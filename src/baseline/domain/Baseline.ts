@@ -1,6 +1,6 @@
 import type {GameConfig, GameConfigData} from "@/game/domain/GameConfig";
 import type {DateTime} from "luxon";
-import {GameGroup} from "@/game/domain/GameGroup";
+import {GameGroup, GameGroupType} from "@/game/domain/GameGroup";
 import type {NewGameData} from "@/game/domain/Game";
 
 export class Baseline extends GameGroup {
@@ -11,6 +11,10 @@ export class Baseline extends GameGroup {
                 public gameIds: string[],
                 public createdAt: DateTime) {
         super();
+    }
+
+    public get type(): GameGroupType {
+        return GameGroupType.Baseline;
     }
 
 }

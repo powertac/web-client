@@ -1,5 +1,5 @@
 import type {Modifier, ModifierData, NewModifierData} from "@/treatment/domain/Modifier";
-import {GameGroup} from "@/game/domain/GameGroup";
+import {GameGroup, GameGroupType} from "@/game/domain/GameGroup";
 import type {Baseline} from "@/baseline/domain/Baseline";
 import {useBaselineStore} from "@/baseline/domain/BaselineStore";
 import type {DateTime} from "luxon";
@@ -16,6 +16,10 @@ export class Treatment extends GameGroup {
                 public readonly config: GameConfig,
                 public readonly createdAt: DateTime) {
         super();
+    }
+
+    public get type(): GameGroupType {
+        return GameGroupType.Treatment;
     }
 
     public get baseline(): Baseline {

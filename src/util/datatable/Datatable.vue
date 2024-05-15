@@ -12,6 +12,10 @@ const props = defineProps<{
     loading?: boolean;
 }>();
 
+defineExpose({
+    toggleSelect
+});
+
 const view = ref<View<E>>(props.view);
 const fields = computed<Field<E, any>[]>(() => view.value.fields);
 const selected = ref<E>();
@@ -52,7 +56,7 @@ function toggleSelect(item: E): void {
 </script>
 
 <template>
-    <table class="datatable">
+    <table class="datatable" :class="{'has-selected': selected !== undefined}">
         <thead>
         <tr>
             <DatatableHeader v-for="field in view.fields" :name="field.name" :align="field.align" :key="field.name"
@@ -62,17 +66,19 @@ function toggleSelect(item: E): void {
         </thead>
         <tbody v-if="loading">
         <tr v-for="i in 5" :key="i">
-            <td v-for="j in fields.length" :key="j">PLACEHOLDER</td>
+            <td v-for="j in fields.length" :key="j">
+                <div class="bg-slate-100 animate-pulse rounded-sm">&nbsp;</div>
+            </td>
         </tr>
         </tbody>
         <tbody v-else-if="items && items.length > 0">
         <template v-for="item in view.sort(items)" :key="item.id">
-            <tr @click="toggleSelect(item)" :class="{'selected': selected === item}">
-                <slot v-for="field in fields" :name="field.name" :field="field" :item="item">
+            <tr @click="toggleSelect(item)" :class="{'selected': selected === item, 'selectable': props.selectable}">
+                <slot v-for="field in fields" :name="field.name" :field="field" :item="item" :selected="selected">
                     <td :class="classes(field)">{{format(field, item)}}</td>
                 </slot>
             </tr>
-            <tr v-if="item === selected">
+            <tr v-if="item === selected" class="datatable-inlay">
                 <td :colspan="fields.length">
                     <slot name="selected-item" :item="item"></slot>
                 </td>

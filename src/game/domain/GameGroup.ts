@@ -2,9 +2,17 @@ import type {Game} from "@/game/domain/Game";
 import {useGameStore} from "@/game/domain/GameStore";
 import {GameStatus} from "@/game/domain/GameStatus";
 
+export enum GameGroupType {
+    Baseline = "Baseline",
+    Treatment = "Treatment",
+    Arbitrary = "Arbitrary"
+}
+
 export abstract class GameGroup {
 
     abstract get gameIds(): string[];
+
+    abstract get type(): GameGroupType;
 
     get games(): Game[] {
         const gameStore = useGameStore();

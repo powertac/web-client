@@ -10,14 +10,16 @@ import {SyncGroup} from "@/util/SyncGroup";
 import {DateTime} from "luxon";
 
 interface GameStoreState {
+    lastUpdate: DateTime|null // lastUpdate refers to full update; it does not consider individual fetches
     games: {[id: string]: Game|undefined},
     runningIds: Set<string>
 }
 
 export const useGameStore = defineStore({
     id: "games",
-    state: () => ({games: {}, runningIds: new Set()} as GameStoreState),
+    state: () => ({lastUpdate: null, games: {}, runningIds: new Set()} as GameStoreState),
     getters: {
+        isReady: (state: GameStoreState) => state.lastUpdate !== null,
         exists: (state: GameStoreState) => (id: string) => state.games[id] !== undefined,
         findById: (state: GameStoreState) => createFindByIdGetter("game", state.games),
         findAll: (state: GameStoreState) => createFindAllGetter(state.games),
@@ -65,7 +67,9 @@ export const useGameStore = defineStore({
         },
         async fetchAll(): Promise<void> {
             const data = await api.orchestrator.games.getAll();
-            return this.add (data);
+            await this.add(data);
+            console.log("is ready");
+            this.lastUpdate = DateTime.now();
         },
         async fetchRunning(): Promise<void> {
             const data = await api.orchestrator.games.getRunning();

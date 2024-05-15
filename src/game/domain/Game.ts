@@ -21,18 +21,25 @@ export class Game {
                 private readonly treatmentId: string|null,
                 private readonly baseGameId: string|null) {}
 
+    get group(): Baseline|Treatment|null {
+        if (this.baseline !== null) {
+            return this.baseline;
+        } else if (this.treatment !== null) {
+            return this.treatment;
+        } else {
+            return null;
+        }
+    }
+
     get baseline(): Baseline|null {
-        // FIXME : check performance impact of loading from store vs. keeping local copy
         return null !== this.baselineId ? useBaselineStore().findById(this.baselineId) : null;
     }
 
     get treatment(): Treatment|null {
-        // FIXME : check performance impact of loading from store vs. keeping local copy
         return null !== this.treatmentId ? useTreatmentStore().findById(this.treatmentId) : null;
     }
 
     get baseGame(): Game|null {
-        // FIXME : check performance impact of loading from store vs. keeping local copy
         return null !== this.baseGameId ? useGameStore().findById(this.baseGameId) : null;
     }
 
