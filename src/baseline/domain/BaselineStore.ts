@@ -8,13 +8,15 @@ import {DateTime} from "luxon";
 import {SyncGroup} from "@/util/SyncGroup";
 
 export interface BaselineStoreState {
-    baselines: {[id: string]: Baseline}
+    lastFullUpdate: DateTime|null;
+    baselines: {[id: string]: Baseline};
 }
 
 export const useBaselineStore = defineStore({
     id: "baselines",
-    state: () => ({baselines: {}} as BaselineStoreState),
+    state: () => ({ lastFullUpdate: null, baselines: {}} as BaselineStoreState),
     getters: {
+        isReady: (state: BaselineStoreState) => { console.log(state.lastFullUpdate); return state.lastFullUpdate !== null },
         exists: (state: BaselineStoreState) => (id: string) => state.baselines[id] !== undefined,
         findById: (state: BaselineStoreState) => createFindByIdGetter("baseline", state.baselines),
         findAll: (state: BaselineStoreState) => createFindAllGetter(state.baselines),
@@ -39,7 +41,8 @@ export const useBaselineStore = defineStore({
             const sync = new SyncGroup();
             const gameStore = useGameStore();
             [...gameIds.values()].forEach((gid) => sync.add(gameStore.fetchOnceById(gid)));
-            return sync.wait();
+            await sync.wait();
+            this.lastFullUpdate = DateTime.now();
         }
     }
 });

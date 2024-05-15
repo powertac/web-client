@@ -1,10 +1,10 @@
 import type {RouteRecordRaw} from "vue-router";
 import NewBaselineView from "@/baseline/views/NewBaselineView.vue";
-import BaselineTableView from "@/baseline/views/BaselineTableView.vue";
 import BaselineDetailsView from "@/baseline/views/BaselineDetailsView.vue";
 import BaselineGamesView from "@/baseline/views/BaselineGamesView.vue";
 import BaselineActionsView from "@/baseline/views/BaselineActionsView.vue";
 import BaselineAnalysisView from "@/baseline/views/BaselineAnalysisView.vue";
+import BaselineTableView from "@/baseline/views/BaselineTableView.vue";
 
 export const baselineRoutes: Readonly<RouteRecordRaw[]> = [
     {
