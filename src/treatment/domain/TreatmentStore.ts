@@ -10,13 +10,15 @@ import {useBaselineStore} from "@/baseline/domain/BaselineStore";
 import {buildGameConfig} from "@/game/domain/GameConfig";
 
 export interface TreatmentStoreState {
-    treatments: {[id: string]: Treatment}
+    lastFullUpdate: DateTime|null;
+    treatments: {[id: string]: Treatment};
 }
 
 export const useTreatmentStore = defineStore({
     id: "treatments",
-    state: () => ({treatments: {}} as TreatmentStoreState),
+    state: () => ({ lastFullUpdate: null, treatments: {} } as TreatmentStoreState),
     getters: {
+        isReady: (state: TreatmentStoreState) => state.lastFullUpdate !== null,
         findById: (state: TreatmentStoreState) => createFindByIdGetter("treatment", state.treatments),
         findAll: (state: TreatmentStoreState) => createFindAllGetter(state.treatments)
     },
@@ -33,6 +35,7 @@ export const useTreatmentStore = defineStore({
             }
         },
         async fetchAll(): Promise<void> {
+            console.log("loading treatments");
             const data: TreatmentData[] = await api.orchestrator.treatments.getAll();
             const baselineIds = new Set<string>();
             const gameIds = new Set<string>();
@@ -48,7 +51,9 @@ export const useTreatmentStore = defineStore({
             const baselineStore = useBaselineStore();
             [... baselineIds.values()].forEach((bid) => sync.add(baselineStore.fetchOnceById(bid)));
             [...gameIds.values()].forEach((gid) => sync.add(gameStore.fetchOnceById(gid)));
-            return sync.wait();
+            await sync.wait();
+            console.log("treatments loaded");
+            this.lastFullUpdate = DateTime.now();
         }
     }
 });

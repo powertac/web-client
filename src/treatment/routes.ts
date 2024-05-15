@@ -1,10 +1,10 @@
 import type {RouteRecordRaw} from "vue-router";
 import NewTreatmentView from "@/treatment/views/NewTreatmentView.vue";
-import TreatmentTableView from "@/treatment/views/TreatmentTableView.vue";
 import TreatmentDetailsView from "@/treatment/views/TreatmentDetailsView.vue";
 import TreatmentGamesView from "@/treatment/components/TreatmentGamesView.vue";
 import TreatmentActionsView from "@/treatment/views/TreatmentActionsView.vue";
 import TreatmentAnalysisView from "@/treatment/views/TreatmentAnalysisView.vue";
+import TreatmentTableView from "@/treatment/views/TreatmentTableView.vue";
 
 export const treatmentRoutes: Readonly<RouteRecordRaw[]> = [
     {
