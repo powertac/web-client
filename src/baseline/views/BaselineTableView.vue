@@ -16,7 +16,7 @@ const baselineTable = ref(null);
 
 const view = new View<Baseline>()
     .field("ID", b => b.id, Compare.string, {classes: ['font-mono', 'w-[20.75rem]']})
-    .field("Name", b => b.name, Compare.number, {align: Align.LEFT})
+    .field("Name", b => b.name, Compare.string, {align: Align.LEFT})
     .field("Progress", b => b.progress, Compare.number)
     .field("Created at", b => b.createdAt, Compare.date, {align: Align.RIGHT, formatFn: datetime, classes: ['font-mono']})
     .orderBy("Created at", true)

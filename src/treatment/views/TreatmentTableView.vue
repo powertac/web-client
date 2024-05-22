@@ -17,7 +17,7 @@ const treatmentTable = ref(null);
 
 const view = new View<Treatment>()
     .field("ID", t => t.id, Compare.string, {classes: ['font-mono', 'w-[20.75rem]']})
-    .field("Name", t => t.name, Compare.number, {align: Align.LEFT})
+    .field("Name", t => t.name, Compare.string, {align: Align.LEFT})
     .field("Baseline", t => t.baseline.name, Compare.string, {align: Align.LEFT})
     .field("Modifier", t => t.modifier.type, Compare.string)
     .field("Progress", t => t.progress, Compare.number)
