@@ -22,6 +22,10 @@ export class User {
         return this.hasRole(UserRole.Admin);
     }
 
+    get rolesAsString(): string {
+        return this.roles.sort().join(", ");
+    }
+
     public hasRole(role: UserRole): boolean {
         return this.roles.filter(r => r === role).length === 1;
     }

@@ -1,7 +1,7 @@
 import type {RouteRecordRaw} from "vue-router";
-import UserTableView from "@/user/views/UserTableView.vue";
 import RegistrationsTableView from "@/user/views/RegistrationsTableView.vue";
 import RegisterNewUserView from "@/user/views/RegisterNewUserView.vue";
+import UserTableView from "@/user/views/UserTableView.vue";
 
 export const userRoutes: Readonly<RouteRecordRaw[]> = [
     {
