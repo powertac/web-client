@@ -68,7 +68,6 @@ export const useGameStore = defineStore({
         async fetchAll(): Promise<void> {
             const data = await api.orchestrator.games.getAll();
             await this.add(data);
-            console.log("is ready");
             this.lastUpdate = DateTime.now();
         },
         async fetchRunning(): Promise<void> {

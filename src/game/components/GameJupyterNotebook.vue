@@ -8,12 +8,14 @@ import {useMessageStore} from "@/application/domain/MessageStore";
 import JupyterServerStatusBar from "@/analysis/components/JupyterServerStatusBadge.vue";
 import CopyToClipboard from "@/util/components/CopyToClipboard.vue";
 import {FontAwesomeIcon as Icon} from "@fortawesome/vue-fontawesome";
+import config from "@/config";
 
+const hostBaseUri = config.services.host.url;
 const props = defineProps<{ game: Game }>();
 
 const messages = useMessageStore();
 const instance = ref<JupyterInstance|null>(null);
-const url = computed(() => instance.value !== null? "http://localhost:" + instance.value.port + "/lab?token=" + instance.value.token : null);
+const url = computed(() => instance.value !== null? hostBaseUri + ":" + instance.value.port + "/lab?token=" + instance.value.token : null);
 
 const loading = ref(true);
 const running = computed(() => instance.value !== null && (instance.value as JupyterInstance).isRunning);

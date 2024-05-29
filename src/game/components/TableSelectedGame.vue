@@ -42,9 +42,10 @@ const emit = defineEmits<{
                     </router-link>
                 </div>
             </div>
-            <div>
-                <div>
-                    Server version: {{game.config.serverVersion.name}}
+            <div class="flex">
+                <div class="mt-4 border border-slate-300 flex items-stretch rounded-sm">
+                    <div class="uppercase px-4 text-xs bg-slate-50 border-r border-slate-300 text-slate-600 flex items-center">Server version</div>
+                    <div class="py-1 px-6">{{game.config.serverVersion.name}}</div>
                 </div>
             </div>
             <div class="flex mt-4 gap-4">
