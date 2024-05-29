@@ -1,4 +1,5 @@
 {
   "orchestrator": "http://localhost:8080",
-  "weatherserver": "http://localhost:8020"
+  "weatherserver": "http://localhost:8020",
+  "host": "http://localhost"
 }

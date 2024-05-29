@@ -15,6 +15,7 @@ axios.get(serviceFileUrl)
     .then(res => {
         config.services.orchestrator.url = res.data.orchestrator;
         config.services.weatherserver.url = res.data.weatherserver;
+        config.services.host.url = res.host;
         const pinia = createPinia();
         createApp(Application)
             .use(pinia)
