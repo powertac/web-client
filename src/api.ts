@@ -16,6 +16,7 @@ import {LogProcessorClient} from "@/logprocessor/LogProcessorClient";
 import {AnalysisClient} from "@/analysis/AnalysisClient";
 import {RegistrationTokenClient} from "@/user/RegistrationTokenClient";
 import {JupyterClient} from "@/analysis/JupyterClient";
+import {SimulationServerClient} from "@/simulation/SimulationServerClient";
 
 const orchestratorUrlLoader = () => config.services.orchestrator.url;
 const weatherServerUrlLoader = () => config.services.weatherserver.url;
@@ -37,6 +38,7 @@ export const api = {
         runs: new GameRunClient(orchestratorUrlLoader),
         tasks: new TaskClient(orchestratorUrlLoader),
         treatments: new TreatmentClient(orchestratorUrlLoader),
+        servers: new SimulationServerClient(orchestratorUrlLoader),
         users: new UserClient(orchestratorUrlLoader)
     },
     weather: {

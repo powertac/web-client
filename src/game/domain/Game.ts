@@ -120,4 +120,5 @@ export interface NewGameData {
     brokerIds: string[];
     parameters: { [key: string]: string };
     weather: WeatherConfigData;
+    serverVersionId: string;
 }

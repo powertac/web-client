@@ -11,21 +11,26 @@ import {api} from "@/api";
 import router from "@/router";
 import ValidationBadge from "@/util/components/ValidationBadge.vue";
 import GamesHeader from "@/file/components/GamesHeader.vue";
+import ServerVersionSelector from "@/simulation/components/ServerVersionSelector.vue";
+import type {SimulationServerVersion} from "@/simulation/domain/SimulationServerVersion";
 
 const name = ref("" as string);
 const brokers = ref([] as Broker[]);
 const weatherConfig = ref({} as Partial<WeatherConfig>);
 const parameters = ref({} as {[key: string]: string});
+const serverVersion = ref<SimulationServerVersion|null>(null);
 const nameElement = ref<HTMLElement>();
 const brokersElement = ref<HTMLElement>();
 const weatherElement = ref<HTMLElement>();
 const parametersElement = ref<HTMLElement>();
+const serverVersionElement = ref<HTMLElement>();
 
 const game = computed((): Partial<NewGameData> => ({
     name: name.value,
     brokerIds: brokers.value.map(b => b.id),
     parameters: parameters.value,
-    weather: weatherConfig.value.data
+    weather: weatherConfig.value.data,
+    serverVersionId: serverVersion.value?.id
 }));
 
 function createGame(): void {
@@ -43,6 +48,11 @@ function isValid(): boolean {
         && game.value.weather !== undefined && GameValidator.weather(game.value.weather)
         && game.value.brokerIds !== undefined && GameValidator.brokers(brokers.value);
 }
+
+function selectVersion(version: SimulationServerVersion): void {
+    console.log(version);
+    serverVersion.value = version;
+}
 </script>
 
 <template>
@@ -54,6 +64,12 @@ function isValid(): boolean {
                 <div class="form-group-content">
                     <input type="text" class="default w-[32rem]" :class="{'valid': name !== null && GameValidator.gameName(name)}" v-model="name" />
                     <p class="mt-5 text-slate-500">A game's name must consist of at least 5 characters.</p>
+                </div>
+            </div>
+            <div class="form-group mt-3" ref="serverVersionElement">
+                <h2 class="form-group-title">Server Version</h2>
+                <div class="form-group-content">
+                    <ServerVersionSelector @selected="selectVersion" />
                 </div>
             </div>
             <div class="form-group" ref="brokersElement">
@@ -85,6 +101,7 @@ function isValid(): boolean {
                 <div class="form-group-content">
                     <div class="flex gap-1.5 w-full mb-3">
                         <ValidationBadge :valid="GameValidator.gameName(name)" label="Name" @click="nameElement?.scrollIntoView()" class="cursor-pointer" />
+                        <ValidationBadge :valid="serverVersion !== null" label="Server Version" @click="serverVersionElement?.scrollIntoView()" class="cursor-pointer" />
                         <ValidationBadge :valid="GameValidator.brokers(brokers)" label="Brokers" @click="brokersElement?.scrollIntoView()" class="cursor-pointer" />
                         <ValidationBadge :valid="game.weather !== undefined && GameValidator.weather(game.weather)" label="Weather" @click="weatherElement?.scrollIntoView()" class="cursor-pointer" />
                         <ValidationBadge :valid="true" label="Parameters" @click="parametersElement?.scrollIntoView()" class="cursor-pointer" />

@@ -37,8 +37,12 @@ function logout(): void {
                 <icon icon="chess" class="mr-2 text-sm" />
                 Brokers
             </router-link>
+            <router-link to="/simulation-servers/versions/table" :class="{'nav-item': true, 'active': activeGroup('/simulation-servers')}">
+                <icon icon="server" class="mr-2 text-sm" />
+                Servers
+            </router-link>
             <router-link to="/tasks/table" :class="{'nav-item': true, 'active': activeGroup('/tasks')}">
-                <icon icon="bars-progress" class="mr-2 text-sm" />
+                <icon icon="list-check" class="mr-2 text-sm" />
                 Tasks
             </router-link>
         </div>

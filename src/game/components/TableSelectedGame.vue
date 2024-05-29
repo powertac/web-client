@@ -42,6 +42,11 @@ const emit = defineEmits<{
                     </router-link>
                 </div>
             </div>
+            <div>
+                <div>
+                    Server version: {{game.config.serverVersion.name}}
+                </div>
+            </div>
             <div class="flex mt-4 gap-4">
                 <BrokersBlock class="compact" :brokers="game.config.brokers" />
                 <WeatherBlock class="compact" :weather="game.config.weather" />

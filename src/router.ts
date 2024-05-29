@@ -9,6 +9,7 @@ import LoginView from "@/security/views/LoginView.vue";
 import {useAuthStore} from "@/security/domain/AuthStore";
 import type {AuthState} from "@/security/domain/AuthState";
 import {brokerRoutes} from "@/broker/routes";
+import {serverRoutes} from "@/simulation/routes";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,6 +30,7 @@ const router = createRouter({
         ...gameRoutes,
         ...taskRoutes,
         ...treatmentRoutes,
+        ...serverRoutes,
         ...userRoutes
     ]
 });

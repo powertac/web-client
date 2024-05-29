@@ -3,6 +3,8 @@ import type {WeatherConfig} from "@/weather/domain/WeatherConfig";
 import type {WeatherConfigData} from "@/weather/domain/WeatherConfig";
 import {useBrokerStore} from "@/broker/domain/BrokerStore";
 import {buildWeatherConfig} from "@/weather/domain/WeatherConfig";
+import type {SimulationServerVersion} from "@/simulation/domain/SimulationServerVersion";
+import {useServerStore} from "@/simulation/domain/SimulationServerStore";
 
 export class GameConfig {
 
@@ -10,7 +12,8 @@ export class GameConfig {
         public readonly brokersIds: string[],
         public readonly parameters: { [key: string]: string },
         public readonly weather: WeatherConfig,
-        public readonly seed: string|null) {} // FIXME : how are seeds represented?
+        public readonly seed: string|null, // FIXME : how are seeds represented?
+        private readonly serverVersionId: string) {}
 
     get brokers(): Broker[] {
         const brokerStore = useBrokerStore();
@@ -21,6 +24,10 @@ export class GameConfig {
             });
     }
 
+    get serverVersion(): SimulationServerVersion {
+        return useServerStore().findVersion(this.serverVersionId);
+    }
+
 }
 
 export interface GameConfigData {
@@ -28,6 +35,7 @@ export interface GameConfigData {
     parameters: { [key: string]: string };
     weather: WeatherConfigData;
     seed: string|null;
+    serverVersionId: string;
 }
 
 export function buildGameConfig(data: GameConfigData) {
@@ -35,5 +43,6 @@ export function buildGameConfig(data: GameConfigData) {
         data.brokerIds,
         data.parameters,
         buildWeatherConfig(data.weather),
-        data.seed !== undefined ? data.seed : null);
+        data.seed !== undefined ? data.seed : null,
+        data.serverVersionId);
 }

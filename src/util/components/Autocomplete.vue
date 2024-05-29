@@ -8,7 +8,8 @@ const props = defineProps<{
     items: string[],
     placeholder?: string,
     valid?: boolean,
-    disabled?: boolean
+    disabled?: boolean,
+    default?: string|undefined
 }>();
 const emit = defineEmits<{
     (e: 'selected', parameter: string): void
@@ -16,7 +17,7 @@ const emit = defineEmits<{
 
 const errorClasses = ["bg-pink-50", "!border-pink-400"];
 const id = uuid();
-const search = ref("");
+const search = ref(props.default !== undefined ? props.default : "");
 const resultsOpen = ref(false);
 const selectedIndex = ref(null as number|null);
 const rootElement = ref(null as HTMLDivElement|null);
@@ -90,6 +91,11 @@ function resultId(index: number):string {
     return id + "-" + index;
 }
 
+function clearSelection(): void {
+    search.value = "";
+    emit("selected", "");
+}
+
 onMounted(() => document.addEventListener('click', handleClickOutside));
 onDeactivated(() => document.removeEventListener('click', handleClickOutside));
 watch(search, (newSearch, oldSearch) => { if (newSearch !== oldSearch) inputElement.value?.classList.remove(...errorClasses)});
@@ -101,9 +107,9 @@ watch(resultsOpen, (open) => open ? resultsElement.value?.scrollIntoView() : nul
 </script>
 
 <template>
-    <div class="autocomplete relative" @focusin="resultsOpen = true" ref="rootElement">
-        <div class="relative">
-            <input type="text" :placeholder="props.placeholder" class="autocomplete-search default w-full" v-model="search"
+    <div class="autocomplete relative flex items-stretch grow" @focusin="resultsOpen = true" ref="rootElement">
+        <div class="flex items-stretch grow">
+            <input type="text" :placeholder="props.placeholder" class="autocomplete-search default px-4 grow" v-model="search"
                    :class="{'rounded-b-none': resultsOpen, 'valid': valid}"
                    ref="inputElement"
                    :disabled="disabled"
@@ -113,7 +119,7 @@ watch(resultsOpen, (open) => open ? resultsElement.value?.scrollIntoView() : nul
                    @keydown.enter="select(results[selectedIndex])"
                    @keydown.esc="resultsOpen = false"
                    @keydown.tab="resultsOpen = false" />
-            <button class="absolute right-0 top-0 h-full px-5" @click="search = ''; inputElement.focus()">
+            <button class="absolute right-0 top-0 h-full px-5" @click="clearSelection(); inputElement.focus()">
                 <icon icon="times" />
             </button>
         </div>
