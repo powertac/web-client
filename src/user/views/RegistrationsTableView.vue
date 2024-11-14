@@ -23,7 +23,8 @@ const view = new View<RegistrationToken>()
     .field("Claimed by", t => t.claimedBy ? t.claimedBy.username : '-', Compare.string)
     .field("Claimed at", t => t.claimedAt, Compare.date, {formatFn: Format.defaultTo(datetime, "-"), align: Align.RIGHT, classes: ['font-mono']})
     .field("Expires at", t => t.expiresAt, Compare.date, {formatFn: datetime, align: Align.RIGHT, classes: ['font-mono']})
-    .field("actions", t => t)
+    .field("URL", t => registrationUrl(t), Compare.string, {classes: ['font-mono', 'w-1/3', 'break-all']})
+    //.field("actions", t => t)
     .orderBy("Issued at", true);
 const lastCopiedId = ref<number>();
 
@@ -31,6 +32,11 @@ function createToken(): void {
     api.orchestrator.registrations.create()
         .then(t => createdTokens.value.push(buildRegistrationToken(t)))
         .catch(e => console.error("unable to create registration token", e));
+}
+
+function registrationUrl(token: RegistrationToken): string {
+    const route = router.resolve({name: "register-user", params: {token: token.token}});
+    return new URL(route.fullPath, window.location.origin,).href;
 }
 
 function registrationUrlToClipboard(token: RegistrationToken): void {

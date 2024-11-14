@@ -3,7 +3,6 @@ import type {Game} from "@/game/domain/Game";
 import {computed, onMounted, onUnmounted, ref} from "vue";
 import {api} from "@/api";
 import {type JupyterInstance, JupyterServerStatus} from "@/analysis/domain/JupyterInstance";
-import {GameStatus} from "@/game/domain/GameStatus";
 import {useMessageStore} from "@/application/domain/MessageStore";
 import JupyterServerStatusBar from "@/analysis/components/JupyterServerStatusBadge.vue";
 import CopyToClipboard from "@/util/components/CopyToClipboard.vue";

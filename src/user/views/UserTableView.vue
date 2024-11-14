@@ -35,7 +35,7 @@ onMounted(() => userStore.fetchAll().catch(e => console.error("unable to load us
                     <td class="uppercase text-xs">
                         <span v-for="role in (props.item as User).roles"
                               class="inline-block py-0.5 px-2 bg-slate-50 border rounded-sm border-slate-300 mr-1"
-                              :class="role === UserRole.Admin ? ['bg-orange-100', 'border-orange-400', 'text-orange-700'] : []">
+                              :class="role === UserRole.Admin ? ['!bg-orange-100', '!border-orange-400', 'text-orange-700'] : []">
                             {{role}}
                         </span>
                     </td>
